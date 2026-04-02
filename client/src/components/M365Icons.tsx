@@ -5,18 +5,11 @@
 
 export function PlannerIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full"
-    >
-      <rect x="2" y="2" width="20" height="20" rx="2" fill="#9C27B0" />
-      <path
-        d="M6 8h3v8H6V8zm5 0h3v5h-3V8zm5 0h3v3h-3V8z"
-        fill="white"
-      />
-    </svg>
+    <img
+      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/Planner-App-2_764bd511.png"
+      alt="Planner"
+      className="w-full h-full object-contain"
+    />
   );
 }
 
