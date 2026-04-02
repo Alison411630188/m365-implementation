@@ -108,21 +108,21 @@ export default function Sidebar() {
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
-        {/* 側邊欄頭部 */}
-        <div className="flex flex-col items-start justify-center px-4 py-3 border-b border-sidebar-border">
-          <div className="flex items-center gap-2 mb-1">
-            {/* 瀚荃 Logo */}
-            <img
-              src="https://www.cvilux-group.com/theme/images/brand/cvilux-logo.png"
-              alt="CviLux Logo"
-              className="h-6 w-auto"
-              title="瀚荃集團"
-            />
-            <span className="font-semibold text-sidebar-foreground hidden sm:inline text-xs">
-              瀚荃集團
-            </span>
-          </div>
-          <span className="font-bold text-sidebar-foreground hidden sm:inline text-sm">
+        {/* 侧邊欄頁部 */}
+        <div className="flex flex-col items-center justify-center px-4 py-4 border-b border-sidebar-border gap-2">
+          {/* 瀚荃 Logo */}
+          <img
+            src="https://www.cvilux-group.com/theme/images/brand/cvilux-logo.png"
+            alt="CviLux Logo"
+            className="h-8 w-auto"
+            title="瀚荃集團"
+          />
+          {/* 瀚荃集團文字 */}
+          <span className="font-semibold text-sidebar-foreground text-xs text-center">
+            瀚荃集團
+          </span>
+          {/* M365 文字 */}
+          <span className="font-bold text-sidebar-foreground text-sm">
             M365
           </span>
         </div>
