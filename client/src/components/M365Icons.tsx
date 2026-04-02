@@ -6,7 +6,7 @@
 export function PlannerIcon() {
   return (
     <img
-      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/Planner-App-2_764bd511.png"
+      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/icons8-microsoft-planner-2019-48_ed055a5b.png"
       alt="Planner"
       className="w-full h-full object-contain"
     />
