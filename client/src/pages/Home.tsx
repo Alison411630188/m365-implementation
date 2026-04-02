@@ -3,6 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
+import {
+  PlannerIcon,
+  PowerAutomateIcon,
+  PowerBIIcon,
+  SharePointIcon,
+  TeamsIcon,
+} from "@/components/M365Icons";
 
 /**
  * 首頁元件
@@ -60,11 +67,29 @@ export default function Home() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }, 100);
             };
+            
+            const getIconComponent = () => {
+              switch (tool.id) {
+                case 'planner':
+                  return <PlannerIcon />;
+                case 'power-automate':
+                  return <PowerAutomateIcon />;
+                case 'power-bi':
+                  return <PowerBIIcon />;
+                case 'sharepoint':
+                  return <SharePointIcon />;
+                case 'teams':
+                  return <TeamsIcon />;
+                default:
+                  return null;
+              }
+            };
+            
             return (
             <Link key={tool.id} href={`/tools/${tool.id}`} onClick={handleToolClick} className="group block">
               <Card className="h-full p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-l-border group-hover:border-l-primary group-hover:-translate-y-1 cursor-pointer">
-                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {tool.icon}
+                <div className="w-12 h-12 mb-4 group-hover:scale-110 transition-transform duration-300">
+                  {getIconComponent()}
                 </div>
                 <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                   {tool.name}
