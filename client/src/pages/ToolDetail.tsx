@@ -1,6 +1,13 @@
 import { Card } from "@/components/ui/card";
 import { useRoute } from "wouter";
 import { M365_TOOLS } from "@/../../shared/const";
+import {
+  PlannerIcon,
+  PowerAutomateIcon,
+  PowerBIIcon,
+  SharePointIcon,
+  TeamsIcon,
+} from "@/components/M365Icons";
 
 /**
  * 工具詳細說明頁面
@@ -329,6 +336,23 @@ const toolDetails: Record<string, ToolDetailInfo> = {
   },
 };
 
+function getToolIcon(toolId: string) {
+  switch (toolId) {
+    case 'planner':
+      return <PlannerIcon />;
+    case 'power-automate':
+      return <PowerAutomateIcon />;
+    case 'power-bi':
+      return <PowerBIIcon />;
+    case 'sharepoint':
+      return <SharePointIcon />;
+    case 'teams':
+      return <TeamsIcon />;
+    default:
+      return null;
+  }
+}
+
 export default function ToolDetail() {
   const [, params] = useRoute("/tools/:toolId");
   const toolId = params?.toolId as string;
@@ -355,7 +379,9 @@ export default function ToolDetail() {
         {/* 工具頭部 */}
         <div className="mb-12 pb-8 border-b border-border">
           <div className="flex items-start gap-6 mb-6">
-            <div className="text-6xl">{tool.icon}</div>
+            <div className="w-20 h-20">
+              {getToolIcon(toolId)}
+            </div>
             <div className="flex-1">
               <h1 className="text-4xl font-bold text-foreground mb-2">
                 {tool.name}
