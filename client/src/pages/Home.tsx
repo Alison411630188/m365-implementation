@@ -54,20 +54,18 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {M365_TOOLS.map((tool) => (
-            <Link key={tool.id} href={`/tools/${tool.id}`}>
-              <a className="group block">
-                <Card className="h-full p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-l-border group-hover:border-l-primary group-hover:-translate-y-1 cursor-pointer">
-                  <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
-                    {tool.icon}
-                  </div>
-                  <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                    {tool.name}
-                  </h3>
-                  <p className="text-sm text-foreground/70">
-                    {tool.description}
-                  </p>
-                </Card>
-              </a>
+            <Link key={tool.id} href={`/tools/${tool.id}`} className="group block">
+              <Card className="h-full p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-l-border group-hover:border-l-primary group-hover:-translate-y-1 cursor-pointer">
+                <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
+                  {tool.icon}
+                </div>
+                <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                  {tool.name}
+                </h3>
+                <p className="text-sm text-foreground/70">
+                  {tool.description}
+                </p>
+              </Card>
             </Link>
           ))}
         </div>
@@ -82,7 +80,8 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* 使用手冊 */}
-            <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow">
+            <Link href="/handbook">
+            <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow cursor-pointer">
               <div className="text-3xl mb-4">📖</div>
               <h3 className="text-xl font-bold text-foreground mb-3">
                 M365 使用手冊
@@ -90,15 +89,15 @@ export default function Home() {
               <p className="text-foreground/70 mb-6">
                 逐步指南和最佳實踐，幫助您快速上手 M365
               </p>
-              <Link href="/handbook">
-                <Button variant="outline" className="w-full">
-                  進入手冊 <ArrowRight size={16} className="ml-2" />
-                </Button>
-              </Link>
+              <Button variant="outline" className="w-full">
+                進入手冊 <ArrowRight size={16} className="ml-2" />
+              </Button>
             </div>
+          </Link>
 
-            {/* 應用案例 */}
-            <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow">
+          {/* 應用案例 */}
+          <Link href="/cases">
+            <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow cursor-pointer">
               <div className="text-3xl mb-4">💼</div>
               <h3 className="text-xl font-bold text-foreground mb-3">
                 應用情境案例
@@ -106,15 +105,15 @@ export default function Home() {
               <p className="text-foreground/70 mb-6">
                 真實業務場景中的 M365 應用案例和解決方案
               </p>
-              <Link href="/cases">
-                <Button variant="outline" className="w-full">
-                  查看案例 <ArrowRight size={16} className="ml-2" />
-                </Button>
-              </Link>
+              <Button variant="outline" className="w-full">
+                查看案例 <ArrowRight size={16} className="ml-2" />
+              </Button>
             </div>
+          </Link>
 
-            {/* 問答區 */}
-            <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow">
+          {/* 問答區 */}
+          <Link href="/faq">
+            <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow cursor-pointer">
               <div className="text-3xl mb-4">❓</div>
               <h3 className="text-xl font-bold text-foreground mb-3">
                 M365 問答區
@@ -122,12 +121,11 @@ export default function Home() {
               <p className="text-foreground/70 mb-6">
                 常見問題解答和故障排除指南
               </p>
-              <Link href="/faq">
-                <Button variant="outline" className="w-full">
-                  進入問答區 <ArrowRight size={16} className="ml-2" />
-                </Button>
-              </Link>
+              <Button variant="outline" className="w-full">
+                進入問答區 <ArrowRight size={16} className="ml-2" />
+              </Button>
             </div>
+          </Link>
           </div>
         </div>
       </section>
