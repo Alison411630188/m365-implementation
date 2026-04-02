@@ -59,16 +59,15 @@ export default function Sidebar() {
             />
           </button>
         ) : (
-          <Link href={item.path || "/"}>
-            <a
-              className={`block px-4 py-3 text-sm font-medium transition-all border-l-4 ${
-                active
-                  ? "border-l-primary bg-primary/5 text-primary"
-                  : "border-l-transparent text-sidebar-foreground hover:bg-muted"
-              }`}
-            >
-              {item.label}
-            </a>
+          <Link
+            href={item.path || "/"}
+            className={`block px-4 py-3 text-sm font-medium transition-all border-l-4 ${
+              active
+                ? "border-l-primary bg-primary/5 text-primary"
+                : "border-l-transparent text-sidebar-foreground hover:bg-muted"
+            }`}
+          >
+            {item.label}
           </Link>
         )}
 
