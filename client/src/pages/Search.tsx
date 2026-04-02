@@ -153,7 +153,7 @@ export default function Search() {
                         </p>
                         {result.keywords && (
                           <div className="flex flex-wrap gap-2">
-                            {result.keywords.split(",").slice(0, 3).map((keyword, idx) => (
+                            {result.keywords.split(",").slice(0, 3).map((keyword: string, idx: number) => (
                               <span key={idx} className="text-xs bg-secondary/50 text-foreground/70 px-2 py-1 rounded">
                                 {keyword.trim()}
                               </span>

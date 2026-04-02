@@ -1,18 +1,25 @@
-import { eq, like, or } from "drizzle-orm";
+import { eq, like, or, and, sql } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, searchableContent, SearchableContent } from "../drizzle/schema";
 import { ENV } from './_core/env';
+import mysql from "mysql2/promise";
 
-let _db: ReturnType<typeof drizzle> | null = null;
+let _db: any = null;
+let _pool: any = null;
 
 // Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
   if (!_db && process.env.DATABASE_URL) {
     try {
-      _db = drizzle(process.env.DATABASE_URL);
+      if (!_pool) {
+        _pool = mysql.createPool(process.env.DATABASE_URL);
+      }
+      _db = drizzle(_pool);
+      console.log("[Database] Connected successfully");
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;
+      _pool = null;
     }
   }
   return _db;
@@ -90,7 +97,7 @@ export async function getUserByOpenId(openId: string) {
 }
 
 // 搜索功能
-export async function searchContent(query: string, type?: string): Promise<SearchableContent[]> {
+export async function searchContent(q: string, type?: string): Promise<any[]> {
   const db = await getDb();
   if (!db) {
     console.warn("[Database] Cannot search: database not available");
@@ -98,27 +105,41 @@ export async function searchContent(query: string, type?: string): Promise<Searc
   }
 
   try {
-    const searchTerms = query.toLowerCase().split(/\s+/).filter(Boolean);
-    const conditions = searchTerms.map(term => 
-      or(
-        like(searchableContent.title, `%${term}%`),
-        like(searchableContent.description, `%${term}%`),
-        like(searchableContent.keywords, `%${term}%`),
-        like(searchableContent.content, `%${term}%`)
-      )
-    );
-
-    let queryBuilder: any = db.select().from(searchableContent);
+    const searchTerms = q.toLowerCase().split(/\s+/).filter(Boolean);
+    console.log(`[Search] Searching for: "${q}" with terms: ${searchTerms.join(', ')}`);
     
+    // 構建搜索條件
+    let whereConditions: any[] = [];
+    
+    // 添加類型篩選
     if (type) {
-      queryBuilder = queryBuilder.where(eq(searchableContent.type, type as any));
+      whereConditions.push(eq(searchableContent.type, type as any));
     }
-
-    if (conditions.length > 0) {
-      queryBuilder = queryBuilder.where(or(...conditions));
+    
+    // 添加關鍵詞搜索條件 - 使用 sql 以支持 text 列和不區分大小写
+    const searchConditions = searchTerms.map(term => {
+      const pattern = `%${term}%`;
+      return sql`(
+        LOWER(${searchableContent.title}) LIKE LOWER(${pattern}) OR
+        LOWER(${searchableContent.description}) LIKE LOWER(${pattern}) OR
+        LOWER(${searchableContent.keywords}) LIKE LOWER(${pattern}) OR
+        LOWER(${searchableContent.content}) LIKE LOWER(${pattern})
+      )`;
+    });
+    
+    if (searchConditions.length > 0) {
+      whereConditions.push(or(...searchConditions));
     }
-
-    const results = await queryBuilder.limit(20);
+    
+    // 構建查詢
+    let query: any = db.select().from(searchableContent);
+    
+    if (whereConditions.length > 0) {
+      query = query.where(and(...whereConditions));
+    }
+    
+    const results = await query.limit(20);
+    console.log(`[Search] Found ${results.length} results for query: "${q}" type: ${type || 'all'}`);
     return results;
   } catch (error) {
     console.error("[Database] Search failed:", error);
