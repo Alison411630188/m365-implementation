@@ -7,20 +7,28 @@ import Handbook from "@/pages/Handbook";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/NotFound";
 import ToolDetail from "@/pages/ToolDetail";
-import { Route, Switch } from "wouter";
+import { Route, Switch, useLocation } from "wouter";
+import { useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
 
 function Router() {
+  const [location] = useLocation();
+
+  useEffect(() => {
+    // 當路由改變時，滾動到頁面頂部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location]);
+
   return (
     <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/handbook"} component={Handbook} />
-      <Route path={"/cases"} component={Cases} />
-      <Route path={"/faq"} component={FAQ} />
-      <Route path={"/tools/:toolId"} component={ToolDetail} />
-      <Route path={"/404"} component={NotFound} />
+      <Route path="/" component={Home} />
+      <Route path="/handbook" component={Handbook} />
+      <Route path="/cases" component={Cases} />
+      <Route path="/faq" component={FAQ} />
+      <Route path="/tools/:toolId" component={ToolDetail} />
+      <Route path="/404" component={NotFound} />
       {/* Final fallback route */}
       <Route component={NotFound} />
     </Switch>
