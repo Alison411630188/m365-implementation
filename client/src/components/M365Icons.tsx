@@ -35,36 +35,20 @@ export function PowerBIIcon() {
 
 export function SharePointIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full"
-    >
-      <rect x="2" y="2" width="20" height="20" rx="2" fill="#0078D4" />
-      <path
-        d="M8 7h8v2H8V7zm0 4h8v2H8v-2zm0 4h8v2H8v-2z"
-        fill="white"
-      />
-    </svg>
+    <img
+      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/Lqe73dG7Tgch_9ca63964.jpg"
+      alt="SharePoint"
+      className="w-full h-full object-contain"
+    />
   );
 }
 
 export function TeamsIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full"
-    >
-      <rect x="2" y="2" width="20" height="20" rx="2" fill="#6264A7" />
-      <circle cx="8" cy="9" r="2" fill="white" />
-      <circle cx="16" cy="9" r="2" fill="white" />
-      <path
-        d="M8 12c-1.5 0-3 1-3 2.5v2h10v-2c0-1.5-1.5-2.5-3-2.5zm8 0c-1.5 0-3 1-3 2.5v2h10v-2c0-1.5-1.5-2.5-3-2.5z"
-        fill="white"
-      />
-    </svg>
+    <img
+      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/EWRmlgBy8VLQ_f1fd842a.png"
+      alt="Teams"
+      className="w-full h-full object-contain"
+    />
   );
 }
