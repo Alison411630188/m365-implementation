@@ -1,12 +1,12 @@
 /**
  * M365 官方 Icon 元件
- * 使用 SVG 格式的 M365 官方 icon
+ * 使用來自 icons8 的 M365 官方 icon
  */
 
 export function PlannerIcon() {
   return (
     <img
-      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/icons8-microsoft-planner-2019-48_ed055a5b.png"
+      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/RGTC90ff5ZPr_1a3babf5.jpg"
       alt="Planner"
       className="w-full h-full object-contain"
     />
@@ -15,35 +15,21 @@ export function PlannerIcon() {
 
 export function PowerAutomateIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full"
-    >
-      <rect x="2" y="2" width="20" height="20" rx="2" fill="#0078D4" />
-      <path
-        d="M12 5L17 9v6l-5 4-5-4V9l5-4z"
-        fill="white"
-      />
-      <circle cx="12" cy="12" r="2" fill="#0078D4" />
-    </svg>
+    <img
+      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/4JQzWYvPUMYW_49243784.png"
+      alt="Power Automate"
+      className="w-full h-full object-contain"
+    />
   );
 }
 
 export function PowerBIIcon() {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className="w-full h-full"
-    >
-      <rect x="2" y="2" width="20" height="20" rx="2" fill="#FFB900" />
-      <rect x="5" y="8" width="3" height="10" fill="white" />
-      <rect x="10" y="6" width="3" height="12" fill="white" />
-      <rect x="15" y="10" width="3" height="8" fill="white" />
-    </svg>
+    <img
+      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/m5YViK7gBB4N_664ae986.png"
+      alt="Power BI"
+      className="w-full h-full object-contain"
+    />
   );
 }
 
