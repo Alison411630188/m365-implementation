@@ -149,27 +149,30 @@ export default function Home() {
             </div>
           </Link>
 
-          {/* 問答區 */}
-          <Link href="/faq">
-            <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="text-3xl mb-4">❓</div>
-              <h3 className="text-xl font-bold text-foreground mb-3">
-                M365 問答區
-              </h3>
-              <p className="text-foreground/70 mb-6">
-                常見問題解答和故障排除指南
-              </p>
-              <Button variant="outline" className="w-full">
-                進入問答區 <ArrowRight size={16} className="ml-2" />
-              </Button>
-            </div>
-          </Link>
           </div>
         </div>
       </section>
 
+      {/* 問答區 - 獨立部分 */}
+      <section className="container py-16">
+        <Link href="/faq">
+          <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow cursor-pointer max-w-2xl mx-auto">
+            <div className="text-4xl mb-4">❓</div>
+            <h3 className="text-2xl font-bold text-foreground mb-3">
+              M365 問答區
+            </h3>
+            <p className="text-foreground/70 mb-6">
+              常見問題解答和故障排除指南。在這裡提出您的問題，我們的專家團隊會為您解答。
+            </p>
+            <Button className="w-full" size="lg">
+              進入問答區 <ArrowRight size={16} className="ml-2" />
+            </Button>
+          </div>
+        </Link>
+      </section>
+
       {/* 底部 CTA */}
-      <section className="bg-primary text-primary-foreground">
+      <section className="bg-primary text-primary-foreground mt-8">
         <div className="container py-12 text-center">
           <h2 className="text-2xl font-bold mb-4">
             準備好開始使用 M365 了嗎？

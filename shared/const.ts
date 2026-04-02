@@ -59,11 +59,6 @@ export const NAVIGATION_ITEMS = [
     path: "/cases",
   },
   {
-    id: "faq",
-    label: "M365 問答區",
-    path: "/faq",
-  },
-  {
     id: "tools",
     label: "工具說明",
     children: [
