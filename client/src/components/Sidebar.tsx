@@ -118,7 +118,7 @@ export default function Sidebar() {
             title="瀚荃集團"
           />
           {/* 瀚荃集團文字 */}
-          <span className="font-semibold text-sidebar-foreground text-xs text-center">
+          <span className="font-bold text-red-600 text-base text-center">
             瀚荃集團
           </span>
           {/* M365 文字 */}
