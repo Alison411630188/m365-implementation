@@ -353,6 +353,21 @@ function getToolIcon(toolId: string) {
   }
 }
 
+// M365 應用程式快速跳轉連結
+function getM365AppUrl(toolId: string): string {
+  const urlMap: Record<string, string> = {
+    'planner': 'https://tasks.office.com',
+    'power-automate': 'https://flow.microsoft.com',
+    'power-bi': 'https://app.powerbi.com',
+    'sharepoint': 'https://www.microsoft.com/en-us/microsoft-365/sharepoint/collaboration',
+    'teams': 'https://teams.microsoft.com',
+    'list': 'https://www.microsoft.com/en-us/microsoft-365/business/microsoft-lists',
+    'loop': 'https://loop.microsoft.com',
+    'todo': 'https://todo.microsoft.com',
+  };
+  return urlMap[toolId] || 'https://www.microsoft.com/en-us/microsoft-365';
+}
+
 export default function ToolDetail() {
   const [, params] = useRoute("/tools/:toolId");
   const toolId = params?.toolId as string;
@@ -386,7 +401,19 @@ export default function ToolDetail() {
               <h1 className="text-4xl font-bold text-foreground mb-2">
                 {tool.name}
               </h1>
-              <p className="text-lg text-foreground/70">{tool.description}</p>
+              <p className="text-lg text-foreground/70 mb-4">{tool.description}</p>
+              {/* 快速跳轉按鈕 */}
+              <a
+                href={getM365AppUrl(toolId)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                打開 {tool.name}
+              </a>
             </div>
           </div>
         </div>

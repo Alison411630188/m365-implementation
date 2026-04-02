@@ -7,6 +7,7 @@ import Handbook from "@/pages/Handbook";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/NotFound";
 import ToolDetail from "@/pages/ToolDetail";
+import Search from "@/pages/Search";
 import { Route, Switch, useLocation } from "wouter";
 import { useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/handbook" component={Handbook} />
       <Route path="/cases" component={Cases} />
       <Route path="/faq" component={FAQ} />
+      <Route path="/search" component={Search} />
       <Route path="/tools/:toolId" component={ToolDetail} />
       <Route path="/404" component={NotFound} />
       {/* Final fallback route */}

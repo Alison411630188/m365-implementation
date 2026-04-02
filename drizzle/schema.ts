@@ -25,4 +25,21 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
+// 搜索內容表 - 存儲所有可搜索的內容
+export const searchableContent = mysqlTable("searchable_content", {
+  id: int("id").autoincrement().primaryKey(),
+  type: mysqlEnum("type", ["tool", "faq", "case"]).notNull(), // 內容類型
+  title: text("title").notNull(), // 標題
+  description: text("description"), // 簡短描述
+  content: text("content"), // 完整內容
+  keywords: text("keywords"), // 搜索關鍵詞（逗號分隔）
+  relatedId: varchar("relatedId", { length: 64 }), // 關聯的工具/FAQ/案例 ID
+  url: varchar("url", { length: 512 }), // 內容鏈接
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type SearchableContent = typeof searchableContent.$inferSelect;
+export type InsertSearchableContent = typeof searchableContent.$inferInsert;
+
 // TODO: Add your tables here

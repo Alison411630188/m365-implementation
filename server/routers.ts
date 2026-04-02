@@ -4,6 +4,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { z } from "zod";
 import { sendContactFormEmail } from "./email";
+import { searchContent, initializeSearchContent } from "./db";
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -42,6 +43,36 @@ export const appRouter = router({
           return {
             success: false,
             message: "發送失敗，請稍後重試。",
+          };
+        }
+      }),
+  }),
+
+  search: router({
+    query: publicProcedure
+      .input(
+        z.object({
+          q: z.string().min(1),
+          type: z.enum(["tool", "faq", "case"]).optional(),
+        })
+      )
+      .query(async ({ input }) => {
+        try {
+          // 初始化搜索內容（如果還未初始化）
+          await initializeSearchContent();
+          
+          const results = await searchContent(input.q, input.type);
+          return {
+            success: true,
+            results,
+            count: results.length,
+          };
+        } catch (error) {
+          console.error("[Search] Error:", error);
+          return {
+            success: false,
+            results: [],
+            count: 0,
           };
         }
       }),
