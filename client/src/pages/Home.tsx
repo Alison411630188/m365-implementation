@@ -30,24 +30,35 @@ export default function Home() {
       {/* 英雄區域 */}
       <section className="bg-gradient-to-br from-primary/10 via-background to-background border-b border-border">
         <div className="container py-16 md:py-24">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
-              Microsoft 365 導入專案
-            </h1>
-            <p className="text-lg text-foreground/80 mb-8">
-              完整的 M365 導入指南、應用案例和工具說明。幫助您的團隊快速掌握 Microsoft 365 的核心功能和最佳實踐。
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link href="/handbook">
-                <Button size="lg" className="gap-2">
-                  查看使用手冊 <ArrowRight size={20} />
-                </Button>
-              </Link>
-              <Link href="/cases">
-                <Button size="lg" variant="outline">
-                  應用情境案例
-                </Button>
-              </Link>
+          <div className="flex justify-between items-start gap-8">
+            <div className="max-w-3xl flex-1">
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+                Microsoft 365 導入專案
+              </h1>
+              <p className="text-lg text-foreground/80 mb-8">
+                完整的 M365 導入指南、應用案例和工具說明。幫助您的團隊快速掌握 Microsoft 365 的核心功能和最佳實踐。
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link href="/handbook">
+                  <Button size="lg" className="gap-2">
+                    查看使用手冊 <ArrowRight size={20} />
+                  </Button>
+                </Link>
+                <Link href="/cases">
+                  <Button size="lg" variant="outline">
+                    應用情境案例
+                  </Button>
+                </Link>
+              </div>
+            </div>
+            {/* 右上角 Logo */}
+            <div className="hidden md:flex items-start justify-end flex-shrink-0">
+              <img
+                src="https://www.cvilux-group.com/theme/images/brand/cvilux-logo.png"
+                alt="CviLux Logo"
+                className="h-24 w-auto opacity-80 hover:opacity-100 transition-opacity"
+                title="瀚荃集團"
+              />
             </div>
           </div>
         </div>
@@ -91,19 +102,19 @@ export default function Home() {
             };
             
             return (
-            <Link key={tool.id} href={`/tools/${tool.id}`} onClick={handleToolClick} className="group block">
-              <Card className="h-full p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-l-border group-hover:border-l-primary group-hover:-translate-y-1 cursor-pointer">
-                <div className="w-12 h-12 mb-4 group-hover:scale-110 transition-transform duration-300">
-                  {getIconComponent()}
-                </div>
-                <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
-                  {tool.name}
-                </h3>
-                <p className="text-sm text-foreground/70">
-                  {tool.description}
-                </p>
-              </Card>
-            </Link>
+              <Link key={tool.id} href={`/tools/${tool.id}`} onClick={handleToolClick} className="group block">
+                <Card className="h-full p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-l-border group-hover:border-l-primary group-hover:-translate-y-1 cursor-pointer">
+                  <div className="w-12 h-12 mb-4 group-hover:scale-110 transition-transform duration-300">
+                    {getIconComponent()}
+                  </div>
+                  <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                    {tool.name}
+                  </h3>
+                  <p className="text-sm text-foreground/70">
+                    {tool.description}
+                  </p>
+                </Card>
+              </Link>
             );
           })}
         </div>
@@ -119,36 +130,35 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* 使用手冊 */}
             <Link href="/handbook">
-            <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="text-3xl mb-4">📖</div>
-              <h3 className="text-xl font-bold text-foreground mb-3">
-                M365 使用手冊
-              </h3>
-              <p className="text-foreground/70 mb-6">
-                逐步指南和最佳實踐，幫助您快速上手 M365
-              </p>
-              <Button variant="outline" className="w-full">
-                進入手冊 <ArrowRight size={16} className="ml-2" />
-              </Button>
-            </div>
-          </Link>
+              <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow cursor-pointer">
+                <div className="text-3xl mb-4">📖</div>
+                <h3 className="text-xl font-bold text-foreground mb-3">
+                  M365 使用手冊
+                </h3>
+                <p className="text-foreground/70 mb-6">
+                  逐步指南和最佳實踐，幫助您快速上手 M365
+                </p>
+                <Button variant="outline" className="w-full">
+                  進入手冊 <ArrowRight size={16} className="ml-2" />
+                </Button>
+              </div>
+            </Link>
 
-          {/* 應用案例 */}
-          <Link href="/cases">
-            <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="text-3xl mb-4">💼</div>
-              <h3 className="text-xl font-bold text-foreground mb-3">
-                應用情境案例
-              </h3>
-              <p className="text-foreground/70 mb-6">
-                真實業務場景中的 M365 應用案例和解決方案
-              </p>
-              <Button variant="outline" className="w-full">
-                查看案例 <ArrowRight size={16} className="ml-2" />
-              </Button>
-            </div>
-          </Link>
-
+            {/* 應用案例 */}
+            <Link href="/cases">
+              <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow cursor-pointer">
+                <div className="text-3xl mb-4">💼</div>
+                <h3 className="text-xl font-bold text-foreground mb-3">
+                  應用情境案例
+                </h3>
+                <p className="text-foreground/70 mb-6">
+                  真實業務場景中的 M365 應用案例和解決方案
+                </p>
+                <Button variant="outline" className="w-full">
+                  查看案例 <ArrowRight size={16} className="ml-2" />
+                </Button>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
