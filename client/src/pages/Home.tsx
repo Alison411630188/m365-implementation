@@ -53,8 +53,15 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {M365_TOOLS.map((tool) => (
-            <Link key={tool.id} href={`/tools/${tool.id}`} className="group block">
+          {M365_TOOLS.map((tool) => {
+            const handleToolClick = () => {
+              // 延遲滾動，確保頁面已加載
+              setTimeout(() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }, 100);
+            };
+            return (
+            <Link key={tool.id} href={`/tools/${tool.id}`} onClick={handleToolClick} className="group block">
               <Card className="h-full p-6 hover:shadow-xl transition-all duration-300 border-l-4 border-l-border group-hover:border-l-primary group-hover:-translate-y-1 cursor-pointer">
                 <div className="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">
                   {tool.icon}
@@ -67,7 +74,8 @@ export default function Home() {
                 </p>
               </Card>
             </Link>
-          ))}
+            );
+          })}
         </div>
       </section>
 
