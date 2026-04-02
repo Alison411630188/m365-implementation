@@ -1,7 +1,8 @@
 import { NAVIGATION_ITEMS } from "@/../../shared/const";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X, Moon, Sun } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
+import { useTheme } from "@/contexts/ThemeContext";
 
 /**
  * 側邊欄導航元件
@@ -24,6 +25,7 @@ export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const [expandedItems, setExpandedItems] = useState<string[]>(["tools"]);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   const toggleExpand = (id: string) => {
     setExpandedItems((prev) =>
@@ -130,13 +132,31 @@ export default function Sidebar() {
         </nav>
 
         {/* 側邊欄底部 */}
-        <div className="border-t border-sidebar-border p-4 text-xs text-sidebar-foreground/60 bg-muted/30">
-          <p className="font-semibold text-sidebar-foreground/80">M365 導入專案</p>
-          <p>知識庫 v1.0</p>
+        <div className="border-t border-sidebar-border p-4 text-xs text-sidebar-foreground/60 bg-muted/30 flex flex-col gap-3">
+          <div>
+            <p className="font-semibold text-sidebar-foreground/80">M365 導入專案</p>
+            <p>知識庫 v1.0</p>
+          </div>
+          {/* 主題切換按鈕 */}
+          <button
+            onClick={toggleTheme}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg bg-sidebar-foreground/10 hover:bg-sidebar-foreground/20 text-sidebar-foreground transition-colors"
+            title={theme === "light" ? "切換為深色主題" : "切換為淺色主題"}
+          >
+            {theme === "light" ? (
+              <>
+                <Moon size={16} />
+                <span className="text-xs font-medium">深色</span>
+              </>
+            ) : (
+              <>
+                <Sun size={16} />
+                <span className="text-xs font-medium">淺色</span>
+              </>
+            )}
+          </button>
         </div>
       </aside>
-
-
     </>
   );
 }
