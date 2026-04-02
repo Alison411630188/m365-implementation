@@ -4,9 +4,11 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Search } from "lucide-react";
+import { Search, Mail, Phone, Send } from "lucide-react";
 import { useState } from "react";
+import { toast } from "sonner";
 
 /**
  * 問答區頁面
@@ -14,6 +16,7 @@ import { useState } from "react";
  * - 可搜尋的常見問題
  * - 按類別組織
  * - 可展開/收起的答案
+ * - 聯繫表單供使用者提問
  */
 
 interface FAQItem {
@@ -133,6 +136,58 @@ const faqItems: FAQItem[] = [
 
 export default function FAQ() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [showContactForm, setShowContactForm] = useState(false);
+  const [contactForm, setContactForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleContactFormChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setContactForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmitContactForm = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    // 驗證表單
+    if (
+      !contactForm.name ||
+      !contactForm.email ||
+      !contactForm.subject ||
+      !contactForm.message
+    ) {
+      toast.error("請填寫所有必填欄位");
+      setIsSubmitting(false);
+      return;
+    }
+
+    // 模擬提交（實際應用中應該發送到後端）
+    try {
+      // 這裡可以添加實際的提交邏輯
+      console.log("提交的表單資料:", contactForm);
+      toast.success("感謝您的提問！我們會盡快回覆您。");
+      setContactForm({
+        name: "",
+        email: "",
+        phone: "",
+        subject: "",
+        message: "",
+      });
+      setShowContactForm(false);
+    } catch (error) {
+      toast.error("提交失敗，請稍後重試");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const categories = Array.from(
     new Set(faqItems.map((item) => item.category))
@@ -220,14 +275,178 @@ export default function FAQ() {
           </div>
         )}
 
-        {/* 底部提示 */}
-        <div className="mt-16 p-8 bg-primary/5 rounded-lg border border-primary/20">
-          <h3 className="text-lg font-bold text-foreground mb-2">
-            ❓ 沒有找到您的問題？
-          </h3>
-          <p className="text-foreground/70">
-            如果您找不到答案，請聯繫您的 IT 部門或訪問 Microsoft 官方支持頁面。
-          </p>
+        {/* 聯繫我們部分 */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold text-foreground mb-8">聯繫我們</h2>
+
+          {/* 聯繫方式卡片 */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* 電子郵件 */}
+            <Card className="p-8 hover:shadow-lg transition-shadow">
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-lg bg-primary/10">
+                  <Mail size={24} className="text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-foreground mb-2">
+                    電子郵件
+                  </h3>
+                  <p className="text-foreground/70 mb-4">
+                    發送您的問題或建議
+                  </p>
+                  <a
+                    href="mailto:zhuojiaquan520@gmail.com"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    zhuojiaquan520@gmail.com
+                  </a>
+                </div>
+              </div>
+            </Card>
+
+            {/* 電話 */}
+            <Card className="p-8 hover:shadow-lg transition-shadow">
+              <div className="flex items-start gap-4">
+                <div className="p-3 rounded-lg bg-primary/10">
+                  <Phone size={24} className="text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-lg font-bold text-foreground mb-2">
+                    電話
+                  </h3>
+                  <p className="text-foreground/70 mb-4">
+                    直接致電我們
+                  </p>
+                  <a
+                    href="tel:0984261917"
+                    className="text-primary hover:underline font-medium"
+                  >
+                    0984-261917
+                  </a>
+                </div>
+              </div>
+            </Card>
+          </div>
+
+          {/* 提問表單 */}
+          {!showContactForm ? (
+            <Card className="p-8 text-center">
+              <h3 className="text-lg font-bold text-foreground mb-4">
+                有問題需要幫助？
+              </h3>
+              <p className="text-foreground/70 mb-6">
+                填寫下方表單，我們會盡快回覆您的問題
+              </p>
+              <Button
+                onClick={() => setShowContactForm(true)}
+                size="lg"
+                className="gap-2"
+              >
+                <Send size={18} />
+                提交問題
+              </Button>
+            </Card>
+          ) : (
+            <Card className="p-8">
+              <h3 className="text-lg font-bold text-foreground mb-6">提交您的問題</h3>
+              <form onSubmit={handleSubmitContactForm} className="space-y-4">
+                {/* 姓名 */}
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    姓名 <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={contactForm.name}
+                    onChange={handleContactFormChange}
+                    placeholder="請輸入您的姓名"
+                    className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+
+                {/* 電子郵件 */}
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    電子郵件 <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={contactForm.email}
+                    onChange={handleContactFormChange}
+                    placeholder="請輸入您的電子郵件"
+                    className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+
+                {/* 電話 */}
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    電話（選填）
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={contactForm.phone}
+                    onChange={handleContactFormChange}
+                    placeholder="請輸入您的電話號碼"
+                    className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+
+                {/* 主題 */}
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    主題 <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    name="subject"
+                    value={contactForm.subject}
+                    onChange={handleContactFormChange}
+                    placeholder="請輸入問題主題"
+                    className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+
+                {/* 訊息 */}
+                <div>
+                  <label className="block text-sm font-medium text-foreground mb-2">
+                    詳細說明 <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    name="message"
+                    value={contactForm.message}
+                    onChange={handleContactFormChange}
+                    placeholder="請詳細描述您的問題或建議"
+                    rows={5}
+                    className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary resize-none"
+                  />
+                </div>
+
+                {/* 按鈕 */}
+                <div className="flex gap-4 pt-4">
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-1 gap-2"
+                  >
+                    <Send size={18} />
+                    {isSubmitting ? "提交中..." : "提交問題"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setShowContactForm(false)}
+                    className="flex-1"
+                  >
+                    取消
+                  </Button>
+                </div>
+              </form>
+            </Card>
+          )}
         </div>
       </div>
     </div>
