@@ -107,24 +107,6 @@ export default function Home() {
             );
           })}
         </div>
-
-        {/* 問答區 - 位於工具說明下方 */}
-        <div className="mt-16 pt-16 border-t border-border">
-          <Link href="/faq">
-            <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow cursor-pointer">
-              <div className="text-4xl mb-4">❓</div>
-              <h3 className="text-2xl font-bold text-foreground mb-3">
-                M365 問答區
-              </h3>
-              <p className="text-foreground/70 mb-6">
-                常見問題解答和故障排除指南。在這裡提出您的問題，我們的專家團隊會為您解答。
-              </p>
-              <Button className="w-full" size="lg">
-                進入問答區 <ArrowRight size={16} className="ml-2" />
-              </Button>
-            </div>
-          </Link>
-        </div>
       </section>
 
       {/* 快速導航 */}

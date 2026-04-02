@@ -69,4 +69,9 @@ export const NAVIGATION_ITEMS = [
       { id: "teams", label: "Teams 說明", path: "/tools/teams" },
     ],
   },
+  {
+    id: "faq",
+    label: "M365 問答區",
+    path: "/faq",
+  },
 ];
