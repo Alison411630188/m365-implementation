@@ -102,7 +102,7 @@ export default function Sidebar() {
       <aside
         className={`fixed left-0 top-0 h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 z-40 ${
           isOpen ? "w-64" : "w-0 overflow-hidden"
-        } lg:relative lg:w-64 lg:z-auto ${
+        } lg:relative lg:w-64 lg:z-auto lg:flex-shrink-0 ${
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
@@ -136,8 +136,7 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      {/* 主內容區域偏移 */}
-      <div className={`transition-all duration-300 ${isOpen ? "lg:ml-64" : ""}`} />
+
     </>
   );
 }
