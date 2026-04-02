@@ -9,6 +9,7 @@ import { Card } from "@/components/ui/card";
 import { Search, Mail, Phone, Send } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { trpc } from "@/lib/trpc";
 
 /**
  * 問答區頁面
@@ -146,6 +147,8 @@ export default function FAQ() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const submitMutation = trpc.contact.submit.useMutation();
+
   const handleContactFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -169,20 +172,30 @@ export default function FAQ() {
       return;
     }
 
-    // 模擬提交（實際應用中應該發送到後端）
     try {
-      // 這裡可以添加實際的提交邏輯
-      console.log("提交的表單資料:", contactForm);
-      toast.success("感謝您的提問！我們會盡快回覆您。");
-      setContactForm({
-        name: "",
-        email: "",
-        phone: "",
-        subject: "",
-        message: "",
+      const result = await submitMutation.mutateAsync({
+        name: contactForm.name,
+        email: contactForm.email,
+        phone: contactForm.phone || undefined,
+        subject: contactForm.subject,
+        message: contactForm.message,
       });
-      setShowContactForm(false);
+
+      if (result.success) {
+        toast.success(result.message);
+        setContactForm({
+          name: "",
+          email: "",
+          phone: "",
+          subject: "",
+          message: "",
+        });
+        setShowContactForm(false);
+      } else {
+        toast.error(result.message);
+      }
     } catch (error) {
+      console.error("提交表單失敗:", error);
       toast.error("提交失敗，請稍後重試");
     } finally {
       setIsSubmitting(false);
@@ -429,11 +442,11 @@ export default function FAQ() {
                 <div className="flex gap-4 pt-4">
                   <Button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || submitMutation.isPending}
                     className="flex-1 gap-2"
                   >
                     <Send size={18} />
-                    {isSubmitting ? "提交中..." : "提交問題"}
+                    {isSubmitting || submitMutation.isPending ? "提交中..." : "提交問題"}
                   </Button>
                   <Button
                     type="button"

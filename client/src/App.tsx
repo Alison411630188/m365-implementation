@@ -12,7 +12,6 @@ import { useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
-
 function Router() {
   const [location] = useLocation();
 
