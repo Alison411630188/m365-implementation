@@ -41,12 +41,10 @@ function App() {
       >
         <TooltipProvider>
           <Toaster />
-          <div className="flex">
-            <Sidebar />
-            <main className="flex-1">
-              <Router />
-            </main>
-          </div>
+          <Sidebar />
+          <main className="lg:ml-64">
+            <Router />
+          </main>
         </TooltipProvider>
       </ThemeProvider>
     </ErrorBoundary>

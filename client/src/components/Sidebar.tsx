@@ -100,9 +100,9 @@ export default function Sidebar() {
 
       {/* 側邊欄 */}
       <aside
-        className={`fixed left-0 top-0 h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 z-40 ${
+        className={`fixed left-0 top-0 h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 z-40 overflow-y-auto ${
           isOpen ? "w-64" : "w-0 overflow-hidden"
-        } lg:relative lg:w-64 lg:z-auto lg:flex-shrink-0 ${
+        } lg:fixed lg:w-64 lg:z-40 lg:flex-shrink-0 ${
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
