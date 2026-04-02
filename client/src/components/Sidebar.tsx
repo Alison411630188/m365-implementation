@@ -109,25 +109,22 @@ export default function Sidebar() {
         }`}
       >
         {/* 側邊欄頭部 */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-sidebar-border">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col items-start justify-center px-4 py-3 border-b border-sidebar-border">
+          <div className="flex items-center gap-2 mb-1">
             {/* 瀚荃 Logo */}
             <img
               src="https://www.cvilux-group.com/theme/images/brand/cvilux-logo.png"
               alt="CviLux Logo"
-              className="h-8 w-auto"
+              className="h-6 w-auto"
               title="瀚荃集團"
             />
-            <span className="font-bold text-sidebar-foreground hidden sm:inline text-sm">
-              M365
+            <span className="font-semibold text-sidebar-foreground hidden sm:inline text-xs">
+              瀚荃集團
             </span>
           </div>
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="hidden lg:block p-1 hover:bg-muted rounded"
-          >
-            {isOpen ? "←" : "→"}
-          </button>
+          <span className="font-bold text-sidebar-foreground hidden sm:inline text-sm">
+            M365
+          </span>
         </div>
 
         {/* 搜索框 */}
