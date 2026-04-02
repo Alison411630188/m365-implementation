@@ -101,3 +101,10 @@
 - [x] 修復搜索查詢邏輯（使用 SQL LOWER() 支持不區分大小寫）
 - [x] 測試搜索功能正常工作（搜索 "Power"、"SharePoint" 等成功返回結果）
 - [x] 驗證類型篩選功能正常工作
+
+
+## 新功能：Planner 工具頁面嵌入 iframe
+
+- [x] 在 Planner 工具詳情頁面最上方添加 iframe
+- [x] 測試 iframe 嵌入功能
+- [x] 保存檢查點

@@ -391,6 +391,19 @@ export default function ToolDetail() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container py-12">
+        {/* Planner iframe 嵌入 */}
+        {toolId === 'planner' && (
+          <div className="mb-12 rounded-lg overflow-hidden shadow-lg">
+            <iframe
+              src="https://cautious-winner-jjxpw6v7gwj5fpgr4-3000.app.github.dev/"
+              width="100%"
+              height="600px"
+              style={{ border: 'none' }}
+              title="Planner Demo"
+            />
+          </div>
+        )}
+
         {/* 工具頭部 */}
         <div className="mb-12 pb-8 border-b border-border">
           <div className="flex items-start gap-6 mb-6">
