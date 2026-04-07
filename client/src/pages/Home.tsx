@@ -30,8 +30,7 @@ export default function Home() {
       {/* 英雄區域 */}
       <section className="bg-gradient-to-br from-primary/10 via-background to-background border-b border-border">
         <div className="container py-16 md:py-24">
-          <div className="flex justify-between items-center gap-8">
-            <div className="max-w-3xl flex-1">
+          <div className="max-w-3xl">
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
                 Microsoft 365 導入專案
               </h1>
@@ -51,16 +50,6 @@ export default function Home() {
                 </Link>
               </div>
             </div>
-            {/* Logo 位置 - 標題右邊空白處正中間 */}
-            <div className="hidden lg:flex items-center justify-center flex-shrink-0">
-              <img
-                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/cvilux-logo-transparent_3d6879c6.png"
-                alt="CviLux Logo"
-                className="h-32 w-auto opacity-80 hover:opacity-100 transition-opacity"
-                title="瀚荃集團"
-              />
-            </div>
-          </div>
         </div>
       </section>
 
