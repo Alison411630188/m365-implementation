@@ -55,26 +55,25 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Logo 位置 - 空白處正中間 */}
+      <div className="hidden lg:flex justify-center items-center py-8">
+        <img
+          src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/cvilux-logo-transparent_3d6879c6.png"
+          alt="CviLux Logo"
+          className="h-28 w-auto opacity-80 hover:opacity-100 transition-opacity"
+          title="瀚荃集團"
+        />
+      </div>
+
       {/* M365 工具介紹 */}
       <section className="container py-16">
-        <div className="mb-12 flex justify-between items-start gap-8">
-          <div>
-            <h2 className="text-3xl font-bold text-foreground mb-4">
-              M365 核心工具
-            </h2>
-            <p className="text-foreground/70">
-              了解每個工具的功能和使用場景
-            </p>
-          </div>
-          {/* Logo 位置調整到工具區域正上方 */}
-          <div className="hidden lg:flex items-start justify-end flex-shrink-0">
-            <img
-              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/cvilux-logo-transparent_3d6879c6.png"
-              alt="CviLux Logo"
-              className="h-28 w-auto opacity-80 hover:opacity-100 transition-opacity"
-              title="瀚荃集團"
-            />
-          </div>
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold text-foreground mb-4">
+            M365 核心工具
+          </h2>
+          <p className="text-foreground/70">
+            了解每個工具的功能和使用場景
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
