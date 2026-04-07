@@ -31,10 +31,10 @@ export default function Home() {
       <section className="bg-gradient-to-br from-primary/20 to-primary/5 dark:from-primary/30 dark:to-primary/10 border-b border-border">
         <div className="container py-16 md:py-24">
           <div className="max-w-3xl">
-              <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+              <h1 className="text-4xl md:text-5xl font-bold text-foreground dark:text-white mb-6">
                 Microsoft 365 導入專案
               </h1>
-              <p className="text-lg text-foreground/80 mb-8">
+              <p className="text-lg text-foreground/80 dark:text-white/80 mb-8">
                 完整的 M365 導入指南、應用案例和工具說明。幫助您的團隊快速掌握 Microsoft 365 的核心功能和最佳實踐。
               </p>
               <div className="flex flex-wrap gap-4">
@@ -56,10 +56,10 @@ export default function Home() {
       {/* M365 工具介紹 */}
       <section className="container py-16">
         <div className="mb-12">
-          <h2 className="text-3xl font-bold text-foreground mb-4">
+          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-4">
             M365 核心工具
           </h2>
-          <p className="text-foreground/70">
+          <p className="text-foreground/70 dark:text-white/70">
             了解每個工具的功能和使用場景
           </p>
         </div>
@@ -96,10 +96,10 @@ export default function Home() {
                   <div className="w-12 h-12 mb-4 group-hover:scale-110 transition-transform duration-300">
                     {getIconComponent()}
                   </div>
-                  <h3 className="text-lg font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                  <h3 className="text-lg font-bold text-foreground dark:text-white mb-2 group-hover:text-primary transition-colors">
                     {tool.name}
                   </h3>
-                  <p className="text-sm text-foreground/70">
+                  <p className="text-sm text-foreground/70 dark:text-white/70">
                     {tool.description}
                   </p>
                 </Card>
@@ -110,21 +110,21 @@ export default function Home() {
       </section>
 
       {/* 快速導航 */}
-      <section className="bg-secondary/50 border-t border-border">
+      <section className="bg-secondary/50 dark:bg-gray-800 border-t border-border">
         <div className="container py-16">
-          <h2 className="text-3xl font-bold text-foreground mb-12">
+          <h2 className="text-3xl font-bold text-foreground dark:text-white mb-12">
             快速導航
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* 使用手冊 */}
             <Link href="/handbook">
-              <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow cursor-pointer">
+              <div className="bg-background dark:bg-gray-900 rounded-lg p-8 border border-border dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer">
                 <div className="text-3xl mb-4">📖</div>
-                <h3 className="text-xl font-bold text-foreground mb-3">
+                <h3 className="text-xl font-bold text-foreground dark:text-white mb-3">
                   M365 使用手冊
                 </h3>
-                <p className="text-foreground/70 mb-6">
+                <p className="text-foreground/70 dark:text-white/70 mb-6">
                   逐步指南和最佳實踐，幫助您快速上手 M365
                 </p>
                 <Button variant="outline" className="w-full">
@@ -135,12 +135,12 @@ export default function Home() {
 
             {/* 應用案例 */}
             <Link href="/cases">
-              <div className="bg-background rounded-lg p-8 border border-border hover:shadow-lg transition-shadow cursor-pointer">
+              <div className="bg-background dark:bg-gray-900 rounded-lg p-8 border border-border dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer">
                 <div className="text-3xl mb-4">💼</div>
-                <h3 className="text-xl font-bold text-foreground mb-3">
+                <h3 className="text-xl font-bold text-foreground dark:text-white mb-3">
                   應用情境案例
                 </h3>
-                <p className="text-foreground/70 mb-6">
+                <p className="text-foreground/70 dark:text-white/70 mb-6">
                   真實業務場景中的 M365 應用案例和解決方案
                 </p>
                 <Button variant="outline" className="w-full">
