@@ -109,12 +109,12 @@ export default function Sidebar() {
         }`}
       >
         {/* 侧邊欄頁部 */}
-        <div className="flex flex-col items-center justify-center px-4 py-4 border-b border-sidebar-border gap-2">
+        <div className="flex flex-col items-center justify-center px-4 py-6 border-b border-sidebar-border gap-3">
           {/* 瀚荃 Logo */}
           <img
-            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/471557122_1185896363536762_8199515470028087466_n_862f27e1.png"
+            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/cvilux-logo-transparent_3d6879c6.png"
             alt="CviLux Logo"
-            className="h-8 w-auto"
+            className="h-12 w-auto"
             title="瀚荃集團"
           />
           {/* 瀚荃集團文字 */}
