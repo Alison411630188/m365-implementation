@@ -54,7 +54,7 @@ export default function Home() {
             {/* 右上角 Logo */}
             <div className="hidden md:flex items-start justify-end flex-shrink-0">
               <img
-                src="https://www.cvilux-group.com/theme/images/brand/cvilux-logo.png"
+                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/471557122_1185896363536762_8199515470028087466_n_862f27e1.png"
                 alt="CviLux Logo"
                 className="h-24 w-auto opacity-80 hover:opacity-100 transition-opacity"
                 title="瀚荃集團"
