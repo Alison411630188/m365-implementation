@@ -52,11 +52,11 @@ export default function Home() {
               </div>
             </div>
             {/* 右上角 Logo */}
-            <div className="hidden md:flex items-start justify-end flex-shrink-0">
+            <div className="hidden md:flex items-start justify-end flex-shrink-0 ml-8">
               <img
                 src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/cvilux-logo-transparent_3d6879c6.png"
                 alt="CviLux Logo"
-                className="h-20 w-auto opacity-80 hover:opacity-100 transition-opacity"
+                className="h-28 w-auto opacity-80 hover:opacity-100 transition-opacity"
                 title="瀚荃集團"
               />
             </div>

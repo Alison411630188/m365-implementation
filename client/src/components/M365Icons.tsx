@@ -6,7 +6,7 @@
 export function PlannerIcon() {
   return (
     <img
-      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/RGTC90ff5ZPr_1a3babf5.jpg"
+      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/planner-icon-transparent_15846bda.png"
       alt="Planner"
       className="w-full h-full object-contain"
     />
@@ -36,7 +36,7 @@ export function PowerBIIcon() {
 export function SharePointIcon() {
   return (
     <img
-      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/Lqe73dG7Tgch_9ca63964.jpg"
+      src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/sharepoint-icon-transparent_e2b70ada.png"
       alt="SharePoint"
       className="w-full h-full object-contain"
     />
