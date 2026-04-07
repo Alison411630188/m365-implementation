@@ -1,33 +1,56 @@
 import { useState, useMemo } from "react";
-import { trpc } from "@/lib/trpc";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Search as SearchIcon, ArrowRight } from "lucide-react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
+// 導入你的資料來源
+import { M365_TOOLS } from "@/../../shared/const"; 
 
 /**
- * 搜索頁面
- * 提供全站搜索功能，支持按類型篩選
+ * 搜索頁面 - 修改為前端本地搜尋，確保一定能找到資料
  */
 export default function Search() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [location] = useLocation();
+  // 取得網址上的搜尋參數 (例如 /search?q=planner)
+  const queryParams = new URLSearchParams(window.location.search);
+  const initialQuery = queryParams.get("q") || "";
+
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [selectedType, setSelectedType] = useState<"tool" | "faq" | "case" | undefined>();
 
-  // 執行搜索查詢
-  const { data: searchResults, isLoading } = trpc.search.query.useQuery(
-    { q: searchQuery, type: selectedType },
-    { enabled: searchQuery.length > 0 }
-  );
-
-  // 篩選結果
+  // 【核心修改】直接在前端進行搜尋過濾
   const filteredResults = useMemo(() => {
-    if (!searchResults?.results) return [];
-    return searchResults.results;
-  }, [searchResults?.results]);
+    if (searchQuery.trim().length === 0) return [];
+
+    const lowerQuery = searchQuery.toLowerCase();
+
+    // 搜尋 M365_TOOLS 裡的資料
+    return M365_TOOLS.filter((tool) => {
+      const matchText = (tool.name + tool.description).toLowerCase();
+      const matchSearch = matchText.includes(lowerQuery);
+      
+      // 如果有選擇類型，則還要符合類型 (目前 M365_TOOLS 預設皆為 tool)
+      if (selectedType && selectedType !== 'tool') return false;
+      
+      return matchSearch;
+    }).map(tool => ({
+      id: tool.id,
+      title: tool.name,
+      description: tool.description,
+      type: "tool",
+      url: `/tools/${tool.id}`,
+      keywords: tool.id
+    }));
+  }, [searchQuery, selectedType]);
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
+    // 可選：同步更新網址，讓重新整理後搜尋還在
+    const newUrl = e.target.value 
+      ? `/search?q=${encodeURIComponent(e.target.value)}` 
+      : '/search';
+    window.history.replaceState({}, '', newUrl);
   };
 
   const getTypeLabel = (type: string) => {
@@ -61,19 +84,17 @@ export default function Search() {
               快速查找工具說明、常見問題和應用案例
             </p>
 
-            {/* 搜索輸入框 */}
             <div className="relative">
               <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 text-foreground/50" size={20} />
               <Input
                 type="text"
-                placeholder="搜索工具、問題或案例..."
+                placeholder="搜索工具 (例如: Planner, Teams)..."
                 value={searchQuery}
                 onChange={handleSearch}
                 className="pl-12 h-12 text-base"
               />
             </div>
 
-            {/* 類型篩選 */}
             <div className="flex flex-wrap gap-2 mt-6">
               <Button
                 variant={selectedType === undefined ? "default" : "outline"}
@@ -89,20 +110,6 @@ export default function Search() {
               >
                 工具說明
               </Button>
-              <Button
-                variant={selectedType === "faq" ? "default" : "outline"}
-                onClick={() => setSelectedType("faq")}
-                size="sm"
-              >
-                常見問題
-              </Button>
-              <Button
-                variant={selectedType === "case" ? "default" : "outline"}
-                onClick={() => setSelectedType("case")}
-                size="sm"
-              >
-                應用案例
-              </Button>
             </div>
           </div>
         </div>
@@ -117,15 +124,10 @@ export default function Search() {
               開始輸入搜索詞以查找相關內容
             </p>
           </div>
-        ) : isLoading ? (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-            <p className="text-foreground/70 mt-4">搜索中...</p>
-          </div>
         ) : filteredResults.length === 0 ? (
           <div className="text-center py-12">
             <p className="text-foreground/70">
-              未找到相關結果。請嘗試其他搜索詞。
+              未找到關於 "{searchQuery}" 的結果。請嘗試搜尋 "Planner" 或 "Teams"。
             </p>
           </div>
         ) : (
@@ -137,7 +139,7 @@ export default function Search() {
             <div className="space-y-4">
               {filteredResults.map((result) => (
                 <Link key={result.id} href={result.url || "#"}>
-                  <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer">
+                  <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer border-l-4 border-l-primary">
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
@@ -151,15 +153,6 @@ export default function Search() {
                         <p className="text-foreground/70 mb-3">
                           {result.description}
                         </p>
-                        {result.keywords && (
-                          <div className="flex flex-wrap gap-2">
-                            {result.keywords.split(",").slice(0, 3).map((keyword: string, idx: number) => (
-                              <span key={idx} className="text-xs bg-secondary/50 text-foreground/70 px-2 py-1 rounded">
-                                {keyword.trim()}
-                              </span>
-                            ))}
-                          </div>
-                        )}
                       </div>
                       <ArrowRight className="text-primary flex-shrink-0 mt-1" size={20} />
                     </div>

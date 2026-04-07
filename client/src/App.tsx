@@ -13,6 +13,21 @@ import { useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 
+// 1. 導入動畫庫
+import { motion, AnimatePresence } from "framer-motion";
+
+// 2. 定義轉場動畫參數（淡入 + 輕微位移）
+const pageVariants = {
+  initial: { opacity: 0, x: 20 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: -20 },
+};
+
+const pageTransition = {
+  duration: 0.3,
+  ease: "easeInOut",
+};
+
 function Router() {
   const [location] = useLocation();
 
@@ -22,36 +37,73 @@ function Router() {
   }, [location]);
 
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/handbook" component={Handbook} />
-      <Route path="/cases" component={Cases} />
-      <Route path="/faq" component={FAQ} />
-      <Route path="/search" component={Search} />
-      <Route path="/tools/:toolId" component={ToolDetail} />
-      <Route path="/404" component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
+    /* 3. 使用 AnimatePresence 監控路由切換 */
+    <AnimatePresence mode="wait">
+      {/* 4. 給 Switch 一個 location 參數與 key，讓它知道什麼時候該跑出場動畫 */}
+      <Switch location={location} key={location}>
+        <Route path="/">
+          <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition}>
+            <Home />
+          </motion.div>
+        </Route>
+
+        <Route path="/handbook">
+          <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition}>
+            <Handbook />
+          </motion.div>
+        </Route>
+
+        <Route path="/cases">
+          <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition}>
+            <Cases />
+          </motion.div>
+        </Route>
+
+        <Route path="/faq">
+          <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition}>
+            <FAQ />
+          </motion.div>
+        </Route>
+
+        <Route path="/search">
+          <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition}>
+            <Search />
+          </motion.div>
+        </Route>
+
+        <Route path="/tools/:toolId">
+          <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition}>
+            <ToolDetail />
+          </motion.div>
+        </Route>
+
+        <Route path="/404">
+          <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition}>
+            <NotFound />
+          </motion.div>
+        </Route>
+
+        <Route>
+          <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition}>
+            <NotFound />
+          </motion.div>
+        </Route>
+      </Switch>
+    </AnimatePresence>
   );
 }
-
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
 
 function App() {
   return (
     <ErrorBoundary>
-      <ThemeProvider
-        defaultTheme="light"
-        switchable
-      >
+      <ThemeProvider defaultTheme="light" switchable>
         <TooltipProvider>
           <Toaster />
+          {/* Sidebar 放在這裡：它是靜止的，不受動畫影響 */}
           <Sidebar />
-          <main className="lg:ml-64">
+          
+          {/* 這裡是內容區：Router 裡面的頁面會有轉場動畫 */}
+          <main className="lg:ml-64 min-h-screen relative overflow-hidden">
             <Router />
           </main>
         </TooltipProvider>
