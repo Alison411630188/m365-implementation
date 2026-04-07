@@ -26,9 +26,9 @@ export default function Home() {
   let { user, loading, error, isAuthenticated, logout } = useAuth();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-red-100 to-red-50 dark:from-red-950 dark:via-red-900 dark:to-red-950">
       {/* 英雄區域 */}
-      <section className="bg-gradient-to-br from-primary/10 via-background to-background border-b border-border">
+      <section className="bg-gradient-to-br from-primary/20 to-primary/5 dark:from-primary/30 dark:to-primary/10 border-b border-border">
         <div className="container py-16 md:py-24">
           <div className="max-w-3xl">
               <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">

@@ -100,16 +100,16 @@ export default function Sidebar() {
         />
       )}
 
-      {/* 側邊欄 */}
+      {/* 侧邊欄 */}
       <aside
-        className={`fixed left-0 top-0 h-screen bg-sidebar border-r border-sidebar-border transition-all duration-300 z-40 overflow-y-auto ${
+        className={`fixed left-0 top-0 h-screen bg-sidebar dark:bg-gray-900 border-r border-sidebar-border dark:border-gray-700 transition-all duration-300 z-40 overflow-y-auto ${
           isOpen ? "w-64" : "w-0 overflow-hidden"
         } lg:fixed lg:w-64 lg:z-40 lg:flex-shrink-0 ${
           isMobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         }`}
       >
-        {/* 侧邊欄頁部 */}
-        <div className="flex flex-col items-center justify-center px-4 py-6 border-b border-sidebar-border gap-3">
+        {/* 侨邊欄頁部 */}
+        <div className="flex flex-col items-center justify-center px-4 py-6 border-b border-sidebar-border dark:border-gray-700 gap-3">
           {/* 瀚荃 Logo */}
           <img
             src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/cvilux-logo-transparent_3d6879c6.png"
@@ -127,8 +127,8 @@ export default function Sidebar() {
           </span>
         </div>
 
-        {/* 搜索框 */}
-        <div className="px-4 py-3 border-b border-sidebar-border">
+        {/* 戠索框 */}
+        <div className="px-4 py-3 border-b border-sidebar-border dark:border-gray-700">
           <Link href="/search">
             <div className="w-full px-3 py-2 rounded-lg bg-sidebar-foreground/10 hover:bg-sidebar-foreground/20 text-sidebar-foreground/70 text-sm cursor-pointer transition-colors flex items-center gap-2">
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -144,8 +144,8 @@ export default function Sidebar() {
           {NAVIGATION_ITEMS.map((item) => renderNavItem(item))}
         </nav>
 
-        {/* 側邊欄底部 */}
-        <div className="border-t border-sidebar-border p-4 text-xs text-sidebar-foreground/60 bg-muted/30 flex flex-col gap-3">
+        {/* 侨邊欄底部 */}
+        <div className="border-t border-sidebar-border dark:border-gray-700 p-4 text-xs text-sidebar-foreground/60 dark:text-gray-400 bg-muted/30 dark:bg-gray-800 flex flex-col gap-3">
           <div>
             <p className="font-semibold text-sidebar-foreground/80">M365 導入專案</p>
             <p>知識庫 v1.0</p>
