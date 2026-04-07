@@ -153,7 +153,7 @@ export default function Home() {
       </section>
 
       {/* 底部 CTA */}
-      <section className="bg-primary text-primary-foreground mt-8">
+      <section className="bg-primary text-primary-foreground mt-8 dark:bg-red-900">
         <div className="container py-12 text-center">
           <h2 className="text-2xl font-bold mb-4">
             準備好開始使用 M365 了嗎？
@@ -165,7 +165,7 @@ export default function Home() {
             <Button
               size="lg"
               variant="outline"
-              className="bg-primary-foreground text-primary hover:bg-primary-foreground/90"
+              className="bg-primary-foreground text-primary hover:bg-primary-foreground/90 dark:bg-transparent dark:text-white dark:border-white dark:hover:bg-white/10"
             >
               開始探索 <ArrowRight size={20} className="ml-2" />
             </Button>
