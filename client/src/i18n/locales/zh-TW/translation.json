@@ -1,0 +1,98 @@
+{
+  "home": {
+    "title": "Microsoft 365",
+    "subtitle": "導入專案",
+    "description": "完整的 M365 導入指南、應用案例和工具說明。幫助您的團隊快速掌握 Microsoft 365 的核心功能和最佳實踐。",
+    "viewHandbook": "查看使用手冊",
+    "viewCases": "應用情境案例",
+    "coreTools": "M365 核心工具",
+    "coreToolsDesc": "了解每個工具的功能和使用場景",
+    "quickNav": "快速導航",
+    "handbook": "使用手冊",
+    "handbookDesc": "逐步指南和最佳實踐",
+    "cases": "應用案例",
+    "casesDesc": "真實業務場景解決方案",
+    "enterHandbook": "進入手冊",
+    "viewAllCases": "查看案例",
+    "enterDetail": "進入詳情"
+  },
+  "sidebar": {
+    "groupTitle": "瀚荃集團",
+    "projectTitle": "M365 導入專案",
+    "searchPlaceholder": "搜尋手冊、案例...",
+    "categoryTitle": "知識庫分類",
+    "version": "系統版本 v1.0.4",
+    "copyright": "CviLux IT Team © 2026"
+  },
+  "nav": {
+    "home": "首頁",
+    "handbook": "使用手冊",
+    "cases": "應用案例",
+    "faq": "常見問題",
+    "tools": "核心工具"
+  },
+  "language": {
+    "switch": "切換語言",
+    "zh": "繁體中文",
+    "en": "English"
+  },
+  "tools": {
+    "planner": {
+      "name": "Planner",
+      "description": "計劃和追蹤專案進度",
+      "label": "Planner 說明"
+    },
+    "power-automate": {
+      "name": "Power Automate",
+      "description": "自動化工作流程和業務流程",
+      "label": "Power Automate 說明"
+    },
+    "power-bi": {
+      "name": "Power BI",
+      "description": "資料視覺化和商業智能分析",
+      "label": "Power BI 說明"
+    },
+    "sharepoint": {
+      "name": "SharePoint",
+      "description": "企業內容管理和協作平台",
+      "label": "SharePoint 說明"
+    },
+    "teams": {
+      "name": "Teams",
+      "description": "團隊溝通和協作中心",
+      "label": "Teams 說明"
+    }
+  },
+  "navigation": {
+    "home": "首頁",
+    "handbook": "M365 使用手冊",
+    "cases": "M365 應用情境案例",
+    "tools": "工具說明",
+    "faq": "M365 問答區"
+  },
+  "faq": {
+    "title": "M365 問答區",
+    "description": "常見問題解答和故障排除指南",
+    "searchPlaceholder": "搜尋問題...",
+    "noResults": "沒有找到相關問題",
+    "tryDifferent": "請嘗試使用不同的搜尋詞或瀏覽所有問題",
+    "contactTitle": "聯繫我們",
+    "emailTitle": "電子郵件",
+    "emailDesc": "發送您的問題或建議",
+    "phoneTitle": "電話",
+    "phoneDesc": "直接致電我們",
+    "formTitle": "有問題需要幫助？",
+    "formDesc": "如果您找不到您要找的答案，請隨時給我們發送消息，我們會盡快回覆您。",
+    "openForm": "立即提問",
+    "closeForm": "取消",
+    "nameLabel": "姓名",
+    "emailLabel": "電子郵件",
+    "phoneLabel": "電話 (選填)",
+    "subjectLabel": "主題",
+    "messageLabel": "消息",
+    "submit": "提交消息",
+    "submitting": "提交中...",
+    "fillRequired": "請填寫所有必填欄位",
+    "submitFailed": "提交失敗，請稍後重試"
+  }
+}

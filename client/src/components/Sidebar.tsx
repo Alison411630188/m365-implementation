@@ -1,8 +1,9 @@
 import { NAVIGATION_ITEMS } from "@/../../shared/const";
-import { ChevronDown, Menu, X, Moon, Sun, Search } from "lucide-react";
+import { ChevronDown, Menu, X, Moon, Sun, Search, Languages } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useTheme } from "@/contexts/ThemeContext";
+import { useTranslation } from "react-i18next";
 
 /**
  * 側邊欄導航元件 - 淺色模式黑色字體 (深色模式維持原樣)
@@ -16,10 +17,16 @@ interface NavItem {
 }
 
 export default function Sidebar() {
+  const { t, i18n } = useTranslation();
   const [location] = useLocation();
   const [expandedItems, setExpandedItems] = useState<string[]>(["tools"]);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
+
+  const toggleLanguage = () => {
+    const nextLang = i18n.language === 'zh-TW' ? 'en' : 'zh-TW';
+    i18n.changeLanguage(nextLang);
+  };
 
   const toggleExpand = (id: string) => {
     setExpandedItems((prev) =>
@@ -49,7 +56,7 @@ export default function Sidebar() {
                 : "text-black dark:text-sidebar-foreground/70 hover:bg-muted/50"
             }`}
           >
-            <span>{item.label}</span>
+            <span>{t(`navigation.${item.id}`)}</span>
             <ChevronDown
               size={14}
               className={`transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
@@ -67,7 +74,9 @@ export default function Sidebar() {
               }
             `}
           >
-            <span className={level > 0 ? "ml-2" : ""}>{item.label}</span>
+            <span className={level > 0 ? "ml-2" : ""}>
+              {level > 0 ? t(`tools.${item.id}.label`) : t(`navigation.${item.id}`)}
+            </span>
           </Link>
         )}
 
@@ -106,9 +115,9 @@ export default function Sidebar() {
             className="h-10 w-auto mb-3"
           />
           <div className="text-center">
-            <span className="block font-black text-red-600 text-lg tracking-tight leading-none">瀚荃集團</span>
+            <span className="block font-black text-red-600 text-lg tracking-tight leading-none">{t('sidebar.groupTitle')}</span>
             {/* 淺色改深：text-black/60 | 深色維持：dark:text-gray-400 */}
-            <span className="block font-bold text-black/60 dark:text-gray-400 text-[10px] uppercase tracking-[0.2em] mt-1">M365 導入專案</span>
+            <span className="block font-bold text-black/60 dark:text-gray-400 text-[10px] uppercase tracking-[0.2em] mt-1">{t('sidebar.projectTitle')}</span>
           </div>
         </div>
 
@@ -118,7 +127,7 @@ export default function Sidebar() {
             {/* 淺色改深：text-black/70 | 深色維持：dark:text-sidebar-foreground/70 */}
             <div className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full bg-gray-100 dark:bg-gray-800 text-black/70 dark:text-sidebar-foreground/70 hover:text-primary hover:ring-2 hover:ring-primary/20 transition-all cursor-pointer group">
               <Search size={16} className="group-hover:scale-110 transition-transform" />
-              <span className="text-xs font-bold">搜尋手冊、案例...</span>
+              <span className="text-xs font-bold">{t('sidebar.searchPlaceholder')}</span>
             </div>
           </Link>
         </div>
@@ -126,7 +135,7 @@ export default function Sidebar() {
         <nav className="flex-1 overflow-y-auto pt-2 scrollbar-hide">
           {/* 淺色改深：text-black/40 | 深色維持：dark:text-sidebar-foreground/60 */}
           <div className="px-6 mb-2 text-[10px] font-bold text-black/40 dark:text-sidebar-foreground/60 uppercase tracking-[0.15em]">
-            知識庫分類
+            {t('sidebar.categoryTitle')}
           </div>
           {NAVIGATION_ITEMS.map((item) => renderNavItem(item))}
         </nav>
@@ -135,15 +144,25 @@ export default function Sidebar() {
         <div className="p-4 bg-gray-50 dark:bg-gray-950 border-t border-sidebar-border dark:border-gray-800 flex flex-col gap-3">
           <div className="flex items-center justify-between px-2">
             <div>
-              <p className="text-[10px] font-bold text-black/60 dark:text-gray-400">系統版本 v1.0.4</p>
-              <p className="text-[10px] text-black/30 dark:text-gray-500">CviLux IT Team © 2026</p>
+              <p className="text-[10px] font-bold text-black/60 dark:text-gray-400">{t('sidebar.version')}</p>
+              <p className="text-[10px] text-black/30 dark:text-gray-500">{t('sidebar.copyright')}</p>
             </div>
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-lg bg-white dark:bg-gray-800 shadow-sm border border-sidebar-border dark:border-gray-700 text-black dark:text-white"
-            >
-              {theme === "light" ? <Moon size={14} /> : <Sun size={14} />}
-            </button>
+            <div className="flex gap-2">
+              <button
+                onClick={toggleLanguage}
+                className="p-2 rounded-lg bg-white dark:bg-gray-800 shadow-sm border border-sidebar-border dark:border-gray-700 text-black dark:text-white flex items-center gap-1"
+                title={t('language.switch')}
+              >
+                <Languages size={14} />
+                <span className="text-[10px] font-bold">{i18n.language === 'zh-TW' ? 'EN' : '中'}</span>
+              </button>
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-white dark:bg-gray-800 shadow-sm border border-sidebar-border dark:border-gray-700 text-black dark:text-white"
+              >
+                {theme === "light" ? <Moon size={14} /> : <Sun size={14} />}
+              </button>
+            </div>
           </div>
         </div>
       </aside>

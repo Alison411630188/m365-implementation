@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
+import { useTranslation } from "react-i18next";
 import {
   PlannerIcon,
   PowerAutomateIcon,
@@ -17,6 +18,7 @@ import {
  */
 
 export default function Home() {
+  const { t } = useTranslation();
   let { user, isAuthenticated } = useAuth();
 
   return (
@@ -27,22 +29,21 @@ export default function Home() {
         <div className="container pt-10 pb-10 md:pt-16 md:pb-12 relative z-10">
           <div className="max-w-3xl">
             <h1 className="text-5xl md:text-6xl font-extrabold text-foreground mb-6 tracking-tight">
-              Microsoft 365 <span className="text-primary">導入專案</span>
+              {t('home.title')} <span className="text-primary">{t('home.subtitle')}</span>
             </h1>
             <p className="text-xl text-foreground/70 mb-10 leading-relaxed">
-              完整的 M365 導入指南、應用案例和工具說明。幫助您的團隊快速掌握 Microsoft 365 的核心功能和最佳實踐。
+              {t('home.description')}
             </p>
             <div className="flex flex-wrap gap-4">
               <Link href="/handbook">
                 <Button size="lg" className="h-14 px-8 gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105 active:scale-95">
-                  查看使用手冊
+                  {t('home.viewHandbook')}
                 </Button>
               </Link>
               
-              {/* 【按鈕修改點】：顏色已改為跟左邊一致的品牌主色 */}
               <Link href="/cases">
                 <Button size="lg" className="h-14 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105 active:scale-95">
-                  應用情境案例
+                  {t('home.viewCases')}
                 </Button>
               </Link>
             </div>
@@ -55,9 +56,9 @@ export default function Home() {
       <section className="container pt-10 pb-24">
         <div className="mb-16">
           <h2 className="text-3xl font-bold text-foreground mb-4 tracking-tight">
-            M365 核心工具
+            {t('home.coreTools')}
           </h2>
-          <p className="text-lg text-foreground/60">了解每個工具的功能和使用場景</p>
+          <p className="text-lg text-foreground/60">{t('home.coreToolsDesc')}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -99,20 +100,20 @@ export default function Home() {
                   {/* 標題對齊容器 (固定高度確保對齊) */}
                   <div className="min-h-[4rem] flex items-center mb-2">
                     <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors leading-tight">
-                      {tool.name}
+                      {t(`tools.${tool.id}.name`)}
                     </h3>
                   </div>
                   
                   {/* 描述對齊容器 */}
                   <div className="min-h-[3.5rem]">
                     <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">
-                      {tool.description}
+                      {t(`tools.${tool.id}.description`)}
                     </p>
                   </div>
 
                   <div className="mt-auto pt-6 flex justify-end opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0 duration-500">
                     <span className="text-primary font-bold text-xs flex items-center gap-1">
-                      進入詳情 <ArrowRight size={14} />
+                      {t('home.enterDetail')} <ArrowRight size={14} />
                     </span>
                   </div>
                 </Card>
@@ -125,22 +126,22 @@ export default function Home() {
       {/* 快速導航與底部 */}
       <section className="bg-secondary/30 border-y border-border">
         <div className="container py-24 text-center">
-          <h2 className="text-3xl font-bold mb-16">快速導航</h2>
+          <h2 className="text-3xl font-bold mb-16">{t('home.quickNav')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
             <Link href="/handbook">
               <div className="group bg-card p-10 rounded-2xl border border-border hover:shadow-2xl transition-all cursor-pointer h-full flex flex-col items-center">
                 <div className="text-5xl mb-6 group-hover:scale-125 transition-transform">📖</div>
-                <h3 className="text-2xl font-bold mb-4">使用手冊</h3>
-                <p className="text-foreground/60 mb-8 min-h-[3rem]">逐步指南和最佳實踐</p>
-                <Button variant="outline" className="w-full mt-auto">進入手冊</Button>
+                <h3 className="text-2xl font-bold mb-4">{t('home.handbook')}</h3>
+                <p className="text-foreground/60 mb-8 min-h-[3rem]">{t('home.handbookDesc')}</p>
+                <Button variant="outline" className="w-full mt-auto">{t('home.enterHandbook')}</Button>
               </div>
             </Link>
             <Link href="/cases">
               <div className="group bg-card p-10 rounded-2xl border border-border hover:shadow-2xl transition-all cursor-pointer h-full flex flex-col items-center">
                 <div className="text-5xl mb-6 group-hover:scale-125 transition-transform">💼</div>
-                <h3 className="text-2xl font-bold mb-4">應用案例</h3>
-                <p className="text-foreground/60 mb-8 min-h-[3rem]">真實業務場景解決方案</p>
-                <Button variant="outline" className="w-full mt-auto">查看案例</Button>
+                <h3 className="text-2xl font-bold mb-4">{t('home.cases')}</h3>
+                <p className="text-foreground/60 mb-8 min-h-[3rem]">{t('home.casesDesc')}</p>
+                <Button variant="outline" className="w-full mt-auto">{t('home.viewAllCases')}</Button>
               </div>
             </Link>
           </div>

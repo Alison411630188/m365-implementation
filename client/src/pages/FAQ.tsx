@@ -10,6 +10,7 @@ import { Search, Mail, Phone, Send } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
+import { useTranslation } from "react-i18next";
 
 /**
  * 問答區頁面
@@ -136,6 +137,7 @@ const faqItems: FAQItem[] = [
 ];
 
 export default function FAQ() {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [showContactForm, setShowContactForm] = useState(false);
   const [contactForm, setContactForm] = useState({
@@ -167,7 +169,7 @@ export default function FAQ() {
       !contactForm.subject ||
       !contactForm.message
     ) {
-      toast.error("請填寫所有必填欄位");
+      toast.error(t('faq.fillRequired'));
       setIsSubmitting(false);
       return;
     }
@@ -196,7 +198,7 @@ export default function FAQ() {
       }
     } catch (error) {
       console.error("提交表單失敗:", error);
-      toast.error("提交失敗，請稍後重試");
+      toast.error(t('faq.submitFailed'));
     } finally {
       setIsSubmitting(false);
     }
@@ -226,10 +228,10 @@ export default function FAQ() {
         {/* 頁面標題 */}
         <div className="mb-12">
           <h1 className="text-4xl font-bold text-foreground mb-4">
-            M365 問答區
+            {t('faq.title')}
           </h1>
           <p className="text-lg text-foreground/70 mb-8">
-            常見問題解答和故障排除指南
+            {t('faq.description')}
           </p>
 
           {/* 搜尋框 */}
@@ -240,7 +242,7 @@ export default function FAQ() {
             />
             <input
               type="text"
-              placeholder="搜尋問題..."
+              placeholder={t('faq.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-lg border border-border bg-background text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary"
@@ -280,17 +282,17 @@ export default function FAQ() {
         {Object.values(groupedItems).every((items) => items.length === 0) && (
           <div className="text-center py-12">
             <p className="text-lg text-foreground/70 mb-4">
-              沒有找到相關問題
+              {t('faq.noResults')}
             </p>
             <p className="text-foreground/50">
-              請嘗試使用不同的搜尋詞或瀏覽所有問題
+              {t('faq.tryDifferent')}
             </p>
           </div>
         )}
 
         {/* 聯繫我們部分 */}
         <div className="mt-16">
-          <h2 className="text-2xl font-bold text-foreground mb-8">聯繫我們</h2>
+          <h2 className="text-2xl font-bold text-foreground mb-8">{t('faq.contactTitle')}</h2>
 
           {/* 聯繫方式卡片 */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -302,10 +304,10 @@ export default function FAQ() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-bold text-foreground mb-2">
-                    電子郵件
+                    {t('faq.emailTitle')}
                   </h3>
                   <p className="text-foreground/70 mb-4">
-                    發送您的問題或建議
+                    {t('faq.emailDesc')}
                   </p>
                   <a
                     href="mailto:zhuojiaquan520@gmail.com"
@@ -325,10 +327,10 @@ export default function FAQ() {
                 </div>
                 <div className="flex-1">
                   <h3 className="text-lg font-bold text-foreground mb-2">
-                    電話
+                    {t('faq.phoneTitle')}
                   </h3>
                   <p className="text-foreground/70 mb-4">
-                    直接致電我們
+                    {t('faq.phoneDesc')}
                   </p>
                   <a
                     href="tel:0984261917"
@@ -345,10 +347,10 @@ export default function FAQ() {
           {!showContactForm ? (
             <Card className="p-8 text-center">
               <h3 className="text-lg font-bold text-foreground mb-4">
-                有問題需要幫助？
+                {t('faq.formTitle')}
               </h3>
               <p className="text-foreground/70 mb-6">
-                填寫下方表單，我們會盡快回覆您的問題
+                {t('faq.formDesc')}
               </p>
               <Button
                 onClick={() => setShowContactForm(true)}
@@ -356,17 +358,17 @@ export default function FAQ() {
                 className="gap-2"
               >
                 <Send size={18} />
-                提交問題
+                {t('faq.openForm')}
               </Button>
             </Card>
           ) : (
             <Card className="p-8">
-              <h3 className="text-lg font-bold text-foreground mb-6">提交您的問題</h3>
+              <h3 className="text-lg font-bold text-foreground mb-6">{t('faq.openForm')}</h3>
               <form onSubmit={handleSubmitContactForm} className="space-y-4">
                 {/* 姓名 */}
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    姓名 <span className="text-red-500">*</span>
+                    {t('faq.nameLabel')} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -381,7 +383,7 @@ export default function FAQ() {
                 {/* 電子郵件 */}
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    電子郵件 <span className="text-red-500">*</span>
+                    {t('faq.emailLabel')} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -396,7 +398,7 @@ export default function FAQ() {
                 {/* 電話 */}
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    電話（選填）
+                    {t('faq.phoneLabel')}
                   </label>
                   <input
                     type="tel"
@@ -411,7 +413,7 @@ export default function FAQ() {
                 {/* 主題 */}
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    主題 <span className="text-red-500">*</span>
+                    {t('faq.subjectLabel')} <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -426,7 +428,7 @@ export default function FAQ() {
                 {/* 訊息 */}
                 <div>
                   <label className="block text-sm font-medium text-foreground mb-2">
-                    詳細說明 <span className="text-red-500">*</span>
+                    {t('faq.messageLabel')} <span className="text-red-500">*</span>
                   </label>
                   <textarea
                     name="message"
@@ -446,7 +448,7 @@ export default function FAQ() {
                     className="flex-1 gap-2"
                   >
                     <Send size={18} />
-                    {isSubmitting || submitMutation.isPending ? "提交中..." : "提交問題"}
+                    {isSubmitting || submitMutation.isPending ? t('faq.submitting') : t('faq.submit')}
                   </Button>
                   <Button
                     type="button"
@@ -454,7 +456,7 @@ export default function FAQ() {
                     onClick={() => setShowContactForm(false)}
                     className="flex-1"
                   >
-                    取消
+                    {t('faq.closeForm')}
                   </Button>
                 </div>
               </form>

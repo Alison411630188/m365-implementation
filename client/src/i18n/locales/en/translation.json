@@ -1,0 +1,98 @@
+{
+  "home": {
+    "title": "Microsoft 365",
+    "subtitle": "Implementation Project",
+    "description": "Comprehensive M365 implementation guides, use cases, and tool documentation. Help your team quickly master the core features and best practices of Microsoft 365.",
+    "viewHandbook": "View Handbook",
+    "viewCases": "View Use Cases",
+    "coreTools": "M365 Core Tools",
+    "coreToolsDesc": "Learn about the features and scenarios for each tool",
+    "quickNav": "Quick Navigation",
+    "handbook": "Handbook",
+    "handbookDesc": "Step-by-step guides and best practices",
+    "cases": "Use Cases",
+    "casesDesc": "Real-world business scenario solutions",
+    "enterHandbook": "Enter Handbook",
+    "viewAllCases": "View Cases",
+    "enterDetail": "View Details"
+  },
+  "sidebar": {
+    "groupTitle": "CviLux Group",
+    "projectTitle": "M365 Implementation",
+    "searchPlaceholder": "Search handbook, cases...",
+    "categoryTitle": "Knowledge Base",
+    "version": "System Version v1.0.4",
+    "copyright": "CviLux IT Team © 2026"
+  },
+  "nav": {
+    "home": "Home",
+    "handbook": "Handbook",
+    "cases": "Use Cases",
+    "faq": "FAQ",
+    "tools": "Core Tools"
+  },
+  "language": {
+    "switch": "Switch Language",
+    "zh": "繁體中文",
+    "en": "English"
+  },
+  "tools": {
+    "planner": {
+      "name": "Planner",
+      "description": "Plan and track project progress",
+      "label": "Planner Guide"
+    },
+    "power-automate": {
+      "name": "Power Automate",
+      "description": "Automate workflows and business processes",
+      "label": "Power Automate Guide"
+    },
+    "power-bi": {
+      "name": "Power BI",
+      "description": "Data visualization and business intelligence",
+      "label": "Power BI Guide"
+    },
+    "sharepoint": {
+      "name": "SharePoint",
+      "description": "Enterprise content management and collaboration",
+      "label": "SharePoint Guide"
+    },
+    "teams": {
+      "name": "Teams",
+      "description": "Team communication and collaboration hub",
+      "label": "Teams Guide"
+    }
+  },
+  "navigation": {
+    "home": "Home",
+    "handbook": "M365 Handbook",
+    "cases": "M365 Use Cases",
+    "tools": "Tool Guides",
+    "faq": "M365 Q&A"
+  },
+  "faq": {
+    "title": "M365 Q&A",
+    "description": "Common questions and troubleshooting guide",
+    "searchPlaceholder": "Search questions...",
+    "noResults": "No matching questions found",
+    "tryDifferent": "Please try different keywords or browse all questions",
+    "contactTitle": "Contact Us",
+    "emailTitle": "Email",
+    "emailDesc": "Send your questions or suggestions",
+    "phoneTitle": "Phone",
+    "phoneDesc": "Call us directly",
+    "formTitle": "Need more help?",
+    "formDesc": "If you can't find the answer you're looking for, feel free to send us a message and we'll get back to you as soon as possible.",
+    "openForm": "Ask Now",
+    "closeForm": "Cancel",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone (Optional)",
+    "subjectLabel": "Subject",
+    "messageLabel": "Message",
+    "submit": "Submit Message",
+    "submitting": "Submitting...",
+    "fillRequired": "Please fill in all required fields",
+    "submitFailed": "Submission failed, please try again later"
+  }
+}
