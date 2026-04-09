@@ -10,8 +10,7 @@ import {
 } from "@/components/M365Icons";
 
 /**
- * M365 工具手冊詳情頁面 - 易讀性優化版
- * 變更點：將英文名詞對照的顏色，修正為與一般字體相同顏色，確保清晰易讀
+ * M365 工具手冊詳情頁面 - 最終版 (含最新 Vercel 連結)
  */
 
 interface ViewItem {
@@ -81,7 +80,7 @@ const toolDetails: Record<string, ToolDetailInfo> = {
       "動作 (Action)：觸發後續執行的一連串步驟（例如：取得使用者設定檔、寄送 Email）。"
     ],
     usageSuggestions: [
-      "【先從範本開始】第一次使用強烈建議去「範本 (Templates)」區搜尋關鍵字，通常你要的功能別人早就寫高度。了。",
+      "【先從範本開始】第一次使用強烈建議去「範本 (Templates)」區搜尋關鍵字，通常你要的功能別人早就寫好了。",
       "【先畫流程圖】在動手拉區塊前，先在紙上畫清楚「如果發生 A，就執行 B；如果沒有，就執行 C」的邏輯。",
       "【善用測試功能】每次新增一個動作後，務必點擊右上角的「測試 (Test)」，確保資料有正確傳遞。",
       "【注意無限迴圈】設定觸發條件時要小心，避免「更新檔案」觸發了「修改檔案」，導致流程不斷自己觸發自己。"
@@ -214,9 +213,10 @@ function getToolIcon(toolId: string) {
   }
 }
 
+// 這裡就是替換成你最新 Vercel 網址的地方 👇
 function getM365AppUrl(toolId: string): string {
   const urlMap: Record<string, string> = {
-    'planner': 'https://cautious-winner-jjxpw6v7gwj5fpgr4-3000.app.github.dev/',
+    'planner': 'https://planner-edu-web-ww930114-creates-projects.vercel.app?_vercel_share=icDkUsPNICYCie1BetGBszsY0rrZqOYa',
     'power-automate': 'https://make.powerautomate.com',
     'power-bi': 'https://app.powerbi.com',
     'sharepoint': 'https://www.microsoft.com',
@@ -284,7 +284,6 @@ export default function ToolDetail() {
               <Card className="p-6 h-full border-black/5 dark:border-white/5 shadow-sm bg-card hover:shadow-md transition-shadow">
                 <ul className="space-y-4">
                   {details.whatYouCanDo.map((item, idx) => {
-                    // 修正點：移除 text-primary/70，直接使用父層顏色，加上粗體區隔
                     const formattedItem = item.replace(/\((.*?)\)/g, '<strong class="font-mono text-[13px]">($1)</strong>');
                     return (
                       <li key={idx} className="flex gap-3 text-[15px] text-foreground/80 leading-relaxed font-medium">
@@ -323,7 +322,6 @@ export default function ToolDetail() {
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
               {details.commonViews.map((view, idx) => {
-                // 自動為 (英文) 加上樣式
                 const formattedName = view.name.replace(/\((.*?)\)/g, '<strong class="font-mono text-[13px] ml-1">($1)</strong>');
                 return (
                   <Card key={idx} className="p-5 border border-border/50 shadow-sm hover:border-orange-500/30 hover:shadow-md transition-all bg-card">
