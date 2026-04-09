@@ -1,551 +1,439 @@
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
-import { ChevronDown } from "lucide-react";
+import { 
+  CheckCircle2, 
+  Workflow, 
+  BarChart3, 
+  MessageSquare, 
+  Share2,
+  Users,
+  Target,
+  AlertCircle,
+  BookOpen
+} from "lucide-react";
 
 /**
- * 應用案例頁面
- * 設計理念：企業級知識庫風格
- * - 七個真實業務情境案例
- * - 詳細的情境說明、痛點、目標、工具、流程等
- * - 可展開/收起的案例詳情
+ * M365 應用情境案例 - 保母級詳細操作步驟版 (15 種情境)
  */
 
-interface CaseDetail {
-  eventName: string;
-  triggerRoles: string[];
-  painPoints: string[];
-  objectives: string[];
-  recommendedTools: string[];
-  operationFlow: string[];
-  supplementaryNotes: string[];
-  userStory: string;
-  useCase: string;
-  expectedBenefits: string[];
+type ToolType = "Planner" | "Power Automate" | "Power BI" | "Teams" | "SharePoint";
+
+interface Scenario {
+  id: number;
+  title: string;
+  tools: ToolType[];
+  targetAudience: string; 
+  goal: string;           
+  context: string;        
+  userStory: string;      
+  steps: string[];        
 }
 
-const cases: Record<string, CaseDetail> = {
-  case1: {
-    eventName: "部門主管指派工作並追蹤完成進度",
-    triggerRoles: ["部門主管", "小組長", "團隊成員"],
-    painPoints: [
-      "工作指派後難以追蹤成員完成進度",
-      "成員不清楚優先級和截止日期",
-      "進度更新依賴人工詢問和郵件往來",
-      "無法快速掌握哪些任務已完成、哪些延誤",
-    ],
-    objectives: [
-      "建立清晰的工作分派和追蹤機制",
-      "讓成員清楚了解任務優先級和截止日期",
-      "實時掌握任務進度和完成狀態",
-      "減少溝通成本和進度追蹤時間",
-    ],
-    recommendedTools: [
-      "Planner：工作任務與進度追蹤",
-      "Teams：工作通知與溝通",
-    ],
-    operationFlow: [
-      "主管於 Planner 中建立計畫，代表部門或小組的工作項目集合",
-      "主管依工作性質建立貯體（分類），例如『待開始』、『進行中』、『待確認』、『已完成』",
-      "主管建立具體任務，填寫任務名稱、說明、優先級、截止日期與附件",
-      "主管將任務指派給具體成員，成員會收到 Teams 通知與郵件提醒",
-      "成員於 Planner 中查看被指派的任務，並更新進度（如『未開始』、『進行中』、『已完成』）",
-      "主管定期檢視 Planner 的 Board 或 Grid 視圖，掌握整體進度與延誤項目",
-      "主管可於 Teams 頻道中釘選 Planner 分頁，方便團隊成員隨時查看最新任務狀態",
-      "任務完成後，成員標記為『已完成』，主管可查看完成時間與相關附件",
-    ],
-    supplementaryNotes: [
-      "Planner 的優先級標籤（高、中、低）有助於成員快速識別重要任務",
-      "設定截止日期後，系統會自動提醒成員，減少遺漏",
-      "與 Teams 整合後，成員可在 Teams 中直接查看和更新任務，無需切換應用",
-    ],
-    userStory:
-      "作為一名部門主管，我需要清楚地分派工作給團隊成員，並能即時掌握每項工作的進度。但如果成員不知道優先級、截止日期不清楚、進度更新又需要人工詢問，我就很難有效管理團隊工作。因此，我希望有一個統一的工作追蹤平台，讓我能清楚看到誰在做什麼、進度如何、是否有延誤，同時成員也能清楚知道自己的任務與期限。",
-    useCase:
-      "行銷部門主管需要協調內容製作、社群發布、廣告投放等多項工作。主管於 Planner 建立『Q1 行銷活動』計畫，依工作類型建立『內容製作』、『社群發布』、『廣告投放』三個 Bucket。主管為每個 Bucket 建立具體任務，指派給對應成員，設定優先級與截止日期。成員透過 Planner 查看被指派的任務，並在完成時更新進度。主管每週檢視 Planner 的進度報告，了解整體完成度與延誤項目，作為週會的討論依據。",
-    expectedBenefits: [
-      "工作分派清晰，成員無須詢問就能了解任務內容與期限",
-      "進度透明化，主管可即時掌握完成狀態，及早發現延誤",
-      "減少郵件往來和重複詢問，提升溝通效率",
-      "成員優先級清晰，能更有效地安排工作順序",
-      "完成記錄完整，便於後續績效評估與工作分析",
-    ],
+// 嚴格限定五大工具的 15 種深度情境 (步驟極度詳細化)
+const SCENARIOS: Scenario[] = [
+  {
+    id: 1,
+    title: "專案進度追蹤與會議管理",
+    tools: ["Teams", "Planner"],
+    targetAudience: "專案經理 (PM)、部門主管、專案團隊成員",
+    goal: "達成任務透明化、減少會議同步時間，確保所有專案細節都有專人負責且不漏接。",
+    context: "開會時總是不清楚大家的實際進度，會後還要人工整理 Excel 待辦事項，耗時又容易漏掉追蹤。",
+    userStory: "身為一位專案經理，我希望能在 Teams 頻道裡直接管理所有待辦清單，以便在每週專案會議時，可以直接看著視覺化看板追蹤進度，不用再額外開啟或維護一份 Excel。",
+    steps: [
+      "登入 Teams，在左側選單點選「團隊」，進入你的專案團隊並點選特定的主題頻道（例如：常規頻道）。",
+      "在頻道畫面最上方（發文、檔案的右側），點擊「+ 新增索引標籤」按鈕，在搜尋框輸入「Planner」，點選「Planner 與 To Do 提供的工作」。",
+      "選擇「建立新計畫」，輸入計畫名稱後點擊「儲存」。畫面會出現一個看板，點擊「新增新貯體 (Bucket)」來建立分類直欄，例如命名為「前期準備」、「執行中」。",
+      "在欄位下方點擊「+ 新增工作」，輸入任務名稱、點擊行事曆圖示設定「到期日」，並點擊人像圖示「指派」給特定成員，最後按「新增工作」送出。",
+      "開會時，主管可點擊畫面右上方的「圖表」或「排程」視圖，一秒切換成圓餅圖或月曆，直觀檢視團隊整體的任務達成率與負載量。"
+    ]
   },
-  case2: {
-    eventName: "專案負責人追蹤跨部門專案進度與協作狀態",
-    triggerRoles: [
-      "專案負責人",
-      "部門主管",
-      "專案經理",
-      "PMO",
-      "營運主管",
-      "跨部門協作窗口",
-    ],
-    painPoints: [
-      "跨部門專案涉及多項工作、議題、風險與文件，資訊分散在聊天、郵件、Excel、簡報中",
-      "版本不一致，各部門掌握的資訊可能不同步",
-      "專案負責人難以即時掌握各部門交付狀態與待處理事項",
-      "協作部門因資訊不同步而延誤時程、重工或遺漏重要議題",
-      "溝通成本高，追蹤困難",
-    ],
-    objectives: [
-      "建立整合型專案協作工作區",
-      "讓任務、議題、風險、需求變更與專案文件能在同一套 M365 框架下被集中管理",
-      "協助專案負責人即時掌握進度",
-      "提升跨部門溝通效率與專案透明度",
-    ],
-    recommendedTools: [
-      "Teams：跨部門溝通與工作入口",
-      "Planner：工作任務與里程碑追蹤",
-      "SharePoint：專案文件、知識與站台整合",
-    ],
-    operationFlow: [
-      "專案負責人或專案經理於 Teams 中建立跨部門專案團隊，並依專案主題、工作流或部門協作需求建立對應頻道",
-      "在 Teams 頻道中新增 Planner 分頁，建立專案共享計畫，用來管理工作項目、負責人、截止日與執行狀態",
-      "依專案性質建立不同任務分類或貯體，例如『待開始』、『進行中』、『待確認』、『已完成』或依里程碑階段區分",
-      "將專案相關文件、作業規範、會議記錄、簡報、表單與範本統一儲存於 SharePoint 專案站台，確保版本一致與資料集中",
-      "專案負責人可定期於 Teams 中檢視 Planner 任務進度，作為跨部門會議追蹤與溝通依據",
-      "各部門成員可於 Teams 中直接進入對應任務或文件，更新執行情況、補充說明與回報進度，降低資訊來回確認成本",
-      "專案推進過程中，可透過 Teams 會議、訊息與檔案共同編輯功能，持續同步專案狀況，並確保所有關鍵資訊都保留在同一工作區中",
-    ],
-    supplementaryNotes: [
-      "Planner 適合管理專案任務、分工與里程碑，可清楚追蹤每項工作的負責人、截止日與完成狀態",
-      "SharePoint 適合作為專案文件與知識資產的集中站台，便於跨部門成員查找最新版本文件與相關紀錄",
-      "Teams、Planner 與 SharePoint 搭配使用，可形成完整的跨部門專案協作管理機制",
-    ],
-    userStory:
-      "作為一名專案負責人或專案經理，我需要同時與多個部門協作推動專案，並持續追蹤各部門的任務進度、待解決議題、風險狀況與相關文件。但如果這些資訊分散在不同工具、不同檔案或不同對話紀錄中，我就很難快速掌握整體專案現況，也不容易在會議中清楚說明目前卡在哪裡、哪個部門還有哪些待辦。因此，我希望能有一個整合的專案工作區，讓所有任務、議題、風險與文件都能集中管理，協助我更有效地進行跨部門協調與進度追蹤。",
-    useCase:
-      "資訊部門導入新系統時，需同時與採購、人資、財務及使用單位協同作業。專案負責人先於 Teams 建立跨部門專案團隊，作為專案討論與協作入口；再透過 Planner 管理各部門的任務與里程碑，並將會議記錄、規格文件、教育訓練資料及相關範本集中存放在 SharePoint。透過這樣的方式，專案負責人可在同一工作區中統整專案執行情況，持續追蹤各部門任務、即時掌握風險與待解問題，並作為例會、專案檢討與後續決策的依據。",
-    expectedBenefits: [
-      "專案資訊集中管理，降低任務、議題、風險與文件分散的風險",
-      "可利用 Planner 即時掌握任務進度、負責人與里程碑狀態，提升專案透明度",
-      "各部門可於同一平台查看最新資訊，降低版本不一致、重工與溝通落差",
-      "提升跨部門專案的追蹤效率、協作品質與整體管理效能",
-    ],
+  {
+    id: 2,
+    title: "部門正式文件統一歸檔與共編",
+    tools: ["Teams", "SharePoint"],
+    targetAudience: "部門助理、行政人員、全體部門同仁",
+    goal: "建立企業內部的單一事實來源（Single Source of Truth），徹底解決檔案版本混亂與檔案遺失的問題。",
+    context: "檔案散落在群組聊天室或個人電腦裡，命名出現「最終版_v2」，沒人知道哪份才是最新版本。",
+    userStory: "身為一位部門同仁，我希望所有工作檔案都能集中放在一個隨時可存取的雲端空間，並且支援多人同時編輯，以便我們在準備提案時不會互相覆蓋檔案。",
+    steps: [
+      "在 Teams 中進入部門專屬頻道的「檔案」頁籤，宣導日後所有正式文件都直接拖曳上傳至此處，不要再傳到私聊群組。",
+      "點擊「檔案」頁籤工具列上方、靠右側的「...」(更多選項)，在下拉選單中點選「在 SharePoint 中開啟」，瀏覽器會自動開啟底層的文件庫網頁。",
+      "在 SharePoint 文件庫畫面左上方，點擊「+ 新增」按鈕，選擇「資料夾」，建立如「2026合約」、「產品規格書」等明確分類。",
+      "團隊成員只要在 Teams 或是 SharePoint 直接點擊檔案名稱（如 Word、Excel），檔案就會在瀏覽器中開啟，支援多人同時輸入，系統會自動在背景存檔並保留修改軌跡。"
+    ]
   },
-  case3: {
-    eventName: "會議召集人整理決議並追蹤行動項目",
-    triggerRoles: ["會議召集人", "會議記錄者", "與會成員"],
-    painPoints: [
-      "會議記錄分散，難以統一管理與追蹤",
-      "決議事項與待辦事項不清楚，容易遺漏或重複",
-      "責任人與完成期限不明確",
-      "會後無法有效追蹤行動項目的完成狀態",
-      "下次會議前無法快速回顧上次決議的執行情況",
-    ],
-    objectives: [
-      "建立會議記錄與決議追蹤機制",
-      "清晰區分決議事項、待辦事項、責任人與完成期限",
-      "會後自動轉化為正式任務進行追蹤",
-      "提升會議延續性與執行效率",
-    ],
-    recommendedTools: [
-      "Planner：將待辦事項轉化為正式任務",
-      "Teams：會議討論與決議通知",
-    ],
-    operationFlow: [
-      "會議進行期間，由會議主持人、會議記錄者或與會成員記錄討論重點與決議內容",
-      "在會議筆記中明確區分『決議事項』、『待辦事項』、『責任人』與『完成期限』，確保資訊完整且可追蹤",
-      "會議結束後，由會議主持人或記錄者將已確認的待辦事項手動整理至 Planner，建立為正式任務",
-      "建立任務時，應填寫任務名稱、負責人、截止日、說明內容與必要附件，讓後續執行依據清楚明確",
-      "各責任人可透過 Planner 查看被指派的工作，並依實際執行情況更新進度",
-      "會議主持人、部門主管或專案經理可於會後定期檢視 Planner 中的任務狀態，追蹤完成情形、確認逾期項目與後續待辦",
-      "下次會議召開前，可先檢視前次會議所產生的任務與完成結果，避免相同事項重複討論，提高會議延續性與執行效率",
-    ],
-    supplementaryNotes: [
-      "在會議記錄中使用清晰的格式與標籤，便於後續快速查找與轉化為任務",
-      "Planner 的優先級與截止日期設定有助於責任人快速了解工作緊急度",
-      "定期檢視 Planner 的進度報告，可作為下次會議的重要參考資料",
-    ],
-    userStory:
-      "作為會議召集人或記錄者，我需要在會議中清楚記錄決議事項與待辦事項，並確保會後能有效追蹤這些行動項目的完成狀態。但如果會議記錄只是存在一份文件中，責任人不清楚、期限模糊，會後也沒有系統的追蹤機制，那麼很多決議就會被遺忘或延誤。因此，我希望能有一個整合的方案，讓會議筆記、決議與任務能無縫銜接，確保每項決議都能被追蹤到完成。",
-    useCase:
-      "部門主管每週召開例會，討論工作進度、解決問題與規劃下週工作。主管於會議期間記錄討論重點，與會成員即時補充說明。會議結束時，主管在筆記中明確列出『決議事項』、『待辦事項』、『責任人』與『完成期限』。會後，主管將待辦事項轉化為 Planner 中的正式任務，指派給對應成員。各成員透過 Planner 查看被指派的工作，並在完成時更新進度。下週例會前，主管檢視上週任務的完成狀況，作為例會討論與績效評估的依據。",
-    expectedBenefits: [
-      "會議決議清晰記錄，避免事後爭議或遺漏",
-      "待辦事項與責任人明確，成員無須詢問就能了解工作內容與期限",
-      "會後自動轉化為任務，確保決議不會被遺忘",
-      "可系統地追蹤行動項目的完成狀態，提升執行效率",
-      "下次會議可快速回顧上次決議的執行情況，提升會議延續性",
-    ],
+  {
+    id: 3,
+    title: "請假與費用申請簽核自動化",
+    tools: ["SharePoint", "Power Automate", "Teams"],
+    targetAudience: "一般員工、部門主管、HR/財務人員",
+    goal: "實現無紙化辦公，將原本需要 3 天的紙本簽核流程縮短至 3 小時內完成。",
+    context: "紙本簽核跑得慢，主管出差就卡關，申請人也不知道單據簽到哪一關，常引發部門抱怨。",
+    userStory: "身為一位常出差的員工，我希望能用手機填寫表單後，系統自動將簽核通知發到主管的 Teams 裡，以便主管能馬上點擊「同意」，縮短我的等待時間。",
+    steps: [
+      "進入部門 SharePoint 網站，點擊左上角「+ 新增」>「清單 (List)」，選擇空白清單。點擊清單上方的「+ 新增欄」，依序建立「申請人(人員)」、「事由(文字)」、「金額(數字)」等欄位。",
+      "開啟 M365 首頁進入 Power Automate，點擊左側選單的「+ 建立」，選擇「自動化雲端流程」。",
+      "將觸發條件搜尋並選擇「SharePoint - 建立項目時」。在流程設計器中，貼上剛剛建好的 SharePoint 網站網址，並從下拉選單選擇你建好的清單名稱。",
+      "點擊「+ 新增動作」，搜尋「核准 (Approvals)」，選擇「開始並等候核准」。設定核准類型為「核准/拒絕」，並在「指派至」欄位填入主管的 Email，詳細資料可帶入剛剛表單的「事由」與「金額」。",
+      "點擊「+ 新增動作」加入「條件」控制項。設定如果「核准結果」等於「Approve」，則在分支內新增動作「Teams - 在聊天或頻道中發布訊息」，回傳『申請已通過』給申請人。"
+    ]
   },
-  case4: {
-    eventName: "新進員工入職與資訊導引",
-    triggerRoles: ["HR", "部門主管", "新進員工", "導師"],
-    painPoints: [
-      "新進員工入職流程複雜，需要完成多項行政手續與系統設定",
-      "入職資訊分散在不同部門、不同系統或不同文件中",
-      "新進員工容易遺漏重要步驟或資訊",
-      "導師與部門主管無法有效追蹤新進員工的入職進度",
-      "重複的入職流程導致效率低下",
-    ],
-    objectives: [
-      "建立標準化的新進員工入職流程",
-      "集中管理入職資訊與檢查清單",
-      "讓新進員工清楚了解入職步驟與時程",
-      "協助導師與部門主管追蹤入職進度",
-      "提升新進員工的入職體驗與融入速度",
-    ],
-    recommendedTools: [
-      "Planner：入職任務與里程碑管理",
-      "SharePoint：入職資訊、政策、表單與培訓資料集中存放",
-      "Teams：新進員工導引與溝通",
-    ],
-    operationFlow: [
-      "HR 建立『新進員工入職檢查清單』，列出所有必要的入職步驟（如系統帳號開通、設備領取、部門導引、政策簽署等）",
-      "HR 為每位新進員工建立一筆記錄，填寫入職日期、部門、職位、導師與完成期限",
-      "HR 或導師於 Planner 中為新進員工建立『入職計畫』，依時間軸安排各項入職任務與培訓課程",
-      "新進員工於 Planner 中查看入職任務，逐項完成並更新進度",
-      "導師與部門主管可於 Planner 中檢視新進員工的入職進度，及時提供協助與指導",
-      "HR 可定期檢視入職進度，確保所有新進員工都按時完成入職流程",
-      "將新進員工所需的政策、表單、培訓資料與常見問題集中存放於 SharePoint，新進員工可隨時查閱",
-      "入職完成後，HR 可根據 Planner 的記錄進行總結，持續改進入職流程",
-    ],
-    supplementaryNotes: [
-      "Planner 的時間軸視圖可清楚展示入職計畫的各個階段與里程碑",
-      "在 SharePoint 上建立『新進員工資訊中心』，集中存放所有入職相關資訊，便於新進員工自助查閱",
-      "利用 Teams 頻道與新進員工進行即時溝通與問題解答",
-    ],
-    userStory:
-      "作為 HR 或部門主管，我需要確保新進員工能順利完成入職流程，並快速融入團隊。但如果入職資訊分散、流程不清楚、進度無法追蹤，新進員工就容易感到迷茫，而我們也無法有效管理入職過程。因此，我希望有一個統一的入職管理平台，讓新進員工清楚知道要做什麼、何時完成，同時我也能隨時掌握入職進度。",
-    useCase:
-      "公司每月平均招聘 5-10 名新進員工。HR 建立『新進員工入職檢查清單』，列出 20 項標準入職步驟。新進員工入職時，HR 為其建立一筆記錄，並在 Planner 中建立『入職計畫』，安排為期 4 週的入職課程與任務。新進員工可在 Planner 中查看自己的入職進度，並在完成各項步驟時更新狀態。導師與部門主管可隨時檢視新進員工的入職進度，及時提供協助。HR 每月檢視 Planner 的數據，評估入職流程的效率與效果，並持續優化。",
-    expectedBenefits: [
-      "新進員工入職流程標準化，減少遺漏與重複",
-      "新進員工清楚了解入職步驟與時程，提升入職體驗",
-      "HR、導師與部門主管可有效追蹤入職進度，及時提供協助",
-      "集中管理入職資訊，新進員工可自助查閱，減少重複詢問",
-      "提升新進員工的融入速度與工作效率",
-    ],
+  {
+    id: 4,
+    title: "每日業務銷售數據儀表板推播",
+    tools: ["Power BI", "Teams"],
+    targetAudience: "業務主管、前線業務員、數據分析師 (IT)",
+    goal: "降低數據取得門檻，透過數據民主化大幅提升業務團隊的決策反應速度。",
+    context: "業務每天都要跟 IT 索取最新銷售報表，IT 撈資料撈到崩潰，且報表經常延遲一天才能看到。",
+    userStory: "身為一位業務主管，我希望每天早上不用點開任何複雜系統，只要打開 Teams 就能看到最新更新的銷售圖表，以便我能在晨會時快速下達戰術指令。",
+    steps: [
+      "IT 人員在 Power BI Desktop 完成報表製作後，點擊畫面上方功能區的「發佈」，選擇發佈至 Power BI 雲端服務 (Service) 中的「公司正式工作區」。",
+      "業務主管打開 Teams，進入「業務部」頻道的「常規」區，點擊最上方頁籤區右側的「+ 新增索引標籤」。",
+      "在搜尋框輸入「Power BI」並點擊其圖示。系統會彈出視窗，展開你的「工作區」，勾選剛剛發佈的「全國銷售動態儀表板」，點擊「儲存」。",
+      "此時報表已經完美嵌入 Teams。業務人員不需切換視窗，直接在畫面中點擊圖表上的長條圖或圓餅圖，其他數據就會自動連動篩選，快速查看當日最新業績。"
+    ]
   },
-  case5: {
-    eventName: "一般員工提出申請、送出簽核並查詢核准進度",
-    triggerRoles: ["一般員工", "部門主管", "簽核人員", "HR"],
-    painPoints: [
-      "申請流程不清楚，員工不知道要向誰申請、如何提交",
-      "申請單據分散在不同系統或紙本中，難以追蹤",
-      "簽核人員無法有效管理待簽核的申請單",
-      "員工無法即時了解申請的簽核進度",
-      "申請記錄不完整，難以查詢歷史申請與核准狀況",
-    ],
-    objectives: [
-      "建立標準化的申請與簽核流程",
-      "集中管理各類申請單據",
-      "讓員工清楚了解申請進度",
-      "提升簽核效率與透明度",
-      "完整保存申請記錄，便於查詢與分析",
-    ],
-    recommendedTools: [
-      "Power Automate：自動化簽核流程與通知",
-      "Teams：申請通知與進度查詢",
-    ],
-    operationFlow: [
-      "HR 建立『申請單據』管理系統，設定欄位包括『申請類型』（假單、加班、採購等）、『申請人』、『申請日期』、『申請內容』、『簽核人』、『簽核狀態』與『備註』",
-      "員工提交申請單，填寫申請類型、內容與相關附件",
-      "利用 Power Automate 建立簽核流程，當員工提交申請時，自動通知相應的簽核人員進行審核",
-      "簽核人員於 Teams 中查看待簽核的申請單，並進行核准或駁回",
-      "申請單的簽核狀態自動更新，員工可於 Teams 中查詢申請進度",
-      "申請核准後，Power Automate 可自動執行後續流程（如發送確認郵件、更新人資系統等）",
-      "員工可於任何時間查詢自己的申請歷史與核准狀況，便於後續參考",
-      "HR 可定期檢視申請數據，進行統計分析與流程優化",
-    ],
-    supplementaryNotes: [
-      "申請系統的欄位設計應清楚區分不同類型的申請，便於篩選與管理",
-      "Power Automate 可根據申請類型自動路由至不同的簽核人員，提升效率",
-      "在 Teams 中設定通知，讓簽核人員能及時收到待簽核的申請提醒",
-      "保留完整的申請記錄，便於後續查詢、審計與流程改進",
-    ],
-    userStory:
-      "作為一般員工，我需要提出各類申請（如假單、加班、採購等），並能清楚了解申請的簽核進度。但如果申請流程不清楚、簽核進度無法追蹤、申請單據分散在不同地方，我就會感到困擾，甚至可能遺漏重要的申請期限。因此，我希望有一個簡單清晰的申請平台，讓我能輕鬆提交申請、隨時查詢進度，並收到簽核結果的通知。",
-    useCase:
-      "員工需要申請年假。員工提交假單申請，填寫假期類型、起訖日期與原因。系統自動通知部門主管進行審核。主管查看申請單，並進行核准或駁回。申請狀態自動更新，員工於 Teams 中收到通知。員工可隨時查詢申請進度。核准後，系統自動發送確認郵件，並更新人資系統的假期記錄。",
-    expectedBenefits: [
-      "申請流程標準化，員工清楚知道如何提交申請",
-      "申請進度透明，員工可隨時查詢簽核狀況",
-      "簽核流程自動化，提升簽核效率與準確性",
-      "申請記錄完整，便於查詢歷史申請與統計分析",
-      "減少郵件往來與人工追蹤，提升整體工作效率",
-    ],
+  {
+    id: 5,
+    title: "任務逾期自動警告通報",
+    tools: ["Planner", "Power Automate", "Teams"],
+    targetAudience: "專案經理、部門主管、負責專案待辦事項的員工",
+    goal: "透過自動化防呆機制，降低專案延遲的風險，並減少主管的追蹤管理成本。",
+    context: "主管每天都要手動檢查 Planner 看誰的工作遲交，非常浪費時間，且容易引發催繳進度時的摩擦。",
+    userStory: "身為一位主管，我希望系統能自動抓出已經超過死線卻還沒完成的工作，並在群組裡面發出提醒，以便我不用每天像保母一樣去追殺團隊進度。",
+    steps: [
+      "開啟 Power Automate，點擊左側「+ 建立」，選擇「排程的雲端流程」。設定流程名稱，並將頻率設定為「每 1 天」的早上 9 點執行。",
+      "在流程設計器中，點擊「+ 新增動作」，搜尋並選擇「Planner - 列出工作」。在下拉選單中選擇對應的「群組」與「計畫識別碼 (專案看板)」。",
+      "點擊「+ 新增動作」，選擇「控制項 - 條件」。在左側欄位放入 Planner 抓到的「到期日」，中間選擇「小於」，右側點擊動態內容輸入運算式 `utcNow()` (代表現在時間)。",
+      "在符合條件的「若是」區塊內，再加入一個「條件」，判斷「進度 (Percent Complete)」小於「100」。",
+      "最後，在第二個條件的「若是」區塊內，新增動作「Teams - 在聊天或頻道中發布訊息」。將內容設定為：「🚨 提醒：任務『[標題]』已逾期，請 @[負責人 Email] 盡速回報進度！」。"
+    ]
   },
-  case6: {
-    eventName: "現場人員即時通報事件並追蹤處理結果",
-    triggerRoles: ["現場人員", "值班主管", "事件處理人員", "管理層"],
-    painPoints: [
-      "現場事件通報流程不清楚，事件可能被遺漏或延誤",
-      "事件資訊分散，難以統一管理與追蹤",
-      "值班主管無法即時掌握所有待處理事件",
-      "事件處理進度無法實時更新，上層無法及時了解狀況",
-      "事件記錄不完整，難以進行事後分析與改進",
-    ],
-    objectives: [
-      "建立即時的事件通報與追蹤機制",
-      "集中管理所有現場事件",
-      "讓值班主管能即時掌握待處理事件",
-      "實時更新事件處理進度",
-      "完整保存事件記錄，便於事後分析與改進",
-    ],
-    recommendedTools: [
-      "Power Automate：事件自動通知與流程",
-      "Teams：即時事件通知與溝通",
-      "Power BI：事件統計與分析",
-    ],
-    operationFlow: [
-      "HR 或管理層建立『現場事件通報』管理系統，設定欄位包括『事件類型』、『通報人』、『通報時間』、『事件位置』、『事件描述』、『優先級』、『處理人』、『處理狀態』與『處理結果』",
-      "現場人員發現事件時，立即提交事件通報，填寫事件類型、位置、描述與優先級，並上傳相關照片或文件",
-      "利用 Power Automate 設定自動通知，當事件被提交時，自動通知值班主管與相應的處理人員進行處理",
-      "值班主管於 Teams 中查看待處理的事件，並指派給對應的處理人員",
-      "處理人員於系統中更新事件處理進度（如『已接收』、『處理中』、『已解決』等），並上傳處理結果與照片",
-      "現場人員與值班主管可實時查看事件的處理進度，及時了解狀況",
-      "事件解決後，處理人員填寫『處理結果』與『完成時間』，事件記錄自動歸檔",
-      "管理層可定期檢視事件數據，利用 Power BI 進行統計分析，識別常見事件類型與改進機會",
-    ],
-    supplementaryNotes: [
-      "事件系統的優先級欄位應清楚區分事件緊急度，便於快速處理",
-      "Power Automate 可根據事件類型自動路由至不同的處理人員，提升效率",
-      "在 Teams 中設定通知，讓值班主管能及時收到新事件的提醒",
-      "利用 Power BI 分析事件數據，識別常見問題與改進方向",
-    ],
-    userStory:
-      "作為現場人員或值班主管，我需要能快速通報現場事件，並實時追蹤事件的處理進度。但如果事件通報流程不清楚、處理進度無法追蹤、上層無法及時了解狀況，就可能導致事件處理延誤或遺漏，影響安全與運營。因此，我希望有一個即時的事件通報與追蹤系統，讓現場人員能快速提交事件、值班主管能實時掌握狀況、上層能及時了解進展。",
-    useCase:
-      "工廠現場發生安全事件。現場人員立即提交事件通報，填寫事件類型（安全事件）、位置、描述與優先級（高），並上傳現場照片。系統自動通知值班主管與安全人員。值班主管於 Teams 中收到通知，立即查看事件詳情，並指派給安全人員進行處理。安全人員到達現場後，於系統中更新處理進度，上傳處理措施與照片。現場人員與值班主管可實時查看處理進度。事件解決後，安全人員填寫『處理結果』，事件記錄自動歸檔。管理層定期檢視事件數據，識別常見問題並進行改進。",
-    expectedBenefits: [
-      "事件通報即時，減少處理延誤",
-      "事件追蹤透明，值班主管與上層能實時掌握狀況",
-      "事件記錄完整，便於事後分析與改進",
-      "自動通知機制，確保事件不被遺漏",
-      "提升現場安全管理與應急響應能力",
-    ],
+  {
+    id: 6,
+    title: "企業內部最新公告與新聞中心",
+    tools: ["SharePoint", "Teams"],
+    targetAudience: "企業溝通部、HR 人資部、全體員工",
+    goal: "提升內部資訊傳遞的到達率與質感，確保重要政策永久留存，不會沉沒在 Email 汪洋中。",
+    context: "公司重要公告用 Email 發送常被當垃圾信忽略，且新進員工無法看到過去發布的重要公告。",
+    userStory: "身為一位人資專員，我希望能有一個像網頁一樣漂亮的佈告欄來發布公司政策，並整合到大家每天必開的 Teams 裡，以便新進員工隨時可以查閱。",
+    steps: [
+      "進入 M365 首頁開啟 SharePoint，點擊畫面左上角的「+ 建立網站」，選擇建立「通訊網站 (Communication Site)」，輸入網站名稱（如：員工入口網）並點擊完成。",
+      "進入建好的網站首頁，點擊畫面上方選單的「+ 新增」>「新聞貼文」。選擇一個喜歡的版面範本，輸入公告標題、上傳封面圖片、打好內文後，點擊右上角「發佈新聞」。",
+      "打開 Teams，進入全公司同仁都在的頻道（例如：General 或 全體公告）。點擊頻道上方右側的「+ 新增索引標籤」。",
+      "搜尋並選擇「SharePoint」，系統會列出你有權限的網站，選擇剛剛建立的「員工入口網」並點擊儲存。",
+      "完成後，所有員工只要點開該 Teams 頻道上方的頁籤，就能看到精美的輪播新聞與歷史公告，不需另外開啟瀏覽器。"
+    ]
   },
-  case7: {
-    eventName: "HR 與部門主管蒐集員工回饋與滿意度",
-    triggerRoles: ["HR", "部門主管", "員工"],
-    painPoints: [
-      "回饋蒐集方式不統一，難以系統地收集員工意見",
-      "回饋數據分散，難以進行有效的分析與追蹤",
-      "改進措施的成效無法量化評估",
-      "員工回饋無法及時反映到組織決策中",
-      "缺乏完整的回饋與改進機制",
-    ],
-    objectives: [
-      "建立系統化的員工回饋蒐集機制",
-      "集中管理回饋數據，便於分析與追蹤",
-      "快速識別員工關鍵問題與改進機會",
-      "追蹤改進措施的執行與成效",
-      "提升組織透明度與員工參與度",
-    ],
-    recommendedTools: [
-      "Power Automate：自動化回饋收集與提醒",
-      "Teams：回饋結果分享與討論",
-      "Power BI：回饋數據分析與可視化",
-    ],
-    operationFlow: [
-      "HR 建立『員工滿意度調查』問卷，包括涵蓋工作環境、薪酬、發展機會等維度的問題",
-      "HR 透過 Power Automate 定期向員工發送問卷邀請，並設定回收期限",
-      "員工填寫問卷，提供對工作環境、管理、發展機會等方面的反饋",
-      "系統自動收集問卷回應，並將數據集中存儲",
-      "HR 利用 Power BI 生成分析報告，識別員工最關注的問題與改進機會",
-      "HR 與各部門主管於 Teams 中討論調查結果，共同制定改進計畫",
-      "各部門主管執行改進措施，並於 Teams 中定期分享進展",
-      "定期進行後續調查，評估改進措施的成效，形成持續改進循環",
-    ],
-    supplementaryNotes: [
-      "問卷設計應清晰易懂，避免過長或複雜的問題",
-      "Power Automate 可根據不同部門或職位自動發送不同的問卷版本",
-      "在 Teams 中定期分享回饋結果與改進進展，提升組織透明度與員工參與度",
-      "利用 Power BI 的可視化功能，讓數據更容易被理解與討論",
-    ],
-    userStory:
-      "作為 HR 或部門主管，我需要了解員工的滿意度與關鍵問題，以便制定改進措施。但如果回饋蒐集方式不統一、數據難以分析、改進成效無法追蹤，我就很難有效改善員工體驗與組織文化。因此，我希望有一個完整的回饋蒐集與分析系統，讓我能系統地蒐集員工意見、快速分析問題、追蹤改進成效。",
-    useCase:
-      "HR 建立『員工滿意度調查』問卷，包括 20 個問題涵蓋工作環境、薪酬、發展機會等維度。HR 邀請全體員工填寫問卷，回收率達 80%。系統自動收集數據，HR 將結果匯入進行分類。HR 利用 Power BI 生成分析報告，發現『職涯發展機會』與『工作與生活平衡』是員工最關注的兩個問題。HR 與各部門主管於 Teams 中討論結果，制定改進計畫（如提供更多培訓機會、調整工作時程等）。三個月後進行下一次調查，評估改進措施的成效。",
-    expectedBenefits: [
-      "回饋蒐集標準化，確保覆蓋所有重要維度",
-      "回饋數據集中管理，便於分析與追蹤",
-      "快速識別員工關鍵問題與改進機會",
-      "改進措施執行透明，提升員工參與度與信任感",
-      "形成持續改進循環，提升組織整體績效與員工滿意度",
-    ],
+  {
+    id: 7,
+    title: "例行性每週會議任務自動生成",
+    tools: ["Power Automate", "Planner"],
+    targetAudience: "PMO 專案幕僚、部門秘書、主管助理",
+    goal: "消除重複性的人工操作，將助理與秘書的時間釋放給更有價值的工作。",
+    context: "每週一都要手動在 Planner 建立一樣的「準備週報」、「更新會議紀錄」等任務，瑣碎且無聊。",
+    userStory: "身為一位部門秘書，我希望系統每個禮拜一能自動在 Planner 上產生「寫週報」的任務卡片並指派給大家，以便我不用每週做重複性的建卡動作。",
+    steps: [
+      "開啟 Power Automate，點擊左側「+ 建立」，選擇「排程的雲端流程」。",
+      "將設定視窗中的「重複頻率」設為「每 1 週」，並勾選「星期一」，啟動時間設定為「08:00 AM」，點擊建立。",
+      "在流程設計畫面中點擊「+ 新增動作」，在搜尋框輸入 Planner，並選擇「建立工作 (Create a task)」。",
+      "在動作卡片中，從下拉選單依序選擇你們部門的「群組識別碼」與「計畫識別碼 (看板)」。將標題手動輸入為「提交本週工作報告」。",
+      "在同一個動作卡片的下方，找到「指派的使用者識別碼」，輸入需繳交報告的同仁 Email，最後點擊右上角「儲存」。流程即會在下週一生效。"
+    ]
   },
-};
+  {
+    id: 8,
+    title: "部門常見問題(FAQ)結構化知識庫",
+    tools: ["SharePoint"],
+    targetAudience: "客服部門、IT 幫助中心、帶新人的導師",
+    goal: "降低教育訓練與重複回答問題的溝通成本，建立企業專屬的知識傳承體系。",
+    context: "新人總是在群組問一樣的問題，老員工每天都在打字回答重複的答案，知識無法有效沉澱。",
+    userStory: "身為一位資深工程師，我希望能有一個結構化的知識庫，把大家常問的問題分類整理起來，以便新人在發問前可以先自己查閱到標準答案。",
+    steps: [
+      "進入部門專屬的 SharePoint 網站首頁，點擊左上角「+ 新增」，選擇「清單 (List)」並點選「空白清單」，命名為「部門 FAQ」。",
+      "進入清單後，點擊標題列最右側的「+ 新增欄」，依序建立三個欄位：單行文字命名為「常見問題」、多行文字命名為「解決方案」、選項命名為「問題分類」(並在下方設定選項如：報帳、IT、請假)。",
+      "點擊清單左上方的「+ 新增」，將過去常被問的問題一筆一筆輸入表單中並儲存。",
+      "點擊清單右上角 (漏斗圖示旁邊) 的視圖切換按鈕 (通常顯示為『所有項目』)，在下拉選單選擇「格式化目前檢視」。",
+      "選擇「群組依據」，並指定欄位為「問題分類」。設定完成後，整個清單會變成可折疊的目錄結構，點擊分類名稱就能展開看到裡面的 Q&A。"
+    ]
+  },
+  {
+    id: 9,
+    title: "舊案資料自動封存與歸檔整理",
+    tools: ["Power Automate", "SharePoint"],
+    targetAudience: "文管中心、法務部、各部門檔案管理員",
+    goal: "維持文件庫的整潔與搜尋效率，並符合企業資料保留的 ISO 或是合規性政策。",
+    context: "部門文件庫越來越大，找個新資料都被三年前的舊合約或廢棄草稿干擾，搜尋結果一片混亂。",
+    userStory: "身為一位檔案管理員，我希望系統能定期把一年都沒人動過的舊合約搬移到「歷史封存」資料夾，以便大家在搜尋最新文件時不會被舊檔干擾。",
+    steps: [
+      "先在 SharePoint 的主要文件庫中，點擊「+ 新增」建立一個名為「歷史封存區」的資料夾。",
+      "開啟 Power Automate，建立一個「排程的雲端流程」，頻率設定為「每 1 個月」執行一次。",
+      "新增動作，搜尋並選擇「SharePoint - 取得多個檔案 (屬性)」。在欄位中填入部門網站網址與主要文件庫的名稱。",
+      "新增動作「條件」：在左側欄位選取檔案的「修改日期 (Modified)」，中間選「小於」，右側點選動態內容，輸入時間函式 `addDays(utcNow(), -365)` (代表365天前)。",
+      "在條件為「若是 (True)」的區塊內，新增動作「SharePoint - 移動檔案」。指定要移動的檔案識別碼，並將目的地資料夾路徑選擇為剛剛建立的「歷史封存區」。"
+    ]
+  },
+  {
+    id: 10,
+    title: "跨部門數據整合與權限分級控管",
+    tools: ["Power BI", "SharePoint"],
+    targetAudience: "財務部、營運長、各區業務區長",
+    goal: "確保數據安全的前提下，打破資訊孤島，提供管理層宏觀的企業運營視角。",
+    context: "各部門的 Excel 報表格式不一，且財務與薪資數據極度敏感，不能讓一般員工或非該區主管看到。",
+    userStory: "身為一位財務長，我希望能把各區的報表整合在同一個儀表板，同時設定好權限，以便北區主管登入時只能看見北區的數字，確保機密絕不外洩。",
+    steps: [
+      "請各部門將每月的 Excel 資料定期上傳到 SharePoint 中各自有嚴格權限控管的資料夾。",
+      "資料分析師打開本機端的 Power BI Desktop，點擊上方「取得資料」>「更多」> 選擇「SharePoint 資料夾」，輸入網址後載入資料，並在 Power Query 中整合成一份關聯資料模型。",
+      "在 Power BI Desktop 上方選單切換至「模型」頁籤，點擊「管理角色」。建立一個名為「區域主管」的角色，並在資料表篩選器中輸入 DAX 語法，例如：`[Region] = USERPRINCIPALNAME()` (依登入帳號過濾)。",
+      "完成後點擊「發佈」至雲端 Power BI Service 的工作區。登入雲端網頁，找到該資料集 (Dataset)，點擊旁邊的「...」>「安全性」，將各區主管的 Email 加入剛剛建立的「區域主管」角色名單中。"
+    ]
+  },
+  {
+    id: 11,
+    title: "Teams 訊息一鍵轉為交辦任務",
+    tools: ["Teams", "Planner"],
+    targetAudience: "高階主管、專案執行人員、跨部門溝通窗口",
+    goal: "確保所有零碎交辦事項都能被妥善記錄與追蹤，做到「凡走過必留下痕跡」。",
+    context: "主管常在聊天室突然交辦事情，但訊息量一大就被洗版，執行者常忘記去做。",
+    userStory: "身為一位執行專員，我希望主管在聊天室講的待辦事項能一鍵轉成 Planner 任務，以便我能在自己的工作看板中統一排程，不怕洗版忘記。",
+    steps: [
+      "在 Teams 聊天室 (無論是一對一私訊還是群組頻道) 中收到交辦訊息時，將滑鼠游標停留在該則訊息的上方。",
+      "在訊息右上角浮出的表情符號列最右側，點擊「...」(更多選項圖示)，在選單中指向「更多動作」，然後點擊「建立工作 (Create task)」。",
+      "系統會彈出一個小視窗。請點擊「建立於」下方的選單，將預設的「Tasks」改為選擇你所屬專案的「Planner 看板名稱」，接著在下方選擇對應的「貯體 (Bucket)」。",
+      "在同一視窗中，點擊行事曆圖示設定「到期日」，確認沒問題後點擊右下角「新增工作」。",
+      "現在，這段對話的原始內容就變成了 Planner 裡面的一張任務卡片，且卡片說明內會自動附上「原始 Teams 訊息的連結」，點擊就能跳回聊天室看上下文。"
+    ]
+  },
+  {
+    id: 12,
+    title: "重要合約版本控管與防覆蓋機制",
+    tools: ["SharePoint"],
+    targetAudience: "法務部、採購部、業務部合約承辦人",
+    goal: "杜絕多頭馬車編輯造成的版本錯亂，嚴格把關高風險合約與規格書的內容正確性。",
+    context: "多人同時打開同一份 Word 合約修改，結果存檔時互相覆蓋，造成嚴重的法律風險與究責困難。",
+    userStory: "身為一位法務人員，我希望在審核合約時能把檔案「鎖定」，以便其他業務在同一時間只能唯讀，防止我辛苦修改的條文被別人意外蓋掉。",
+    steps: [
+      "進入存放重要合約的 SharePoint 文件庫網頁，點擊畫面右上角的「齒輪圖示 (設定)」，選擇「文件庫設定」。",
+      "在彈出的側邊欄底部點擊「更多文件庫設定」，進入舊版設定頁面，點選第一欄的「版本設定」。",
+      "將畫面捲動到最底部的「需要簽出」區塊，將「需要先簽出文件，才能加以編輯」的選項切換為【是】，並點擊右下角「確定」儲存設定。",
+      "設定生效後，任何人要修改此資料夾內的合約，必須先在檔案名稱上按右鍵，選擇「更多」>「簽出」。",
+      "簽出後，檔案圖示右下角會出現一個綠色小箭頭代表「已被上鎖」，其他人打開只能唯讀。修改完畢後，必須再次按右鍵選擇「簽入」，輸入修改註解後，才能將最新版釋放給其他人看見。"
+    ]
+  },
+  {
+    id: 13,
+    title: "危機關鍵字監控與即時自動通報",
+    tools: ["Power Automate", "Teams"],
+    targetAudience: "客服主管、公關部、IT 系統維運團隊",
+    goal: "建立即時的風險預警機制，大幅縮短企業對異常公關事件或系統當機的反應時間。",
+    context: "第一線客服頻道訊息太多，主管無法隨時盯著，常錯失處理「嚴重客訴」的最佳黃金時機。",
+    userStory: "身為一位公關主管，我希望當客服群組中有人打出「客訴」或「爆料」等關鍵字時，我的高階主管群組能立刻收到紅色警告，以便我們能秒速啟動危機處理。",
+    steps: [
+      "開啟 Power Automate，點擊左側「+ 建立」，選擇「自動化雲端流程」。跳過名稱設定進入設計器。",
+      "搜尋觸發條件「Teams」，選擇「當聊天或頻道中新增訊息時」。在下方設定好對應的第一線「團隊」與「客服頻道」。",
+      "點擊「+ 新增動作」，搜尋「條件」控制項。在左側欄位點擊閃電符號，選擇上方 Teams 取得的動態內容「訊息本文內容 (Message body content)」。",
+      "將中間的比較條件選擇為「包含」，右側欄位手動輸入關鍵字，例如『客訴』。 (如需多個關鍵字，可點選『新增列』設定為『OR (或)』邏輯)。",
+      "在條件為「若是 (True)」的分支中，新增動作「Teams - 在聊天或頻道中發布訊息」。將發布對象設定為「高階主管應變頻道」，內文輸入「🚨 警報：客服頻道出現敏感關鍵字，請點擊此連結查看：[加上訊息連結的動態內容]」。"
+    ]
+  },
+  {
+    id: 14,
+    title: "專案結案報告一鍵產生並分享",
+    tools: ["Power BI", "SharePoint", "Teams"],
+    targetAudience: "數據分析師、專案經理 (PM)、高階決策主管",
+    goal: "簡化結案報告的產出流程，確保匯報給高層的數據 100% 準確無誤且具備互動性。",
+    context: "專案結束要準備 PPT 結案報告，PM 要花一整天從各系統截圖貼到簡報裡，不僅累人還容易截錯資料。",
+    userStory: "身為一位數據分析師，我希望能把 Power BI 上最新整理好的結案數據直接匯出成 PPT，並把連結貼到 Teams 裡，以便老闆開會時能直接看著標準數據聽簡報。",
+    steps: [
+      "在 Power BI Service (網頁版) 中，打開整理好的專案績效與 ROI 互動式報表。",
+      "在畫面最上方的黑色工具列，點擊「匯出 (Export)」按鈕，在下拉選單選擇「PowerPoint」。",
+      "在彈出視窗中，選擇「嵌入即時資料 (Embed live data)」，系統會產生一頁包含動態報表的投影片；或者選擇「匯出包含目前值的影像」，將報表截圖轉為靜態簡報，最後點擊下載。",
+      "將下載回來的 PPT 檔案，拖曳上傳到該專案 SharePoint 文件庫中的「結案資料夾」中。",
+      "回到 Teams 的專案頻道，在發布新訊息框中輸入：「@團隊 結案報告已出爐，請長官參閱」，點擊輸入框下方的「迴紋針圖示」，從最近的檔案中附上剛剛上傳的簡報連結，送出訊息。"
+    ]
+  },
+  {
+    id: 15,
+    title: "新人報到自動化訓練包與迎新",
+    tools: ["SharePoint", "Power Automate", "Planner", "Teams"],
+    targetAudience: "HR 人資部、用人單位主管、新進員工",
+    goal: "提供標準化且溫暖的入職體驗，同時大幅減輕人資與單位主管的行政派工負擔。",
+    context: "新人報到第一天，HR 跟主管要到處發信通知各部門開權限，還要手動給新人一堆紙本手冊和待辦清單，手忙腳亂。",
+    userStory: "身為一位 HR，我希望只要在名單打上新人名字，系統就會自動幫他建好專屬的學習清單，並在群組發文歡迎他，以便我能省下時間專心做更深度的關懷面談。",
+    steps: [
+      "HR 首先在 SharePoint 建立一個名為「新人到職名單」的清單(List)，包含欄位：新人姓名、所屬部門、新人Email、到職日期。",
+      "開啟 Power Automate 建立「自動化雲端流程」，觸發條件選擇「SharePoint - 建立項目時」，並綁定剛剛建立的新人清單。",
+      "新增動作搜尋「Planner - 建立工作」。設定時，選擇公司的「新人訓練專屬 Planner 看板」，將任務標題設為「[新人姓名] 的第一週到職任務」，並在「指派的使用者」欄位帶入剛才表單填寫的 [新人Email]。",
+      "接著新增動作「Planner - 更新工作詳細資料」，在其中加入預先寫好的檢查清單內容，例如：「領取電腦設備」、「完成資安測驗」、「設定印表機連線」。",
+      "最後新增動作「Teams - 在聊天或頻道中發布訊息」，選擇發布至全公司的「General 頻道」，內文輸入：「🎉 讓我們熱烈歡迎新同事 [新人姓名] 加入 [所屬部門]！大家快來底下留言跟他打聲招呼吧！」。"
+    ]
+  }
+];
+
+// 取得工具對應的 icon 與顏色
+function getToolBadge(tool: ToolType) {
+  switch (tool) {
+    case "Planner":
+      return { icon: <CheckCircle2 size={12} className="mr-1" />, bg: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" };
+    case "Power Automate":
+      return { icon: <Workflow size={12} className="mr-1" />, bg: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" };
+    case "Power BI":
+      return { icon: <BarChart3 size={12} className="mr-1" />, bg: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400" };
+    case "Teams":
+      return { icon: <MessageSquare size={12} className="mr-1" />, bg: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400" };
+    case "SharePoint":
+      return { icon: <Share2 size={12} className="mr-1" />, bg: "bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400" };
+  }
+}
 
 export default function Cases() {
+  const [activeFilter, setActiveFilter] = useState<ToolType | "All">("All");
+
+  const filteredScenarios = activeFilter === "All" 
+    ? SCENARIOS 
+    : SCENARIOS.filter(s => s.tools.includes(activeFilter));
+
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container py-12">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
+    <div className="min-h-screen bg-background selection:bg-primary/10">
+      <div className="mx-auto px-6 md:px-10 py-12 max-w-[1440px] w-full">
+        
+        {/* 頁面標題 */}
+        <div className="mb-12 pb-8 border-b border-border">
+          <h1 className="text-4xl font-extrabold text-foreground tracking-tight mb-4 flex items-center gap-3">
+            <div className="w-2 h-10 bg-primary rounded-full" />
             M365 應用情境案例
           </h1>
-          <p className="text-foreground/70 text-lg">
-            瞭解 Microsoft 365 在不同業務場景中的實際應用，透過真實案例學習如何提升工作效率與協作品質。
+          <p className="text-lg text-foreground/60 max-w-4xl leading-relaxed ml-5">
+            不知道從何開始導入？這裡為您準備了 15 種企業真實情境。我們以標準的 Agile (敏捷) 格式列出使用者故事、痛點與目標，並提供極度詳細的「滑鼠點擊級別」實作步驟，協助您一次上手。
           </p>
         </div>
 
-        <div className="space-y-4">
-          {Object.entries(cases).map(([key, caseData]) => (
-            <Card key={key} className="border border-border/50 overflow-hidden">
-              <Accordion type="single" collapsible className="w-full">
-                <AccordionItem value={key} className="border-none">
-                  <AccordionTrigger className="px-6 py-4 hover:bg-primary/5 transition-colors">
-                    <div className="flex items-center gap-3 text-left">
-                      <ChevronDown className="h-5 w-5 text-primary flex-shrink-0" />
-                      <div>
-                        <h3 className="font-bold text-foreground text-lg">
-                          {caseData.eventName}
-                        </h3>
-                        <p className="text-sm text-foreground/60 mt-1">
-                          涉及角色：{caseData.triggerRoles.join("、")}
-                        </p>
-                      </div>
-                    </div>
-                  </AccordionTrigger>
-
-                  <AccordionContent className="px-6 py-4 bg-background/50 border-t border-border/30">
-                    <div className="space-y-6">
-                      {/* 痛點 */}
-                      <div>
-                        <h4 className="font-bold text-foreground mb-3">
-                          痛點
-                        </h4>
-                        <ul className="space-y-2">
-                          {caseData.painPoints.map((point, idx) => (
-                            <li
-                              key={idx}
-                              className="flex gap-3 text-foreground/70 text-sm"
-                            >
-                              <span className="flex-shrink-0">❌</span>
-                              <span>{point}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* 目標 */}
-                      <div>
-                        <h4 className="font-bold text-foreground mb-3">
-                          目標
-                        </h4>
-                        <ul className="space-y-2">
-                          {caseData.objectives.map((obj, idx) => (
-                            <li
-                              key={idx}
-                              className="flex gap-3 text-foreground/70 text-sm"
-                            >
-                              <span className="flex-shrink-0">🎯</span>
-                              <span>{obj}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* 建議工具 */}
-                      <div>
-                        <h4 className="font-bold text-foreground mb-3">
-                          建議 M365 工具
-                        </h4>
-                        <ul className="space-y-2">
-                          {caseData.recommendedTools.map((tool, idx) => (
-                            <li
-                              key={idx}
-                              className="flex gap-3 text-foreground/70 text-sm"
-                            >
-                              <span className="flex-shrink-0">🔧</span>
-                              <span>{tool}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* 操作流程 */}
-                      <div>
-                        <h4 className="font-bold text-foreground mb-3">
-                          操作流程
-                        </h4>
-                        <ol className="space-y-2">
-                          {caseData.operationFlow.map((step, idx) => (
-                            <li
-                              key={idx}
-                              className="flex gap-3 text-foreground/70 text-sm"
-                            >
-                              <span className="flex-shrink-0 font-semibold text-primary">
-                                {idx + 1}.
-                              </span>
-                              <span>{step}</span>
-                            </li>
-                          ))}
-                        </ol>
-                      </div>
-
-                      {/* 補充說明 */}
-                      <div>
-                        <h4 className="font-bold text-foreground mb-3">
-                          補充說明
-                        </h4>
-                        <ul className="space-y-2">
-                          {caseData.supplementaryNotes.map((note, idx) => (
-                            <li
-                              key={idx}
-                              className="flex gap-3 text-foreground/70 text-sm"
-                            >
-                              <span className="flex-shrink-0">💡</span>
-                              <span>{note}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* User Story */}
-                      <div className="bg-primary/5 p-4 rounded-lg border border-primary/20">
-                        <h4 className="font-bold text-foreground mb-2">
-                          User Story
-                        </h4>
-                        <p className="text-foreground/70 text-sm">
-                          {caseData.userStory}
-                        </p>
-                      </div>
-
-                      {/* Use Case */}
-                      <div className="bg-primary/5 p-4 rounded-lg border border-primary/20">
-                        <h4 className="font-bold text-foreground mb-2">
-                          Use Case
-                        </h4>
-                        <p className="text-foreground/70 text-sm">
-                          {caseData.useCase}
-                        </p>
-                      </div>
-
-                      {/* 預期效益 */}
-                      <div>
-                        <h4 className="font-bold text-foreground mb-3">
-                          預期效益
-                        </h4>
-                        <ul className="space-y-2">
-                          {caseData.expectedBenefits.map((benefit, idx) => (
-                            <li
-                              key={idx}
-                              className="flex gap-3 text-foreground/70 text-sm"
-                            >
-                              <span className="flex-shrink-0 text-primary">
-                                ⭐
-                              </span>
-                              <span>{benefit}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            </Card>
+        {/* 篩選器 */}
+        <div className="flex flex-wrap gap-3 mb-10">
+          <button
+            onClick={() => setActiveFilter("All")}
+            className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all shadow-sm ${
+              activeFilter === "All" 
+                ? "bg-primary text-primary-foreground scale-105" 
+                : "bg-white dark:bg-gray-800 text-foreground/60 hover:bg-gray-50 dark:hover:bg-gray-700 border border-border"
+            }`}
+          >
+            全部情境 ({SCENARIOS.length})
+          </button>
+          {(["Planner", "Power Automate", "Power BI", "Teams", "SharePoint"] as ToolType[]).map(tool => (
+            <button
+              key={tool}
+              onClick={() => setActiveFilter(tool)}
+              className={`px-5 py-2.5 rounded-full text-sm font-bold flex items-center transition-all shadow-sm ${
+                activeFilter === tool 
+                  ? "bg-primary text-primary-foreground scale-105" 
+                  : "bg-white dark:bg-gray-800 text-foreground/60 hover:bg-gray-50 dark:hover:bg-gray-700 border border-border"
+              }`}
+            >
+              {getToolBadge(tool).icon}
+              {tool}
+            </button>
           ))}
         </div>
+
+        {/* 情境列表 - 兩欄瀑布流排版 */}
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
+          {filteredScenarios.map((scenario) => (
+            <Card key={scenario.id} className="overflow-hidden border border-border shadow-md hover:shadow-xl transition-shadow bg-card">
+              
+              {/* 卡片標題區塊 */}
+              <div className="p-6 pb-4 border-b border-border/50 bg-muted/30">
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {scenario.tools.map(tool => {
+                    const badge = getToolBadge(tool);
+                    return (
+                      <span key={tool} className={`flex items-center px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider ${badge.bg}`}>
+                        {badge.icon}
+                        {tool}
+                      </span>
+                    );
+                  })}
+                </div>
+                <h3 className="text-2xl font-bold text-foreground leading-tight">
+                  {scenario.title}
+                </h3>
+              </div>
+
+              {/* 核心資訊區塊 (使用者 / 目標 / 痛點) */}
+              <div className="p-6 bg-background space-y-4 border-b border-border/50">
+                <div className="flex items-start gap-3">
+                  <div className="shrink-0 p-2 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-lg">
+                    <Users size={16} />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-bold text-foreground/40 uppercase tracking-widest mb-0.5">目標對象</p>
+                    <p className="text-sm font-medium text-foreground">{scenario.targetAudience}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="shrink-0 p-2 bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400 rounded-lg">
+                    <Target size={16} />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-bold text-foreground/40 uppercase tracking-widest mb-0.5">達成目標</p>
+                    <p className="text-sm font-medium text-foreground">{scenario.goal}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <div className="shrink-0 p-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 rounded-lg">
+                    <AlertCircle size={16} />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-bold text-foreground/40 uppercase tracking-widest mb-0.5">解決痛點</p>
+                    <p className="text-sm font-medium text-foreground">{scenario.context}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* User Story 區塊 - 已移除斜體 */}
+              <div className="p-6 bg-primary/5 border-b border-border/50">
+                <div className="flex gap-2">
+                  <BookOpen size={18} className="text-primary shrink-0 mt-0.5" />
+                  <div>
+                    <p className="text-[11px] font-bold text-primary uppercase tracking-widest mb-1.5">User Story 使用者故事</p>
+                    <p className="text-sm text-foreground/80 leading-relaxed font-medium">
+                      "{scenario.userStory}"
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* 操作步驟區塊 */}
+              <div className="p-6">
+                <h4 className="text-xs font-bold text-foreground/40 uppercase tracking-widest mb-5">實作步驟指南</h4>
+                <div className="space-y-6">
+                  {scenario.steps.map((step, idx) => (
+                    <div key={idx} className="flex items-start gap-4">
+                      {/* 步驟數字圓圈 */}
+                      <div className="shrink-0 w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-sm font-black border border-primary/20">
+                        {idx + 1}
+                      </div>
+                      {/* 步驟說明 */}
+                      <div className="pt-0.5 text-sm text-foreground/80 leading-relaxed font-medium">
+                        {step}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+            </Card>
+          ))}
+          
+          {filteredScenarios.length === 0 && (
+            <div className="col-span-full py-20 text-center text-foreground/50 font-bold">
+              此工具目前沒有相關情境。
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );

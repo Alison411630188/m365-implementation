@@ -1,319 +1,372 @@
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link } from "wouter";
+import { 
+  HelpCircle,
+  Lock,
+  ArrowRight,
+  Lightbulb,
+  ShieldCheck,
+  Zap,
+  AlertCircle
+} from "lucide-react";
+import {
+  PlannerIcon,
+  PowerAutomateIcon,
+  PowerBIIcon,
+  SharePointIcon,
+  TeamsIcon,
+} from "@/components/M365Icons";
 
 /**
- * 使用手冊頁面
- * 設計理念：企業級知識庫風格
- * - 分類標籤頁組織內容
- * - 清晰的步驟指南
- * - 可掃描的內容結構
+ * M365 使用手冊頁面 - 企業級精緻版 (官方圖示放大版)
  */
+
+// 快速對照表資料
+const QUICK_REFERENCE = [
+  {
+    category: "溝通與會議",
+    items: [
+      { question: "我想跟同事一對一或建立群組快速討論事情", tool: "Teams (聊天)", color: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400", icon: <div className="w-4 h-4 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div> },
+      { question: "我想發起跨部門的線上視訊會議或分享螢幕", tool: "Teams (會議)", color: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400", icon: <div className="w-4 h-4 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div> },
+    ]
+  },
+  {
+    category: "檔案與知識管理",
+    items: [
+      { question: "我想存放部門的正式合約、規範或建立內部網頁", tool: "SharePoint", color: "bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400", icon: <div className="w-4 h-4 flex items-center justify-center"><SharePointIcon /></div> },
+      { question: "我想尋找團隊過去討論時上傳的參考檔案", tool: "Teams (檔案)", color: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400", icon: <div className="w-4 h-4 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div> },
+    ]
+  },
+  {
+    category: "專案與任務追蹤",
+    items: [
+      { question: "我想拆解大型活動，並指派負責人與追蹤到期日", tool: "Planner", color: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400", icon: <div className="w-4 h-4 flex items-center justify-center"><PlannerIcon /></div> },
+    ]
+  },
+  {
+    category: "數據與自動化",
+    items: [
+      { question: "我想把每天都要手動複製貼上的工作自動化", tool: "Power Automate", color: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400", icon: <div className="w-4 h-4 flex items-center justify-center scale-[1.35]"><PowerAutomateIcon /></div> },
+      { question: "我想製作能自動更新的銷售或營運數據圖表", tool: "Power BI", color: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400", icon: <div className="w-4 h-4 flex items-center justify-center scale-[1.35]"><PowerBIIcon /></div> },
+    ]
+  }
+];
+
+// 核心工具導航卡片
+const TOOL_CARDS = [
+  { id: "teams", name: "Teams", desc: "企業溝通與協作中樞", link: "/tools/teams", icon: <div className="scale-[1.35]"><TeamsIcon /></div>, color: "text-indigo-600 dark:text-indigo-400", bg: "bg-indigo-50 dark:bg-indigo-900/20", border: "hover:border-indigo-300 dark:hover:border-indigo-700" },
+  { id: "sharepoint", name: "SharePoint", desc: "企業文檔與知識庫管理", link: "/tools/sharepoint", icon: <SharePointIcon />, color: "text-teal-600 dark:text-teal-400", bg: "bg-teal-50 dark:bg-teal-900/20", border: "hover:border-teal-300 dark:hover:border-teal-700" },
+  { id: "planner", name: "Planner", desc: "視覺化專案與任務管理", link: "/tools/planner", icon: <PlannerIcon />, color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-900/20", border: "hover:border-green-300 dark:hover:border-green-700" },
+  { id: "power-automate", name: "Power Automate", desc: "跨系統流程自動化引擎", link: "/tools/power-automate", icon: <div className="scale-[1.35]"><PowerAutomateIcon /></div>, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-900/20", border: "hover:border-blue-300 dark:hover:border-blue-700" },
+  { id: "power-bi", name: "Power BI", desc: "商業智慧與數據視覺化", link: "/tools/power-bi", icon: <div className="scale-[1.35]"><PowerBIIcon /></div>, color: "text-yellow-600 dark:text-yellow-400", bg: "bg-yellow-50 dark:bg-yellow-900/20", border: "hover:border-yellow-300 dark:hover:border-yellow-700" },
+];
 
 export default function Handbook() {
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container py-12">
+    <div className="min-h-screen bg-background selection:bg-primary/10 pb-20">
+      <div className="mx-auto px-6 md:px-10 py-12 max-w-[1440px] w-full">
+        
         {/* 頁面標題 */}
-        <div className="mb-12">
-          <h1 className="text-4xl font-bold text-foreground mb-4">
+        <div className="mb-10 pb-8 border-b border-border">
+          <h1 className="text-4xl font-extrabold text-foreground tracking-tight mb-4 flex items-center gap-3">
+            <div className="w-2 h-10 bg-primary rounded-full" />
             M365 使用手冊
           </h1>
-          <p className="text-lg text-foreground/70">
-            完整的逐步指南和最佳實踐，幫助您快速上手 Microsoft 365
+          <p className="text-lg text-foreground/60 max-w-4xl leading-relaxed ml-5">
+            完整的逐步指南和最佳實踐，幫助您快速上手 Microsoft 365。<br/>
+            不知道該用哪個工具？請直接查看「快速對照表」為您指引方向。
           </p>
         </div>
 
         {/* 標籤頁內容 */}
-        <Tabs defaultValue="getting-started" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-5 mb-8">
-            <TabsTrigger value="getting-started">快速開始</TabsTrigger>
-            <TabsTrigger value="setup">設置指南</TabsTrigger>
-            <TabsTrigger value="collaboration">協作工具</TabsTrigger>
-            <TabsTrigger value="security">安全性</TabsTrigger>
-            <TabsTrigger value="tips">技巧與訣竅</TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="quick-ref" className="w-full">
+          <div className="overflow-x-auto pb-2 mb-8 scrollbar-hide">
+            <TabsList className="inline-flex w-auto min-w-full sm:grid sm:w-full grid-cols-4 lg:grid-cols-4 h-12 items-center justify-start rounded-xl bg-muted/50 p-1 text-muted-foreground">
+              <TabsTrigger value="quick-ref" className="rounded-lg px-3 py-2 text-sm font-bold transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm">
+                <HelpCircle size={16} className="mr-2 inline-block" /> 快速對照表
+              </TabsTrigger>
+              <TabsTrigger value="getting-started" className="rounded-lg px-3 py-2 text-sm font-bold transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm">
+                <Zap size={16} className="mr-2 inline-block" /> 新手入門
+              </TabsTrigger>
+              <TabsTrigger value="security" className="rounded-lg px-3 py-2 text-sm font-bold transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm">
+                <ShieldCheck size={16} className="mr-2 inline-block" /> 資訊安全
+              </TabsTrigger>
+              <TabsTrigger value="tips" className="rounded-lg px-3 py-2 text-sm font-bold transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm">
+                <Lightbulb size={16} className="mr-2 inline-block" /> 實戰技巧
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
-          {/* 快速開始 */}
-          <TabsContent value="getting-started" className="space-y-6">
-            <Card className="p-8">
-              <h2 className="text-2xl font-bold text-foreground mb-6">
-                快速開始指南
-              </h2>
+          {/* 1. 快速對照表 & 核心工具 */}
+          <TabsContent value="quick-ref" className="space-y-10 animate-in fade-in duration-500">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-10">
+              
+              {/* 左側：情境對照與檔案邏輯 (佔 2 欄) */}
+              <div className="xl:col-span-2 space-y-10">
+                
+                {/* 情境快速對照表 */}
+                <section>
+                  <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+                    <span className="w-1.5 h-6 bg-primary rounded-full" /> 我想做什麼...？
+                  </h2>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {QUICK_REFERENCE.map((section, idx) => (
+                      <Card key={idx} className="p-6 border border-border shadow-sm bg-card hover:shadow-md transition-shadow">
+                        <h3 className="text-sm font-bold text-foreground/40 uppercase tracking-widest mb-5 border-b border-border/50 pb-3">
+                          {section.category}
+                        </h3>
+                        <div className="space-y-5">
+                          {section.items.map((item, itemIdx) => (
+                            <div key={itemIdx} className="flex flex-col gap-2">
+                              <div className="flex items-start gap-2 text-sm font-medium text-foreground/80 leading-relaxed">
+                                <span className="shrink-0 mt-0.5 text-foreground/40">{item.icon}</span>
+                                <span>{item.question}</span>
+                              </div>
+                              <div className="pl-6">
+                                <span className={`inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-bold tracking-wider ${item.color}`}>
+                                  👉 建議使用：{item.tool}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </section>
 
-              <div className="space-y-8">
-                {/* 步驟 1 */}
-                <div className="flex gap-6">
-                  <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary text-primary-foreground font-bold">
-                      1
+                {/* 檔案儲存邏輯表 */}
+                <section>
+                  <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+                    <span className="w-1.5 h-6 bg-primary rounded-full" /> 黃金觀念：我的檔案到底存在哪？
+                  </h2>
+                  <Card className="overflow-hidden border border-border shadow-sm bg-card">
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-sm">
+                        <thead className="bg-muted/50 border-b border-border">
+                          <tr>
+                            <th className="p-4 font-bold text-foreground w-1/3">如果你把檔案傳到...</th>
+                            <th className="p-4 font-bold text-foreground w-1/3">檔案實際上會存在...</th>
+                            <th className="p-4 font-bold text-foreground w-1/3">誰可以看到？</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-border">
+                          <tr className="hover:bg-muted/30 transition-colors">
+                            <td className="p-4 font-bold flex items-center gap-2">
+                              <div className="w-5 h-5 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div> Teams (一對一/群組私聊)
+                            </td>
+                            <td className="p-4 text-foreground/80">上傳者的 <strong className="text-blue-500 bg-blue-50 dark:bg-blue-900/30 px-1.5 py-0.5 rounded">OneDrive</strong> 中</td>
+                            <td className="p-4 text-foreground/70">只有該聊天室內的人可以存取</td>
+                          </tr>
+                          <tr className="hover:bg-muted/30 transition-colors">
+                            <td className="p-4 font-bold flex items-center gap-2">
+                              <div className="w-5 h-5 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div> Teams (專案/部門頻道)
+                            </td>
+                            <td className="p-4 text-foreground/80">該團隊背後的 <strong className="text-teal-500 bg-teal-50 dark:bg-teal-900/30 px-1.5 py-0.5 rounded">SharePoint</strong> 網站</td>
+                            <td className="p-4 text-foreground/70">整個團隊的所有成員都可存取</td>
+                          </tr>
+                          <tr className="hover:bg-muted/30 transition-colors">
+                            <td className="p-4 font-bold flex items-center gap-2">
+                              <Lock size={16} className="text-foreground/40 ml-0.5" /> 電腦上的本機資料夾
+                            </td>
+                            <td className="p-4 text-foreground/80">你的電腦實體硬碟</td>
+                            <td className="p-4 text-red-500 font-bold">只有你自己 (硬碟損壞即遺失)</td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-foreground mb-2">
-                      登入您的 M365 帳戶
-                    </h3>
-                    <p className="text-foreground/70 mb-4">
-                      使用您的公司帳戶登入 Microsoft 365。訪問 office.com 或使用您的組織提供的登入連結。
-                    </p>
-                    <ul className="list-disc list-inside text-foreground/70 space-y-2">
-                      <li>輸入您的公司電子郵件地址</li>
-                      <li>輸入您的密碼</li>
-                      <li>完成多因素驗證（如需要）</li>
-                    </ul>
-                  </div>
+                    <div className="bg-primary/5 p-4 text-sm text-foreground/80 border-t border-border flex gap-3 items-start">
+                      <Lightbulb className="text-primary shrink-0 mt-0.5" size={18} />
+                      <p className="leading-relaxed">
+                        <strong className="text-primary">實戰鐵則：</strong> 個人草稿放 OneDrive，正式的專案與部門文件請務必上傳到 Teams 頻道或 SharePoint，以確保知識傳承！
+                      </p>
+                    </div>
+                  </Card>
+                </section>
+              </div>
+
+              {/* 右側：核心工具導航卡片 (佔 1 欄) */}
+              <div className="xl:col-span-1 space-y-6">
+                <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
+                  <span className="w-1.5 h-6 bg-primary rounded-full" /> 五大工具深度手冊
+                </h2>
+                <div className="flex flex-col gap-4">
+                  {TOOL_CARDS.map((tool) => (
+                    <Link key={tool.id} href={tool.link}>
+                      <Card className={`group flex items-center p-5 cursor-pointer border border-border shadow-sm transition-all duration-300 hover:shadow-md ${tool.border} bg-card hover:bg-muted/30`}>
+                        <div className={`shrink-0 w-12 h-12 rounded-xl flex items-center justify-center ${tool.bg} ${tool.color} group-hover:scale-110 transition-transform duration-300`}>
+                          <div className="w-7 h-7 flex items-center justify-center">
+                            {tool.icon}
+                          </div>
+                        </div>
+                        <div className="ml-4 flex-1">
+                          <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                            {tool.name}
+                          </h3>
+                          <p className="text-xs text-foreground/50 mt-1 font-medium">
+                            {tool.desc}
+                          </p>
+                        </div>
+                        <ArrowRight size={18} className="text-foreground/20 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                      </Card>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* 2. 新手入門 */}
+          <TabsContent value="getting-started" className="space-y-6 animate-in fade-in duration-500">
+            <Card className="p-8 border border-border shadow-sm bg-card">
+              <h2 className="text-2xl font-bold text-foreground mb-8">新手快速啟動指南</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                {/* 步驟 1 */}
+                <div className="relative">
+                  <div className="absolute top-0 left-6 w-0.5 h-full bg-border -z-10 hidden md:block"></div>
+                  <div className="bg-primary text-primary-foreground w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl mb-6 shadow-lg shadow-primary/30">1</div>
+                  <h3 className="text-lg font-bold text-foreground mb-3">登入 M365 帳戶</h3>
+                  <p className="text-sm text-foreground/70 mb-4 leading-relaxed">
+                    使用您的公司帳戶登入 Microsoft 365。訪問 office.com 或使用您的組織提供的登入連結。
+                  </p>
+                  <ul className="text-sm text-foreground/60 space-y-2 font-medium">
+                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 輸入公司電子郵件</li>
+                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 輸入您的密碼</li>
+                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 完成多因素驗證 (MFA)</li>
+                  </ul>
                 </div>
 
                 {/* 步驟 2 */}
-                <div className="flex gap-6">
-                  <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary text-primary-foreground font-bold">
-                      2
-                    </div>
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-foreground mb-2">
-                      探索應用程式啟動器
-                    </h3>
-                    <p className="text-foreground/70 mb-4">
-                      點擊左上角的應用程式啟動器（網格圖示）以訪問所有 M365 應用程式。
-                    </p>
-                    <ul className="list-disc list-inside text-foreground/70 space-y-2">
-                      <li>查看所有可用的應用程式</li>
-                      <li>釘選常用應用程式以快速訪問</li>
-                      <li>搜尋特定應用程式</li>
-                    </ul>
-                  </div>
+                <div className="relative">
+                  <div className="absolute top-0 left-6 w-0.5 h-full bg-border -z-10 hidden md:block"></div>
+                  <div className="bg-primary text-primary-foreground w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl mb-6 shadow-lg shadow-primary/30">2</div>
+                  <h3 className="text-lg font-bold text-foreground mb-3">探索應用程式啟動器</h3>
+                  <p className="text-sm text-foreground/70 mb-4 leading-relaxed">
+                    點擊左上角的應用程式啟動器（九宮格圖示，俗稱鬆餅圖示）以訪問所有 M365 應用程式。
+                  </p>
+                  <ul className="text-sm text-foreground/60 space-y-2 font-medium">
+                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 查看所有可用 App</li>
+                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 釘選常用工具</li>
+                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 搜尋特定應用程式</li>
+                  </ul>
                 </div>
 
                 {/* 步驟 3 */}
-                <div className="flex gap-6">
-                  <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-12 w-12 rounded-lg bg-primary text-primary-foreground font-bold">
-                      3
-                    </div>
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-lg font-bold text-foreground mb-2">
-                      設置您的個人資料
-                    </h3>
-                    <p className="text-foreground/70 mb-4">
-                      完成您的個人資料設置以改善協作體驗。
-                    </p>
-                    <ul className="list-disc list-inside text-foreground/70 space-y-2">
-                      <li>添加個人資料照片</li>
-                      <li>填寫職位和部門信息</li>
-                      <li>設置您的可用性狀態</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </TabsContent>
-
-          {/* 設置指南 */}
-          <TabsContent value="setup" className="space-y-6">
-            <Card className="p-8">
-              <h2 className="text-2xl font-bold text-foreground mb-6">
-                設置和配置
-              </h2>
-
-              <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-bold text-foreground mb-3">
-                    安裝 Office 應用程式
-                  </h3>
-                  <p className="text-foreground/70 mb-4">
-                    在您的設備上安裝 Word、Excel、PowerPoint 和其他 Office 應用程式。
+                  <div className="bg-primary text-primary-foreground w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl mb-6 shadow-lg shadow-primary/30">3</div>
+                  <h3 className="text-lg font-bold text-foreground mb-3">設置您的個人資料</h3>
+                  <p className="text-sm text-foreground/70 mb-4 leading-relaxed">
+                    完善您的個人資料，讓跨部門的同事更容易找到您，改善企業內部協作體驗。
                   </p>
-                  <ol className="list-decimal list-inside text-foreground/70 space-y-2">
-                    <li>訪問 account.microsoft.com</li>
-                    <li>點擊「安裝 Office」</li>
-                    <li>選擇您的語言和版本</li>
-                    <li>完成安裝過程</li>
-                  </ol>
+                  <ul className="text-sm text-foreground/60 space-y-2 font-medium">
+                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 上傳專業的大頭照</li>
+                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 確認職位和部門資訊</li>
+                    <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 設置 Teams 狀態訊息</li>
+                  </ul>
                 </div>
 
-                <div className="border-t border-border pt-6">
-                  <h3 className="text-lg font-bold text-foreground mb-3">
-                    配置電子郵件客戶端
-                  </h3>
-                  <p className="text-foreground/70 mb-4">
-                    在 Outlook 中設置您的公司電子郵件帳戶。
-                  </p>
-                  <ol className="list-decimal list-inside text-foreground/70 space-y-2">
-                    <li>打開 Outlook</li>
-                    <li>點擊「文件」→「帳戶設置」</li>
-                    <li>輸入您的電子郵件地址</li>
-                    <li>允許 Outlook 自動配置您的帳戶</li>
-                  </ol>
-                </div>
-
-                <div className="border-t border-border pt-6">
-                  <h3 className="text-lg font-bold text-foreground mb-3">
-                    同步設置
-                  </h3>
-                  <p className="text-foreground/70 mb-4">
-                    啟用設置同步以在多個設備上保持一致的體驗。
-                  </p>
-                  <ol className="list-decimal list-inside text-foreground/70 space-y-2">
-                    <li>進入「設置」→「帳戶」</li>
-                    <li>選擇「同步您的設置」</li>
-                    <li>啟用所需的同步選項</li>
-                  </ol>
-                </div>
               </div>
             </Card>
           </TabsContent>
 
-          {/* 協作工具 */}
-          <TabsContent value="collaboration" className="space-y-6">
-            <Card className="p-8">
-              <h2 className="text-2xl font-bold text-foreground mb-6">
-                協作工具最佳實踐
-              </h2>
-
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-bold text-foreground mb-3">
-                    在 Teams 中進行有效協作
-                  </h3>
-                  <ul className="list-disc list-inside text-foreground/70 space-y-2">
-                    <li>使用頻道組織不同的主題和項目</li>
-                    <li>利用線程回覆保持對話有序</li>
-                    <li>使用 @提及來吸引特定人員的注意</li>
-                    <li>定期檢查已釘選的消息和文件</li>
+          {/* 3. 資訊安全 */}
+          <TabsContent value="security" className="space-y-6 animate-in fade-in duration-500">
+            <Card className="p-8 border border-border shadow-sm bg-card">
+              <h2 className="text-2xl font-bold text-foreground mb-8">企業安全與隱私規範</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div className="p-6 bg-muted/30 rounded-2xl border border-border/50">
+                  <ShieldCheck className="text-indigo-500 mb-4" size={32} />
+                  <h3 className="text-lg font-bold text-foreground mb-3">保護您的帳戶</h3>
+                  <ul className="text-sm text-foreground/70 space-y-2.5 font-medium">
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" /> 使用強密碼並定期更改</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" /> 務必開啟多因素驗證 (MFA)</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" /> 不要在公共電腦上記住密碼</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" /> 離開座位時隨手鎖定螢幕 (Win+L)</li>
                   </ul>
                 </div>
 
-                <div className="border-t border-border pt-6">
-                  <h3 className="text-lg font-bold text-foreground mb-3">
-                    SharePoint 文件管理
-                  </h3>
-                  <ul className="list-disc list-inside text-foreground/70 space-y-2">
-                    <li>使用有意義的文件夾結構組織文件</li>
-                    <li>利用版本控制跟蹤文件更改</li>
-                    <li>設置適當的權限以保護敏感信息</li>
-                    <li>使用搜尋功能快速查找文件</li>
+                <div className="p-6 bg-muted/30 rounded-2xl border border-border/50">
+                  <AlertCircle className="text-red-500 mb-4" size={32} />
+                  <h3 className="text-lg font-bold text-foreground mb-3">防範社交工程與釣魚</h3>
+                  <ul className="text-sm text-foreground/70 space-y-2.5 font-medium">
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5 shrink-0" /> 仔細檢查寄件人的真實 Email 地址</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5 shrink-0" /> 絕不在來路不明的網頁輸入 M365 密碼</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5 shrink-0" /> 不隨意下載外部郵件的壓縮檔附件</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5 shrink-0" /> 遇到要求緊急匯款的信件，務必電話確認</li>
                   </ul>
                 </div>
 
-                <div className="border-t border-border pt-6">
-                  <h3 className="text-lg font-bold text-foreground mb-3">
-                    實時共同編輯
-                  </h3>
-                  <ul className="list-disc list-inside text-foreground/70 space-y-2">
-                    <li>在 Office 應用程式中打開共享文件</li>
-                    <li>邀請其他人進行實時編輯</li>
-                    <li>查看其他人的光標和更改</li>
-                    <li>使用評論功能進行反饋</li>
+                <div className="p-6 bg-muted/30 rounded-2xl border border-border/50">
+                  <Lock className="text-teal-500 mb-4" size={32} />
+                  <h3 className="text-lg font-bold text-foreground mb-3">檔案權限與資料分類</h3>
+                  <ul className="text-sm text-foreground/70 space-y-2.5 font-medium">
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-1.5 shrink-0" /> 分享連結時，優先選「特定人員」而非「任何人」</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-1.5 shrink-0" /> 機密財報請加上敏感度標籤 (Sensitivity labels)</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-1.5 shrink-0" /> 定期檢查 OneDrive 中對外分享的過期連結</li>
                   </ul>
                 </div>
+
               </div>
             </Card>
           </TabsContent>
 
-          {/* 安全性 */}
-          <TabsContent value="security" className="space-y-6">
-            <Card className="p-8">
-              <h2 className="text-2xl font-bold text-foreground mb-6">
-                安全性和隱私
-              </h2>
+          {/* 4. 實戰技巧 */}
+          <TabsContent value="tips" className="space-y-6 animate-in fade-in duration-500">
+            <Card className="p-8 border border-border shadow-sm bg-card">
+              <h2 className="text-2xl font-bold text-foreground mb-8">提升生產力的隱藏技巧</h2>
 
-              <div className="space-y-6">
-                <div>
-                  <h3 className="text-lg font-bold text-foreground mb-3">
-                    保護您的帳戶
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div className="border border-border/60 rounded-xl p-5 hover:border-primary/50 transition-colors bg-background">
+                  <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
+                    <span className="text-xl">⌨️</span> 鍵盤快捷鍵
                   </h3>
-                  <ul className="list-disc list-inside text-foreground/70 space-y-2">
-                    <li>使用強密碼並定期更改</li>
-                    <li>啟用多因素驗證（MFA）</li>
-                    <li>不要在公共計算機上保存密碼</li>
-                    <li>定期檢查登入活動</li>
+                  <ul className="text-sm text-foreground/70 space-y-2 font-medium">
+                    <li className="flex justify-between border-b border-border/40 pb-1"><span>搜尋</span> <kbd className="bg-muted px-1.5 rounded text-xs font-mono">Ctrl+F</kbd></li>
+                    <li className="flex justify-between border-b border-border/40 pb-1"><span>Teams 靜音</span> <kbd className="bg-muted px-1.5 rounded text-xs font-mono">Ctrl+Shift+M</kbd></li>
+                    <li className="flex justify-between border-b border-border/40 pb-1"><span>強制重新整理</span> <kbd className="bg-muted px-1.5 rounded text-xs font-mono">Ctrl+F5</kbd></li>
+                    <li className="flex justify-between pb-1"><span>鎖定電腦</span> <kbd className="bg-muted px-1.5 rounded text-xs font-mono">Win+L</kbd></li>
                   </ul>
                 </div>
 
-                <div className="border-t border-border pt-6">
-                  <h3 className="text-lg font-bold text-foreground mb-3">
-                    識別釣魚攻擊
+                <div className="border border-border/60 rounded-xl p-5 hover:border-primary/50 transition-colors bg-background">
+                  <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
+                    <span className="text-xl">🔍</span> 搜尋高階語法
                   </h3>
-                  <ul className="list-disc list-inside text-foreground/70 space-y-2">
-                    <li>檢查發件人的電子郵件地址</li>
-                    <li>懷疑要求提供個人信息的消息</li>
-                    <li>不要點擊可疑鏈接或下載附件</li>
-                    <li>向 IT 部門報告可疑電子郵件</li>
+                  <ul className="text-sm text-foreground/70 space-y-2.5 font-medium">
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 使用引號 <code>"財報"</code> 搜尋精確短語</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 使用 <code>-</code> 排除特定單詞</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 在 Teams 搜尋框輸入 <code>/</code> 呼叫快捷指令</li>
                   </ul>
                 </div>
 
-                <div className="border-t border-border pt-6">
-                  <h3 className="text-lg font-bold text-foreground mb-3">
-                    數據分類
+                <div className="border border-border/60 rounded-xl p-5 hover:border-primary/50 transition-colors bg-background">
+                  <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
+                    <span className="text-xl">👥</span> 協同編輯禮儀
                   </h3>
-                  <ul className="list-disc list-inside text-foreground/70 space-y-2">
-                    <li>了解您組織的數據分類政策</li>
-                    <li>正確標記敏感文件</li>
-                    <li>遵守數據保留政策</li>
-                    <li>在共享前檢查文件權限</li>
+                  <ul className="text-sm text-foreground/70 space-y-2.5 font-medium">
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 善用「註解」功能 Tag 同事，不要直接改原文顏色</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 檔案預設會自動儲存，請勿任意按復原</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 點擊上方頭像可看到同事目前游標位置</li>
+                  </ul>
+                </div>
+
+                <div className="border border-border/60 rounded-xl p-5 hover:border-primary/50 transition-colors bg-background">
+                  <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
+                    <span className="text-xl">📌</span> 快速訪問設定
+                  </h3>
+                  <ul className="text-sm text-foreground/70 space-y-2.5 font-medium">
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 將正在執行的專案釘選在 Teams 頻道最上方</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 在 Edge 瀏覽器將 M365 首頁設為我的最愛</li>
+                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 將常用的 SharePoint 網站按星號追蹤</li>
                   </ul>
                 </div>
               </div>
             </Card>
           </TabsContent>
 
-          {/* 技巧與訣竅 */}
-          <TabsContent value="tips" className="space-y-6">
-            <Card className="p-8">
-              <h2 className="text-2xl font-bold text-foreground mb-6">
-                提高生產力的技巧
-              </h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="border border-border rounded-lg p-4">
-                  <h3 className="font-bold text-foreground mb-2">
-                    ⌨️ 鍵盤快捷鍵
-                  </h3>
-                  <ul className="text-sm text-foreground/70 space-y-1">
-                    <li>Ctrl+N：新建文件</li>
-                    <li>Ctrl+S：保存文件</li>
-                    <li>Ctrl+Z：撤銷</li>
-                    <li>Ctrl+Y：重做</li>
-                  </ul>
-                </div>
-
-                <div className="border border-border rounded-lg p-4">
-                  <h3 className="font-bold text-foreground mb-2">
-                    🔍 搜尋技巧
-                  </h3>
-                  <ul className="text-sm text-foreground/70 space-y-1">
-                    <li>使用引號搜尋精確短語</li>
-                    <li>使用 - 排除特定單詞</li>
-                    <li>使用通配符 * 進行模糊搜尋</li>
-                  </ul>
-                </div>
-
-                <div className="border border-border rounded-lg p-4">
-                  <h3 className="font-bold text-foreground mb-2">
-                    📌 快速訪問
-                  </h3>
-                  <ul className="text-sm text-foreground/70 space-y-1">
-                    <li>釘選常用文件和文件夾</li>
-                    <li>使用快速訪問欄</li>
-                    <li>創建自定義快捷方式</li>
-                  </ul>
-                </div>
-
-                <div className="border border-border rounded-lg p-4">
-                  <h3 className="font-bold text-foreground mb-2">
-                    🤖 自動化工作流程
-                  </h3>
-                  <ul className="text-sm text-foreground/70 space-y-1">
-                    <li>使用 Power Automate 自動化任務</li>
-                    <li>設置自動回复和規則</li>
-                    <li>創建模板以節省時間</li>
-                  </ul>
-                </div>
-              </div>
-            </Card>
-          </TabsContent>
         </Tabs>
       </div>
     </div>

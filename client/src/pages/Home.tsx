@@ -1,10 +1,11 @@
-import { M365_TOOLS } from "@/../../shared/const";
-import { useAuth } from "@/_core/hooks/useAuth";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowRight } from "lucide-react";
 import { Link } from "wouter";
-import { useTranslation } from "react-i18next";
+import { 
+  ArrowRight, 
+  BookOpen,
+  Lightbulb,
+  Rocket
+} from "lucide-react";
 import {
   PlannerIcon,
   PowerAutomateIcon,
@@ -14,139 +15,139 @@ import {
 } from "@/components/M365Icons";
 
 /**
- * 首頁元件 - 整合按鈕顏色統一、圖標縮小與完美對齊
+ * M365 實戰學院 - 精緻版首頁 (Landing Page)
+ * 變更點：將 Teams, Power Automate, Power BI 的圖示加上 scale-[1.35] 放大
  */
 
-export default function Home() {
-  const { t } = useTranslation();
-  let { user, isAuthenticated } = useAuth();
+const TOOLS = [
+  { id: "teams", name: "Teams", desc: "溝通協作與會議", icon: <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div>, color: "text-indigo-500", bg: "bg-indigo-500/10", border: "hover:border-indigo-500/50 hover:shadow-indigo-500/20" },
+  { id: "sharepoint", name: "SharePoint", desc: "企業文件與知識庫", icon: <div className="w-8 h-8 flex items-center justify-center"><SharePointIcon /></div>, color: "text-teal-500", bg: "bg-teal-500/10", border: "hover:border-teal-500/50 hover:shadow-teal-500/20" },
+  { id: "planner", name: "Planner", desc: "專案與任務追蹤", icon: <div className="w-8 h-8 flex items-center justify-center"><PlannerIcon /></div>, color: "text-green-500", bg: "bg-green-500/10", border: "hover:border-green-500/50 hover:shadow-green-500/20" },
+  { id: "power-automate", name: "Power Automate", desc: "日常流程自動化", icon: <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><PowerAutomateIcon /></div>, color: "text-blue-500", bg: "bg-blue-500/10", border: "hover:border-blue-500/50 hover:shadow-blue-500/20" },
+  { id: "power-bi", name: "Power BI", desc: "商業數據視覺化", icon: <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><PowerBIIcon /></div>, color: "text-yellow-500", bg: "bg-yellow-500/10", border: "hover:border-yellow-500/50 hover:shadow-yellow-500/20" },
+];
 
+export default function Home() {
   return (
-    <div className="min-h-screen bg-background selection:bg-primary/20">
-      {/* 英雄區域 */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-background border-b border-border">
-        {/* 頂部與底部間距優化 */}
-        <div className="container pt-10 pb-10 md:pt-16 md:pb-12 relative z-10">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-6xl font-extrabold text-foreground mb-6 tracking-tight">
-              {t('home.title')} <span className="text-primary">{t('home.subtitle')}</span>
-            </h1>
-            <p className="text-xl text-foreground/70 mb-10 leading-relaxed">
-              {t('home.description')}
-            </p>
-            <div className="flex flex-wrap gap-4">
-              <Link href="/handbook">
-                <Button size="lg" className="h-14 px-8 gap-2 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105 active:scale-95">
-                  {t('home.viewHandbook')}
-                </Button>
-              </Link>
-              
-              <Link href="/cases">
-                <Button size="lg" className="h-14 px-8 shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all hover:scale-105 active:scale-95">
-                  {t('home.viewCases')}
-                </Button>
-              </Link>
-            </div>
+    <div className="min-h-screen bg-background overflow-hidden selection:bg-primary/20">
+      
+      {/* --- 主視覺區塊 (Hero Section) --- */}
+      <section className="relative pt-24 pb-32 px-6 md:px-10 lg:pt-36 lg:pb-40">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/20 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse duration-1000"></div>
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 blur-[100px] rounded-full pointer-events-none -z-10"></div>
+        
+        <div className="max-w-[1200px] mx-auto text-center animate-in slide-in-from-bottom-8 fade-in duration-1000 fill-mode-both">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-bold tracking-widest uppercase mb-8 border border-primary/20 shadow-sm">
+            <Rocket size={16} />
+            <span>Empower Your Workflow</span>
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl font-extrabold text-foreground tracking-tight mb-8 leading-[1.1]">
+            擁抱高效率，<br className="md:hidden" />探索 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-500 to-teal-400">M365 實戰學院</span>
+          </h1>
+          
+          <p className="text-xl md:text-2xl text-foreground/60 max-w-3xl mx-auto mb-12 leading-relaxed font-medium">
+            告別瑣碎的手動輸入與混亂的檔案版本。在這裡，我們用最白話的圖文與真實企業情境，帶你輕鬆駕馭微軟五大神器。
+          </p>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link href="/handbook">
+              <button className="w-full sm:w-auto px-8 py-4 bg-primary text-primary-foreground rounded-full font-bold text-lg hover:bg-primary/90 hover:scale-105 transition-all shadow-xl shadow-primary/30 flex items-center justify-center gap-2">
+                開始閱讀手冊 <ArrowRight size={20} />
+              </button>
+            </Link>
+            <Link href="/cases">
+              <button className="w-full sm:w-auto px-8 py-4 bg-card text-foreground border border-border rounded-full font-bold text-lg hover:bg-muted transition-all flex items-center justify-center gap-2">
+                瀏覽實戰案例
+              </button>
+            </Link>
           </div>
         </div>
-        <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl" />
       </section>
 
-      {/* M365 工具介紹 */}
-      <section className="container pt-10 pb-24">
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-foreground mb-4 tracking-tight">
-            {t('home.coreTools')}
-          </h2>
-          <p className="text-lg text-foreground/60">{t('home.coreToolsDesc')}</p>
-        </div>
+      {/* --- 五大核心工具區塊 --- */}
+      <section className="px-6 md:px-10 py-16 bg-muted/30 border-y border-border/50">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="text-center mb-12 animate-in fade-in duration-700 delay-200 fill-mode-both">
+            <h2 className="text-3xl font-bold text-foreground mb-4">五大核心工具，解決 90% 日常痛點</h2>
+            <p className="text-foreground/60">點擊下方卡片，查看各工具的「圖文教學」與「操作秘笈」</p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {M365_TOOLS.map((tool) => {
-            const handleToolClick = () => {
-              setTimeout(() => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }, 100);
-            };
-            
-            const getIconComponent = () => {
-              switch (tool.id) {
-                case 'planner': return <PlannerIcon />;
-                case 'power-automate': return <PowerAutomateIcon />;
-                case 'power-bi': return <PowerBIIcon />;
-                case 'sharepoint': return <SharePointIcon />;
-                case 'teams': return <TeamsIcon />;
-                default: return null;
-              }
-            };
-            
-            const isPlanner = tool.id === 'planner';
-            const isSharePoint = tool.id === 'sharepoint';
-            
-            return (
-              <Link key={tool.id} href={`/tools/${tool.id}`} onClick={handleToolClick} className="group block">
-                <Card className="h-full p-8 relative overflow-hidden transition-all duration-500 ease-out hover:-translate-y-3 hover:scale-105 hover:shadow-xl hover:ring-2 hover:ring-primary/40 border-l-4 border-l-border group-hover:border-l-primary cursor-pointer bg-card flex flex-col">
-                  
-                  <div className="absolute -right-4 -top-4 w-20 h-20 bg-primary/5 rounded-full group-hover:bg-primary/10 transition-colors" />
-                  
-                  {/* 圖標對齊容器 */}
-                  <div className="h-16 flex items-center mb-4">
-                    <div className={`transform transition-transform duration-500 group-hover:rotate-[10deg] group-hover:scale-110 flex items-center justify-center 
-                      ${isPlanner ? 'w-9 h-9 translate-y-1' : isSharePoint ? 'w-10 h-10' : 'w-14 h-14'}`}>
-                      {getIconComponent()}
-                    </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            {TOOLS.map((tool, index) => (
+              <Link key={tool.id} href={`/tools/${tool.id}`}>
+                <Card 
+                  className={`group relative overflow-hidden h-full p-6 border border-border shadow-sm bg-card cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${tool.border} animate-in slide-in-from-bottom-10 fade-in fill-mode-both`}
+                  style={{ animationDelay: `${index * 100 + 300}ms` }}
+                >
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-white/5 to-white/0 dark:from-white/5 rounded-bl-full -z-10"></div>
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110 ${tool.bg} ${tool.color}`}>
+                    {tool.icon}
                   </div>
+                  <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
+                    {tool.name}
+                  </h3>
+                  <p className="text-sm text-foreground/60 font-medium">
+                    {tool.desc}
+                  </p>
                   
-                  {/* 標題對齊容器 (固定高度確保對齊) */}
-                  <div className="min-h-[4rem] flex items-center mb-2">
-                    <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors leading-tight">
-                      {t(`tools.${tool.id}.name`)}
-                    </h3>
-                  </div>
-                  
-                  {/* 描述對齊容器 */}
-                  <div className="min-h-[3.5rem]">
-                    <p className="text-sm text-foreground/70 leading-relaxed line-clamp-2">
-                      {t(`tools.${tool.id}.description`)}
-                    </p>
-                  </div>
-
-                  <div className="mt-auto pt-6 flex justify-end opacity-0 group-hover:opacity-100 transition-all transform translate-x-4 group-hover:translate-x-0 duration-500">
-                    <span className="text-primary font-bold text-xs flex items-center gap-1">
-                      {t('home.enterDetail')} <ArrowRight size={14} />
-                    </span>
+                  {/* 隱藏的箭頭，hover時出現 */}
+                  <div className="absolute bottom-6 right-6 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-foreground/40 group-hover:text-primary">
+                    <ArrowRight size={20} />
                   </div>
                 </Card>
               </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* 快速導航與底部 */}
-      <section className="bg-secondary/30 border-y border-border">
-        <div className="container py-24 text-center">
-          <h2 className="text-3xl font-bold mb-16">{t('home.quickNav')}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-5xl mx-auto">
-            <Link href="/handbook">
-              <div className="group bg-card p-10 rounded-2xl border border-border hover:shadow-2xl transition-all cursor-pointer h-full flex flex-col items-center">
-                <div className="text-5xl mb-6 group-hover:scale-125 transition-transform">📖</div>
-                <h3 className="text-2xl font-bold mb-4">{t('home.handbook')}</h3>
-                <p className="text-foreground/60 mb-8 min-h-[3rem]">{t('home.handbookDesc')}</p>
-                <Button variant="outline" className="w-full mt-auto">{t('home.enterHandbook')}</Button>
-              </div>
-            </Link>
-            <Link href="/cases">
-              <div className="group bg-card p-10 rounded-2xl border border-border hover:shadow-2xl transition-all cursor-pointer h-full flex flex-col items-center">
-                <div className="text-5xl mb-6 group-hover:scale-125 transition-transform">💼</div>
-                <h3 className="text-2xl font-bold mb-4">{t('home.cases')}</h3>
-                <p className="text-foreground/60 mb-8 min-h-[3rem]">{t('home.casesDesc')}</p>
-                <Button variant="outline" className="w-full mt-auto">{t('home.viewAllCases')}</Button>
-              </div>
-            </Link>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* --- 學習資源分流區塊 --- */}
+      <section className="px-6 md:px-10 py-24">
+        <div className="max-w-[1000px] mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <Link href="/handbook">
+              <Card className="group p-8 border border-border/50 bg-card hover:border-primary/50 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <BookOpen size={32} />
+                </div>
+                <h2 className="text-2xl font-bold text-foreground mb-3">M365 使用手冊</h2>
+                <p className="text-foreground/60 leading-relaxed mb-6 h-12">
+                  不知道什麼時候該用什麼工具？這裡有「快速對照表」與「檔案儲存觀念釐清」，幫你打好基本功。
+                </p>
+                <div className="font-bold text-primary flex items-center gap-2">
+                  開始閱讀 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Card>
+            </Link>
+
+            <Link href="/cases">
+              <Card className="group p-8 border border-border/50 bg-card hover:border-orange-500/50 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg">
+                <div className="w-16 h-16 rounded-2xl bg-orange-500/10 text-orange-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Lightbulb size={32} />
+                </div>
+                <h2 className="text-2xl font-bold text-foreground mb-3">15 大應用情境案例</h2>
+                <p className="text-foreground/60 leading-relaxed mb-6 h-12">
+                  整理了企業最常見的痛點（如：簽核自動化、結案報告自動產出），提供超詳細 Step-by-Step 教學。
+                </p>
+                <div className="font-bold text-orange-500 flex items-center gap-2">
+                  探索案例 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Card>
+            </Link>
+
+          </div>
+        </div>
+      </section>
+
+      {/* --- Footer 簡約結尾 --- */}
+      <footer className="border-t border-border/50 py-10 text-center">
+        <p className="text-sm font-bold text-foreground/40 uppercase tracking-widest">
+          Empowering the Modern Workplace
+        </p>
+      </footer>
+
     </div>
   );
 }

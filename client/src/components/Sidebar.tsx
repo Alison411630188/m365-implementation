@@ -1,12 +1,11 @@
 import { NAVIGATION_ITEMS } from "@/../../shared/const";
-import { ChevronDown, Menu, X, Moon, Sun, Search, Languages } from "lucide-react";
+import { ChevronDown, Menu, X, Moon, Sun, Search } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useTheme } from "@/contexts/ThemeContext";
-import { useTranslation } from "react-i18next";
 
 /**
- * 側邊欄導航元件 - 淺色模式黑色字體 (深色模式維持原樣)
+ * 側邊欄導航元件 - 單一語系 (科技感毛玻璃保留版)
  */
 
 interface NavItem {
@@ -17,16 +16,12 @@ interface NavItem {
 }
 
 export default function Sidebar() {
-  const { t, i18n } = useTranslation();
   const [location] = useLocation();
   const [expandedItems, setExpandedItems] = useState<string[]>(["tools"]);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  
+  // 只保留深淺色切換 Context
   const { theme, toggleTheme } = useTheme();
-
-  const toggleLanguage = () => {
-    const nextLang = i18n.language === 'zh-TW' ? 'en' : 'zh-TW';
-    i18n.changeLanguage(nextLang);
-  };
 
   const toggleExpand = (id: string) => {
     setExpandedItems((prev) =>
@@ -49,39 +44,36 @@ export default function Sidebar() {
         {hasChildren ? (
           <button
             onClick={() => toggleExpand(item.id)}
-            // 淺色模式：text-black | 深色模式：維持原本 text-sidebar-foreground/70 或 dark:text-gray-300
-            className={`w-full flex items-center justify-between px-6 py-3 text-sm font-bold transition-colors ${
+            className={`w-[calc(100%-24px)] flex items-center justify-between px-4 py-2.5 mx-3 my-1 rounded-xl text-sm font-bold transition-all duration-300 ${
               isExpanded 
-                ? "text-primary" 
-                : "text-black dark:text-sidebar-foreground/70 hover:bg-muted/50"
+                ? "text-primary bg-primary/5 border border-primary/10 shadow-[0_0_10px_rgba(var(--primary),0.05)]" 
+                : "text-black/80 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 border border-transparent"
             }`}
           >
-            <span>{t(`navigation.${item.id}`)}</span>
+            <span>{item.label}</span>
             <ChevronDown
               size={14}
-              className={`transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
+              className={`transition-transform duration-300 ${isExpanded ? "rotate-180 text-primary" : "text-black/40 dark:text-gray-500"}`}
             />
           </button>
         ) : (
           <Link
             href={item.path || "/"}
-            // 淺色模式：text-black | 深色模式：維持原本 text-sidebar-foreground/80
             className={`
-              block px-6 py-3 text-sm transition-all duration-200 border-l-4
+              block px-4 py-2.5 mx-3 my-1 text-sm rounded-xl transition-all duration-300
               ${active 
-                ? "bg-primary/5 text-primary border-primary font-bold" 
-                : "border-transparent text-black dark:text-sidebar-foreground/80 hover:bg-muted hover:text-primary"
+                ? "bg-primary/10 dark:bg-primary/15 text-primary font-bold border border-primary/30 shadow-[0_0_15px_-3px_rgba(var(--primary),0.3)] translate-x-1" 
+                : "text-black/70 dark:text-gray-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-primary hover:translate-x-1 border border-transparent"
               }
             `}
           >
-            <span className={level > 0 ? "ml-2" : ""}>
-              {level > 0 ? t(`tools.${item.id}.label`) : t(`navigation.${item.id}`)}
-            </span>
+            <span className={level > 0 ? "ml-1" : ""}>{item.label}</span>
           </Link>
         )}
 
+        {/* 子選單左側科技感導引線 */}
         {hasChildren && isExpanded && item.children && (
-          <div className="bg-muted/10 dark:bg-gray-800/20 border-b border-sidebar-border/50 dark:border-gray-700/50">
+          <div className="ml-7 pl-2 mt-1 mb-2 border-l-2 border-black/5 dark:border-primary/20 space-y-0.5 animate-in slide-in-from-top-2 fade-in duration-200">
             {item.children.map((child) => renderNavItem(child, level + 1))}
           </div>
         )}
@@ -91,74 +83,89 @@ export default function Sidebar() {
 
   return (
     <>
+      {/* 🚀 注入全局科技感背景 (Tech Dot Matrix & Top Glow) */}
+      <div className="fixed inset-0 z-[-100] bg-slate-50 dark:bg-[#050507]">
+        {/* 頂部穹頂環境光暈 */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] opacity-40 dark:opacity-20 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/40 via-transparent to-transparent pointer-events-none"></div>
+        {/* 科技感點陣底紋 (Dot Matrix) */}
+        <div className="absolute inset-0 bg-[radial-gradient(#00000015_1px,transparent_1px)] dark:bg-[radial-gradient(#ffffff15_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none [mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)]"></div>
+      </div>
+
+      {/* 手機版漢堡選單按鈕 */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
-        className="fixed top-4 left-4 z-50 lg:hidden p-2 rounded-xl bg-primary text-primary-foreground shadow-lg"
+        className="fixed top-4 left-4 z-50 lg:hidden p-2 rounded-xl bg-primary text-primary-foreground shadow-[0_0_15px_rgba(var(--primary),0.5)] hover:scale-105 transition-transform"
       >
         {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
+      {/* 手機版遮罩 */}
       {isMobileOpen && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-30 lg:hidden" onClick={() => setIsMobileOpen(false)} />
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-30 lg:hidden" onClick={() => setIsMobileOpen(false)} />
       )}
 
+      {/* 側邊欄本體：增強右側陰影與發光邊界，與右側內容徹底區分 */}
       <aside
-        className={`fixed left-0 top-0 h-screen bg-white dark:bg-gray-900 border-r border-sidebar-border dark:border-gray-700 transition-all duration-300 z-40 flex flex-col ${
+        className={`fixed left-0 top-0 h-screen bg-white/80 dark:bg-[#0a0a0c]/80 backdrop-blur-2xl 
+          border-r border-black/10 dark:border-white/5 dark:border-r-primary/20 
+          shadow-[8px_0_30px_-10px_rgba(0,0,0,0.1)] dark:shadow-[8px_0_30px_-10px_rgba(var(--primary),0.15)] 
+          transition-all duration-500 ease-out z-40 flex flex-col ${
           isMobileOpen ? "translate-x-0 w-64" : "-translate-x-full lg:translate-x-0 lg:w-64"
         }`}
       >
         {/* Logo 區域 */}
-        <div className="flex flex-col items-center p-8 border-b border-sidebar-border dark:border-gray-800">
+        <div className="flex flex-col items-center pt-10 pb-6 border-b border-black/5 dark:border-white/5 relative">
           <img
             src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/cvilux-logo-transparent_3d6879c6.png"
             alt="CviLux Logo"
-            className="h-10 w-auto mb-3"
+            className="h-10 w-auto mb-3 relative z-10 hover:scale-105 transition-transform duration-300 drop-shadow-md"
           />
-          <div className="text-center">
-            <span className="block font-black text-red-600 text-lg tracking-tight leading-none">{t('sidebar.groupTitle')}</span>
-            {/* 淺色改深：text-black/60 | 深色維持：dark:text-gray-400 */}
-            <span className="block font-bold text-black/60 dark:text-gray-400 text-[10px] uppercase tracking-[0.2em] mt-1">{t('sidebar.projectTitle')}</span>
+          <div className="text-center relative z-10">
+            <span className="block font-black text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-400 text-xl tracking-tight leading-none drop-shadow-sm">
+              瀚荃集團
+            </span>
+            <span className="block font-bold text-black/50 dark:text-gray-400 text-[10px] uppercase tracking-[0.25em] mt-1.5 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 px-2 py-0.5 rounded-full inline-block shadow-sm">
+              M365 導入專案
+            </span>
           </div>
         </div>
 
-        {/* 搜尋框 */}
-        <div className="px-4 py-4">
+        {/* 搜尋框 - 擬態微凸起設計 */}
+        <div className="px-4 py-5">
           <Link href="/search">
-            {/* 淺色改深：text-black/70 | 深色維持：dark:text-sidebar-foreground/70 */}
-            <div className="w-full flex items-center gap-3 px-4 py-2.5 rounded-full bg-gray-100 dark:bg-gray-800 text-black/70 dark:text-sidebar-foreground/70 hover:text-primary hover:ring-2 hover:ring-primary/20 transition-all cursor-pointer group">
-              <Search size={16} className="group-hover:scale-110 transition-transform" />
-              <span className="text-xs font-bold">{t('sidebar.searchPlaceholder')}</span>
+            <div className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white dark:bg-[#121214] border border-black/10 dark:border-white/10 shadow-sm text-black/50 dark:text-gray-400 hover:text-primary hover:border-primary/40 hover:shadow-[0_0_15px_rgba(var(--primary),0.15)] transition-all cursor-pointer group">
+              <Search size={16} className="group-hover:scale-110 transition-transform text-primary/70" />
+              <span className="text-xs font-bold tracking-wide">
+                搜尋手冊、案例...
+              </span>
             </div>
           </Link>
         </div>
 
-        <nav className="flex-1 overflow-y-auto pt-2 scrollbar-hide">
-          {/* 淺色改深：text-black/40 | 深色維持：dark:text-sidebar-foreground/60 */}
-          <div className="px-6 mb-2 text-[10px] font-bold text-black/40 dark:text-sidebar-foreground/60 uppercase tracking-[0.15em]">
-            {t('sidebar.categoryTitle')}
+        <nav className="flex-1 overflow-y-auto pt-1 pb-4 scrollbar-hide">
+          <div className="px-6 mb-3 text-[10px] font-extrabold text-black/40 dark:text-gray-500 uppercase tracking-[0.2em] flex items-center gap-2">
+            知識庫分類
+            <div className="h-px bg-gradient-to-r from-black/10 to-transparent dark:from-primary/20 dark:to-transparent flex-1 mt-0.5"></div>
           </div>
           {NAVIGATION_ITEMS.map((item) => renderNavItem(item))}
         </nav>
 
         {/* 底部狀態列 */}
-        <div className="p-4 bg-gray-50 dark:bg-gray-950 border-t border-sidebar-border dark:border-gray-800 flex flex-col gap-3">
+        <div className="p-4 bg-black/[0.02] dark:bg-black/20 border-t border-black/5 dark:border-white/5">
           <div className="flex items-center justify-between px-2">
             <div>
-              <p className="text-[10px] font-bold text-black/60 dark:text-gray-400">{t('sidebar.version')}</p>
-              <p className="text-[10px] text-black/30 dark:text-gray-500">{t('sidebar.copyright')}</p>
+              <p className="text-[10px] font-bold text-black/70 dark:text-gray-300">
+                系統版本 v1.0.4
+              </p>
+              <p className="text-[9px] text-black/40 dark:text-gray-500 mt-0.5">CviLux IT Team © 2026</p>
             </div>
-            <div className="flex gap-2">
-              <button
-                onClick={toggleLanguage}
-                className="p-2 rounded-lg bg-white dark:bg-gray-800 shadow-sm border border-sidebar-border dark:border-gray-700 text-black dark:text-white flex items-center gap-1"
-                title={t('language.switch')}
-              >
-                <Languages size={14} />
-                <span className="text-[10px] font-bold">{i18n.language === 'zh-TW' ? 'EN' : '中'}</span>
-              </button>
+            
+            {/* 功能按鈕區塊：只保留深淺色切換 */}
+            <div className="flex items-center gap-2">
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-lg bg-white dark:bg-gray-800 shadow-sm border border-sidebar-border dark:border-gray-700 text-black dark:text-white"
+                className="p-2 rounded-xl bg-white dark:bg-[#121214] shadow-sm border border-black/10 dark:border-white/10 text-black/70 dark:text-gray-300 hover:text-primary hover:border-primary/40 hover:shadow-[0_0_10px_rgba(var(--primary),0.2)] hover:scale-105 transition-all"
+                title="切換深淺色 / Toggle Theme"
               >
                 {theme === "light" ? <Moon size={14} /> : <Sun size={14} />}
               </button>
