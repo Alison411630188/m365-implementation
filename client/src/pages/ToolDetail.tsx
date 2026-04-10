@@ -216,7 +216,7 @@ function getToolIcon(toolId: string) {
 // 這裡就是替換成你最新 Vercel 網址的地方 👇
 function getM365AppUrl(toolId: string): string {
   const urlMap: Record<string, string> = {
-    'planner': 'https://planner-edu-web-ww930114-creates-projects.vercel.app?_vercel_share=icDkUsPNICYCie1BetGBszsY0rrZqOYa',
+    'planner': 'https://planner-edu-web.vercel.app',
     'power-automate': 'https://make.powerautomate.com',
     'power-bi': 'https://app.powerbi.com',
     'sharepoint': 'https://www.microsoft.com',
