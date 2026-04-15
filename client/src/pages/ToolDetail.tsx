@@ -217,7 +217,7 @@ function getToolIcon(toolId: string) {
 function getM365AppUrl(toolId: string): string {
   const urlMap: Record<string, string> = {
     'planner': 'https://planner-edu-web.vercel.app',
-    'power-automate': 'https://make.powerautomate.com',
+    'power-automate': 'https://power-automate-new.vercel.app?_vercel_share=Q40rvu7fMvpHclnz4E1Ots7RO5VlSBQl',
     'power-bi': 'https://app.powerbi.com',
     'sharepoint': 'https://www.microsoft.com',
     'teams': 'https://teams.microsoft.com',
