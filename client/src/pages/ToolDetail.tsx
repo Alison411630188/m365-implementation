@@ -219,7 +219,7 @@ function getM365AppUrl(toolId: string): string {
     'planner': 'https://planner-edu-web.vercel.app',
     'power-automate': 'https://power-automate-new.vercel.app?_vercel_share=Q40rvu7fMvpHclnz4E1Ots7RO5VlSBQl',
     'power-bi': 'https://app.powerbi.com',
-    'sharepoint': 'https://www.microsoft.com',
+    'sharepoint': 'https://sharepoint-alison411630188s-projects.vercel.app?_vercel_share=TeIhrXvLJZJw7WeZN7lw5fEYQqI2qIB5',
     'teams': 'https://teams.microsoft.com',
   };
   return urlMap[toolId] || 'https://www.microsoft.com';
