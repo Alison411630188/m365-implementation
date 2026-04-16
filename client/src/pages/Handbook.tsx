@@ -19,7 +19,7 @@ import {
 } from "@/components/M365Icons";
 
 /**
- * M365 使用手冊頁面 - 企業級精緻版 (官方圖示放大版)
+ * M365 使用手冊頁面 - 五大工具全新網格排版版
  */
 
 // 快速對照表資料
@@ -55,11 +55,11 @@ const QUICK_REFERENCE = [
 
 // 核心工具導航卡片
 const TOOL_CARDS = [
-  { id: "teams", name: "Teams", desc: "企業溝通與協作中樞", link: "/tools/teams", icon: <div className="scale-[1.35]"><TeamsIcon /></div>, color: "text-indigo-600 dark:text-indigo-400", bg: "bg-indigo-50 dark:bg-indigo-900/20", border: "hover:border-indigo-300 dark:hover:border-indigo-700" },
-  { id: "sharepoint", name: "SharePoint", desc: "企業文檔與知識庫管理", link: "/tools/sharepoint", icon: <SharePointIcon />, color: "text-teal-600 dark:text-teal-400", bg: "bg-teal-50 dark:bg-teal-900/20", border: "hover:border-teal-300 dark:hover:border-teal-700" },
-  { id: "planner", name: "Planner", desc: "視覺化專案與任務管理", link: "/tools/planner", icon: <PlannerIcon />, color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-900/20", border: "hover:border-green-300 dark:hover:border-green-700" },
-  { id: "power-automate", name: "Power Automate", desc: "跨系統流程自動化引擎", link: "/tools/power-automate", icon: <div className="scale-[1.35]"><PowerAutomateIcon /></div>, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-900/20", border: "hover:border-blue-300 dark:hover:border-blue-700" },
-  { id: "power-bi", name: "Power BI", desc: "商業智慧與數據視覺化", link: "/tools/power-bi", icon: <div className="scale-[1.35]"><PowerBIIcon /></div>, color: "text-yellow-600 dark:text-yellow-400", bg: "bg-yellow-50 dark:bg-yellow-900/20", border: "hover:border-yellow-300 dark:hover:border-yellow-700" },
+  { id: "teams", name: "Teams", desc: "企業溝通與協作中樞", link: "/tools/teams", icon: <div className="scale-[1.5]"><TeamsIcon /></div>, color: "text-indigo-600 dark:text-indigo-400", bg: "bg-indigo-50 dark:bg-indigo-900/20", shadowColor: "shadow-indigo-500/20", border: "border-indigo-100 hover:border-indigo-300 dark:border-indigo-900 dark:hover:border-indigo-700" },
+  { id: "sharepoint", name: "SharePoint", desc: "企業文檔與知識庫管理", link: "/tools/sharepoint", icon: <div className="scale-[1.2]"><SharePointIcon /></div>, color: "text-teal-600 dark:text-teal-400", bg: "bg-teal-50 dark:bg-teal-900/20", shadowColor: "shadow-teal-500/20", border: "border-teal-100 hover:border-teal-300 dark:border-teal-900 dark:hover:border-teal-700" },
+  { id: "planner", name: "Planner", desc: "視覺化專案與任務管理", link: "/tools/planner", icon: <div className="scale-[1.2]"><PlannerIcon /></div>, color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-900/20", shadowColor: "shadow-green-500/20", border: "border-green-100 hover:border-green-300 dark:border-green-900 dark:hover:border-green-700" },
+  { id: "power-automate", name: "Power Automate", desc: "跨系統流程自動化引擎", link: "/tools/power-automate", icon: <div className="scale-[1.5]"><PowerAutomateIcon /></div>, color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-900/20", shadowColor: "shadow-blue-500/20", border: "border-blue-100 hover:border-blue-300 dark:border-blue-900 dark:hover:border-blue-700" },
+  { id: "power-bi", name: "Power BI", desc: "商業智慧與數據視覺化", link: "/tools/power-bi", icon: <div className="scale-[1.5]"><PowerBIIcon /></div>, color: "text-yellow-600 dark:text-yellow-400", bg: "bg-yellow-50 dark:bg-yellow-900/20", shadowColor: "shadow-yellow-500/20", border: "border-yellow-100 hover:border-yellow-300 dark:border-yellow-900 dark:hover:border-yellow-700" },
 ];
 
 export default function Handbook() {
@@ -186,29 +186,34 @@ export default function Handbook() {
                 </section>
               </div>
 
-              {/* 右側：核心工具導航卡片 (佔 1 欄) */}
+              {/* 右側：全新網格排版 - 核心工具導航卡片 (佔 1 欄) */}
               <div className="xl:col-span-1 space-y-6">
                 <h2 className="text-2xl font-bold text-foreground mb-6 flex items-center gap-2">
                   <span className="w-1.5 h-6 bg-primary rounded-full" /> 五大工具深度手冊
                 </h2>
-                <div className="flex flex-col gap-4">
-                  {TOOL_CARDS.map((tool) => (
-                    <Link key={tool.id} href={tool.link}>
-                      <Card className={`group flex items-center p-5 cursor-pointer border border-border shadow-sm transition-all duration-300 hover:shadow-md ${tool.border} bg-card hover:bg-muted/30`}>
-                        <div className={`shrink-0 w-12 h-12 rounded-xl flex items-center justify-center ${tool.bg} ${tool.color} group-hover:scale-110 transition-transform duration-300`}>
-                          <div className="w-7 h-7 flex items-center justify-center">
+                
+                <div className="grid grid-cols-2 gap-4">
+                  {TOOL_CARDS.map((tool, index) => (
+                    <Link key={tool.id} href={tool.link} className={index === 0 ? "col-span-2" : "col-span-1"}>
+                      <Card className={`group relative overflow-hidden flex flex-col items-center justify-center p-6 h-full cursor-pointer shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${tool.border} bg-card`}>
+                        
+                        {/* 炫光背景效果 */}
+                        <div className={`absolute -top-10 -right-10 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-40 transition-opacity duration-500 ${tool.bg}`} />
+
+                        <div className={`w-16 h-16 mb-4 rounded-2xl flex items-center justify-center ${tool.bg} ${tool.color} shadow-sm group-hover:shadow-md transition-all duration-300 group-hover:scale-110`}>
+                          <div className="w-8 h-8 flex items-center justify-center">
                             {tool.icon}
                           </div>
                         </div>
-                        <div className="ml-4 flex-1">
-                          <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
-                            {tool.name}
-                          </h3>
-                          <p className="text-xs text-foreground/50 mt-1 font-medium">
-                            {tool.desc}
-                          </p>
-                        </div>
-                        <ArrowRight size={18} className="text-foreground/20 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                        
+                        <h3 className={`text-[15px] font-bold text-foreground group-hover:${tool.color} transition-colors text-center`}>
+                          {tool.name}
+                        </h3>
+                        
+                        {/* 只有第一個佔據整行的項目(Teams)顯示完整敘述 */}
+                        <p className={`text-xs text-foreground/50 mt-2 font-medium text-center ${index === 0 ? "block" : "hidden sm:block"}`}>
+                          {tool.desc}
+                        </p>
                       </Card>
                     </Link>
                   ))}
@@ -219,10 +224,10 @@ export default function Handbook() {
 
           {/* 2. 新手入門 */}
           <TabsContent value="getting-started" className="space-y-6 animate-in fade-in duration-500">
+            {/* ...(新手入門的內容維持不變)... */}
             <Card className="p-8 border border-border shadow-sm bg-card">
               <h2 className="text-2xl font-bold text-foreground mb-8">新手快速啟動指南</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                
                 {/* 步驟 1 */}
                 <div className="relative">
                   <div className="absolute top-0 left-6 w-0.5 h-full bg-border -z-10 hidden md:block"></div>
@@ -237,14 +242,13 @@ export default function Handbook() {
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 完成多因素驗證 (MFA)</li>
                   </ul>
                 </div>
-
                 {/* 步驟 2 */}
                 <div className="relative">
                   <div className="absolute top-0 left-6 w-0.5 h-full bg-border -z-10 hidden md:block"></div>
                   <div className="bg-primary text-primary-foreground w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl mb-6 shadow-lg shadow-primary/30">2</div>
                   <h3 className="text-lg font-bold text-foreground mb-3">探索應用程式啟動器</h3>
                   <p className="text-sm text-foreground/70 mb-4 leading-relaxed">
-                    點擊左上角的應用程式啟動器（九宮格圖示，俗稱鬆餅圖示）以訪問所有 M365 應用程式。
+                    點擊左上角的應用程式啟動器（九宮格圖示）以訪問所有 M365 應用程式。
                   </p>
                   <ul className="text-sm text-foreground/60 space-y-2 font-medium">
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 查看所有可用 App</li>
@@ -252,7 +256,6 @@ export default function Handbook() {
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 搜尋特定應用程式</li>
                   </ul>
                 </div>
-
                 {/* 步驟 3 */}
                 <div>
                   <div className="bg-primary text-primary-foreground w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl mb-6 shadow-lg shadow-primary/30">3</div>
@@ -266,13 +269,13 @@ export default function Handbook() {
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 設置 Teams 狀態訊息</li>
                   </ul>
                 </div>
-
               </div>
             </Card>
           </TabsContent>
 
           {/* 3. 資訊安全 */}
           <TabsContent value="security" className="space-y-6 animate-in fade-in duration-500">
+            {/* ...(資訊安全的內容維持不變)... */}
             <Card className="p-8 border border-border shadow-sm bg-card">
               <h2 className="text-2xl font-bold text-foreground mb-8">企業安全與隱私規範</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -315,6 +318,7 @@ export default function Handbook() {
 
           {/* 4. 實戰技巧 */}
           <TabsContent value="tips" className="space-y-6 animate-in fade-in duration-500">
+            {/* ...(實戰技巧的內容維持不變)... */}
             <Card className="p-8 border border-border shadow-sm bg-card">
               <h2 className="text-2xl font-bold text-foreground mb-8">提升生產力的隱藏技巧</h2>
 
