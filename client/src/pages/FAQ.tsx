@@ -310,10 +310,10 @@ export default function FAQ() {
                     {t('faq.emailDesc')}
                   </p>
                   <a
-                    href="mailto:zhuojiaquan520@gmail.com"
+                    href="mailto:x0102@cvilux.com"
                     className="text-primary hover:underline font-medium"
                   >
-                    zhuojiaquan520@gmail.com
+                    x0102@cvilux.com
                   </a>
                 </div>
               </div>
@@ -336,7 +336,7 @@ export default function FAQ() {
                     href="tel:0984261917"
                     className="text-primary hover:underline font-medium"
                   >
-                    0984-261917
+                    代填入
                   </a>
                 </div>
               </div>
