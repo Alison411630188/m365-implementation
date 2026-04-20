@@ -155,7 +155,7 @@ export default function Sidebar() {
           <div className="flex items-center justify-between px-2">
             <div>
               <p className="text-[10px] font-bold text-black/70 dark:text-gray-300">
-                系統版本 v1.0.4
+                系統版本 v0.0.1
               </p>
               <p className="text-[9px] text-black/40 dark:text-gray-500 mt-0.5">CviLux IT Team © 2026</p>
             </div>
