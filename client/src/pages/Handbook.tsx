@@ -366,7 +366,7 @@ export default function Handbook() {
                     <span className="text-xl">📌</span> 快速訪問設定
                   </h3>
                   <ul className="text-sm text-foreground/70 dark:text-white space-y-2.5 font-medium">
-                    <n                      <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 將正在執行的專案釘選在 Teams 頻道最上方</li>
+                      <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 將正在執行的專案釘選在 Teams 頻道最上方</li>
                       <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 在 Edge 瀏覽器將 M365 首頁設為我的最愛</li>
                       <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 將常用的 SharePoint 網站按星號追蹤</li>
                     </ul>
