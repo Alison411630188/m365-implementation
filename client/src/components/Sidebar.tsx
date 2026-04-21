@@ -49,7 +49,7 @@ export default function Sidebar() {
         {hasChildren ? (
           <button
             onClick={() => toggleExpand(item.id)}
-            className={`w-[calc(100%-24px)] flex items-center justify-between px-4 py-2.5 mx-3 my-1 rounded-xl text-sm font-bold transition-all duration-300 ${
+            className={`w-[calc(100%-24px)] flex items-center justify-between px-4 py-2.5 mx-3 my-1 rounded-xl text-sm font-bold transition-all duration-300 whitespace-nowrap ${
               isExpanded 
                 ? "text-primary bg-primary/5 border border-primary/10 shadow-[0_0_10px_rgba(var(--primary),0.05)]" 
                 : "text-black/80 dark:text-white hover:bg-black/5 dark:hover:bg-white/5 border border-transparent"
@@ -69,7 +69,7 @@ export default function Sidebar() {
               handleLinkClick(item.path || "/");
             }}
             className={`
-              block px-4 py-2.5 mx-3 my-1 text-sm rounded-xl transition-all duration-300
+              block whitespace-nowrap px-4 py-2.5 mx-3 my-1 text-sm rounded-xl transition-all duration-300
               ${active 
                 ? "bg-primary/10 dark:bg-primary/15 text-primary font-bold border border-primary/30 shadow-[0_0_15px_-3px_rgba(var(--primary),0.3)] translate-x-1" 
                 : "text-black/70 dark:text-white hover:bg-black/5 dark:hover:bg-white/5 hover:text-primary hover:translate-x-1 border border-transparent"
