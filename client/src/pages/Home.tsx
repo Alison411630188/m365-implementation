@@ -9,22 +9,23 @@ import {
 import {
   PlannerIcon,
   PowerAutomateIcon,
+  PowerBIIcon,
   SharePointIcon,
   TeamsIcon,
 } from "@/components/M365Icons";
+import { TOOLS_DATA } from "@/data/tools";
 
 /**
  * M365 實戰學院 - 精緻版首頁 (Landing Page)
- * 變更點：將 Teams, Power Automate 的圖示加上 scale-[1.35] 放大
  */
 
-const TOOLS = [
-  { id: "teams", name: "Teams", desc: "溝通協作與會議", icon: <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div>, color: "text-indigo-500", bg: "bg-indigo-500/10", border: "hover:border-indigo-500/50 hover:shadow-indigo-500/20" },
-  { href: "https://teams-edu-web.vercel.app", name: "Teams 實戰教學", desc: "線上互動式教學", icon: <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div>, color: "text-indigo-500", bg: "bg-indigo-500/10", border: "hover:border-indigo-500/50 hover:shadow-indigo-500/20" },
-  { id: "sharepoint", name: "SharePoint", desc: "企業文件與知識庫", icon: <div className="w-8 h-8 flex items-center justify-center"><SharePointIcon /></div>, color: "text-teal-500", bg: "bg-teal-500/10", border: "hover:border-teal-500/50 hover:shadow-teal-500/20" },
-  { id: "planner", name: "Planner", desc: "專案與任務追蹤", icon: <div className="w-8 h-8 flex items-center justify-center"><PlannerIcon /></div>, color: "text-green-500", bg: "bg-green-500/10", border: "hover:border-green-500/50 hover:shadow-green-500/20" },
-  { id: "power-automate", name: "Power Automate", desc: "日常流程自動化", icon: <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><PowerAutomateIcon /></div>, color: "text-blue-500", bg: "bg-blue-500/10", border: "hover:border-blue-500/50 hover:shadow-blue-500/20" },
-];
+const ICONS: { [key: string]: JSX.Element } = {
+  teams: <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div>,
+  sharepoint: <div className="w-8 h-8 flex items-center justify-center"><SharePointIcon /></div>,
+  planner: <div className="w-8 h-8 flex items-center justify-center"><PlannerIcon /></div>,
+  'power-automate': <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><PowerAutomateIcon /></div>,
+  'power-bi': <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><PowerBIIcon /></div>,
+};
 
 export default function Home() {
   return (
@@ -73,7 +74,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-            {TOOLS.map((tool, index) => {
+            {TOOLS_DATA.map((tool, index) => {
               const card = (
                 <Card 
                   className={`group relative overflow-hidden h-full p-6 border border-border shadow-sm bg-card cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${tool.border} animate-in slide-in-from-bottom-10 fade-in fill-mode-both`}
@@ -81,7 +82,7 @@ export default function Home() {
                 >
                   <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-white/5 to-white/0 dark:from-white/5 rounded-bl-full -z-10"></div>
                   <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110 ${tool.bg} ${tool.color}`}>
-                    {tool.icon}
+                    {ICONS[tool.id]}
                   </div>
                   <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                     {tool.name}
@@ -97,15 +98,15 @@ export default function Home() {
                 </Card>
               );
 
-              if ('href' in tool) {
+              if (tool.href) {
                 return (
-                  <a key={tool.name} href={(tool as any).href} target="_blank" rel="noopener noreferrer">
+                  <a key={tool.name} href={tool.href} target="_blank" rel="noopener noreferrer">
                     {card}
                   </a>
                 )
               }
               return (
-                <Link key={(tool as any).id} href={`/tools/${(tool as any).id}`}>
+                <Link key={tool.id} href={`/tools/${tool.id}`}>
                   {card}
                 </Link>
               )

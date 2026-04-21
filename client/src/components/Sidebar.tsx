@@ -3,9 +3,10 @@ import { ChevronDown, Menu, X, Moon, Sun, Search } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { useTheme } from "@/contexts/ThemeContext";
+import { SearchDialog } from "@/components/SearchDialog";
 
 /**
- * 側邊欄導航元件 - 單一語系 (科技感毛玻璃保留版)
+ * 側邊欄導航元件 - 整合了全站搜尋對話框
  */
 
 interface NavItem {
@@ -19,13 +20,14 @@ export default function Sidebar() {
   const [location, setLocation] = useLocation();
   const [expandedItems, setExpandedItems] = useState<string[]>(["tools"]);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   
-  // 只保留深淺色切換 Context
   const { theme, toggleTheme } = useTheme();
 
   const handleLinkClick = (path: string) => {
     setLocation(path);
     window.scrollTo(0, 0);
+    setIsMobileOpen(false); // 在點擊手機版連結後關閉選單
   };
 
   const toggleExpand = (id: string) => {
@@ -80,7 +82,6 @@ export default function Sidebar() {
           </a>
         )}
 
-        {/* 子選單左側科技感導引線 */}
         {hasChildren && isExpanded && item.children && (
           <div className="ml-7 pl-2 mt-1 mb-2 border-l-2 border-black/5 dark:border-primary/20 space-y-0.5 animate-in slide-in-from-top-2 fade-in duration-200">
             {item.children.map((child) => renderNavItem(child, level + 1))}
@@ -92,15 +93,15 @@ export default function Sidebar() {
 
   return (
     <>
-      {/* 🚀 注入全局科技感背景 (Tech Dot Matrix & Top Glow) */}
+      <SearchDialog open={isSearchOpen} onOpenChange={setIsSearchOpen} />
+
+      {/* Global background elements */}
       <div className="fixed inset-0 z-[-100] bg-slate-50 dark:bg-[#050507]">
-        {/* 頂部穹頂環境光暈 */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] opacity-40 dark:opacity-20 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/40 via-transparent to-transparent pointer-events-none"></div>
-        {/* 科技感點陣底紋 (Dot Matrix) */}
         <div className="absolute inset-0 bg-[radial-gradient(#00000015_1px,transparent_1px)] dark:bg-[radial-gradient(#ffffff15_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none [mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)]"></div>
       </div>
 
-      {/* 手機版漢堡選單按鈕 */}
+      {/* Mobile hamburger menu button */}
       <button
         onClick={() => setIsMobileOpen(!isMobileOpen)}
         className="fixed top-4 left-4 z-50 lg:hidden p-2 rounded-xl bg-primary text-primary-foreground shadow-[0_0_15px_rgba(var(--primary),0.5)] hover:scale-105 transition-transform"
@@ -108,12 +109,12 @@ export default function Sidebar() {
         {isMobileOpen ? <X size={24} /> : <Menu size={24} />}
       </button>
 
-      {/* 手機版遮罩 */}
+      {/* Mobile overlay */}
       {isMobileOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md z-30 lg:hidden" onClick={() => setIsMobileOpen(false)} />
       )}
 
-      {/* 側邊欄本體：增強右側陰影與發光邊界，與右側內容徹底區分 */}
+      {/* Sidebar */}
       <aside
         className={`fixed left-0 top-0 h-screen bg-white/80 dark:bg-black backdrop-blur-2xl dark:backdrop-blur-none 
           border-r-4 border-gray-300 dark:border-gray-700 
@@ -122,7 +123,7 @@ export default function Sidebar() {
           isMobileOpen ? "translate-x-0 w-64" : "-translate-x-full lg:translate-x-0 lg:w-64"
         }`}
       >
-        {/* Logo 區域 */}
+        {/* Logo Area */}
         <div className="flex flex-col items-center pt-10 pb-6 border-b border-black/5 dark:border-white/5 relative">
           <img
             src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/99zHGgEmYidDpe6x6PArSa/cvilux-logo-transparent_3d6879c6.png"
@@ -139,14 +140,14 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* 搜尋框 - 擬態微凸起設計 */}
+        {/* Search trigger button */}
         <div className="px-4 py-5">
-          <a href="/search" onClick={(e) => { e.preventDefault(); handleLinkClick("/search"); }} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white dark:bg-[#121214] border border-black/10 dark:border-white/10 shadow-sm text-black/50 dark:text-white hover:text-primary hover:border-primary/40 hover:shadow-[0_0_15px_rgba(var(--primary),0.15)] transition-all cursor-pointer group">
+          <button onClick={() => setIsSearchOpen(true)} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white dark:bg-[#121214] border border-black/10 dark:border-white/10 shadow-sm text-black/50 dark:text-white hover:text-primary hover:border-primary/40 hover:shadow-[0_0_15px_rgba(var(--primary),0.15)] transition-all cursor-pointer group">
             <Search size={16} className="group-hover:scale-110 transition-transform text-primary/70" />
             <span className="text-xs font-bold tracking-wide">
               搜尋手冊、案例...
             </span>
-          </a>
+          </button>
         </div>
 
         <nav className="flex-1 overflow-y-auto pt-1 pb-4 scrollbar-hide">
@@ -157,7 +158,7 @@ export default function Sidebar() {
           {NAVIGATION_ITEMS.map((item) => renderNavItem(item))}
         </nav>
 
-        {/* 底部狀態列 */}
+        {/* Footer status bar */}
         <div className="p-4 bg-black/[0.02] dark:bg-black/20 border-t border-black/5 dark:border-white/5">
           <div className="flex items-center justify-between px-2">
             <div>
@@ -167,7 +168,6 @@ export default function Sidebar() {
               <p className="text-[9px] text-black/40 dark:text-white mt-0.5">CviLux IT Team © 2026</p>
             </div>
             
-            {/* 功能按鈕區塊：只保留深淺色切換 */}
             <div className="flex items-center gap-2">
               <button
                 onClick={toggleTheme}

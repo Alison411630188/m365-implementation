@@ -273,7 +273,7 @@ export default function ToolDetail() {
             <h2 className="text-2xl font-bold mb-5 flex items-center gap-2">
               <span className="w-1.5 h-7 bg-primary rounded-full shadow-[0_0_10px_rgba(var(--primary),0.5)]" /> 工具概述
             </h2>
-            <Card className="p-8 text-foreground/80 leading-relaxed text-lg border-black/5 dark:border-white/5 bg-muted/30 shadow-sm">
+            <Card className="p-8 text-foreground/80 leading-relaxed text-lg border-2 border-gray-200 dark:border-gray-700 bg-muted/30 shadow-sm">
               {details.overview}
             </Card>
           </section>
@@ -283,7 +283,7 @@ export default function ToolDetail() {
               <h3 className="text-xl font-bold mb-5 flex items-center gap-2">
                 <span className="w-1.5 h-6 bg-blue-500 rounded-full" /> 你可以用它做什麼？
               </h3>
-              <Card className="p-6 h-full border-black/5 dark:border-white/5 shadow-sm bg-card hover:shadow-md transition-shadow">
+              <Card className="p-6 h-full border-2 border-blue-200 dark:border-blue-800 shadow-sm bg-card hover:shadow-md transition-shadow">
                 <ul className="space-y-4">
                   {details.whatYouCanDo.map((item, idx) => {
                     const formattedItem = item.replace(/\((.*?)\)/g, '<strong class="font-mono text-[13px]">($1)</strong>');
@@ -302,7 +302,7 @@ export default function ToolDetail() {
               <h3 className="text-xl font-bold mb-5 flex items-center gap-2">
                 <span className="w-1.5 h-6 bg-teal-500 rounded-full" /> 基本結構名詞 (UI 對照)
               </h3>
-              <Card className="p-6 h-full border-black/5 dark:border-white/5 shadow-sm bg-card hover:shadow-md transition-shadow">
+              <Card className="p-6 h-full border-2 border-teal-200 dark:border-teal-800 shadow-sm bg-card hover:shadow-md transition-shadow">
                 <ul className="space-y-4">
                   {details.basicStructure.map((item, idx) => {
                     const formattedItem = item.replace(/\((.*?)\)/g, '<strong class="font-mono text-[13px]">($1)</strong>');
@@ -326,7 +326,7 @@ export default function ToolDetail() {
               {details.commonViews.map((view, idx) => {
                 const formattedName = view.name.replace(/\((.*?)\)/g, '<strong class="font-mono text-[13px] ml-1">($1)</strong>');
                 return (
-                  <Card key={idx} className="p-5 border border-border/50 shadow-sm hover:border-orange-500/30 hover:shadow-md transition-all bg-card">
+                  <Card key={idx} className="p-5 border-2 border-orange-200 hover:border-orange-400 dark:border-orange-800 dark:hover:border-orange-600 shadow-sm hover:shadow-md transition-all bg-card">
                     <p className="font-bold text-foreground mb-3 flex items-center gap-2" dangerouslySetInnerHTML={{ __html: `<span class="w-1 h-4 bg-orange-500 rounded-full"></span>` + formattedName }} />
                     <p className="text-sm text-foreground/60 leading-relaxed font-medium">
                       {view.description}
@@ -347,7 +347,7 @@ export default function ToolDetail() {
                 return (
                   <Card 
                     key={idx} 
-                    className="flex items-start gap-4 p-5 border border-border/50 shadow-sm hover:border-indigo-500/30 hover:shadow-md transition-all bg-card"
+                    className="flex items-start gap-4 p-5 border-2 border-indigo-200 hover:border-indigo-400 dark:border-indigo-800 dark:hover:border-indigo-600 shadow-sm hover:shadow-md transition-all bg-card"
                   >
                     <span className="shrink-0 bg-indigo-500/10 text-indigo-500 w-8 h-8 flex items-center justify-center rounded-lg text-xs font-black mt-0.5 border border-indigo-500/20">
                       TIP
@@ -365,7 +365,7 @@ export default function ToolDetail() {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {details.suitableScenarios.map((item, idx) => (
-                <Card key={idx} className="p-4 border border-green-500/20 shadow-sm flex items-center gap-3 bg-green-500/5 hover:bg-green-500/10 transition-colors">
+                <Card key={idx} className="p-4 border-2 border-green-300 dark:border-green-700 shadow-sm flex items-center gap-3 bg-green-500/5 hover:bg-green-500/10 transition-colors">
                   <span className="text-xl shrink-0 drop-shadow-sm">✅</span> 
                   <span className="text-[15px] font-bold text-foreground/80 leading-relaxed">{item}</span>
                 </Card>
