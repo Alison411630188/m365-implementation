@@ -81,7 +81,7 @@ const toolDetails: Record<string, ToolDetailInfo> = {
     ],
     usageSuggestions: [
       "【先從範本開始】第一次使用強烈建議去「範本 (Templates)」區搜尋關鍵字，通常你要的功能別人早就寫好了。",
-      "【先畫流程圖】在動手拉區塊前，先在紙上畫清楚「如果發生 A，就執行 B；如果沒有，就執行 C」的邏輯。",
+      "【先畫流程圖】在動手拉區塊前，先在紙上畫清楚「如果發生 A，就執行 B；如果沒有，就執行 C」的 logique。",
       "【善用測試功能】每次新增一個動作後，務必點擊右上角的「測試 (Test)」，確保資料有正確傳遞。",
       "【注意無限迴圈】設定觸發條件時要小心，避免「更新檔案」觸發了「修改檔案」，導致流程不斷自己觸發自己。"
     ],
@@ -220,7 +220,7 @@ function getM365AppUrl(toolId: string): string {
     'power-automate': 'https://power-automate-new.vercel.app?_vercel_share=Q40rvu7fMvpHclnz4E1Ots7RO5VlSBQl',
     'power-bi': 'https://app.powerbi.com',
     'sharepoint': 'https://sharepoint-alison411630188s-projects.vercel.app?_vercel_share=TeIhrXvLJZJw7WeZN7lw5fEYQqI2qIB5',
-    'teams': 'https://teams.microsoft.com',
+    'teams': 'https://teams-edu-web.vercel.app?_vercel_share=QkrQshxlAeOYdPcvANjfGishC7GF3olL',
   };
   return urlMap[toolId] || 'https://www.microsoft.com';
 }
@@ -251,17 +251,19 @@ export default function ToolDetail() {
               </div>
               <p className="text-lg text-foreground/60 mb-6 leading-relaxed font-medium">{tool.description}</p>
               
-              <a
-                href={getM365AppUrl(toolId)}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-3 px-8 py-3.5 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 hover:scale-105 transition-all font-bold shadow-[0_0_20px_rgba(var(--primary),0.3)]"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                </svg>
-                打開 實戰學院
-              </a>
+              {toolId !== 'power-bi' && (
+                <a
+                  href={getM365AppUrl(toolId)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-3 px-8 py-3.5 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 hover:scale-105 transition-all font-bold shadow-[0_0_20px_rgba(var(--primary),0.3)]"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  打開 實戰學院
+                </a>
+              )}
             </div>
           </div>
         </div>

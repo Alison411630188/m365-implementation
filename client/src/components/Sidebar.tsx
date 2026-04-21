@@ -1,7 +1,7 @@
 import { NAVIGATION_ITEMS } from "@/../../shared/const";
 import { ChevronDown, Menu, X, Moon, Sun, Search } from "lucide-react";
 import { useState } from "react";
-import { Link, useLocation } from "wouter";
+import { useLocation } from "wouter";
 import { useTheme } from "@/contexts/ThemeContext";
 
 /**
@@ -16,12 +16,17 @@ interface NavItem {
 }
 
 export default function Sidebar() {
-  const [location] = useLocation();
+  const [location, setLocation] = useLocation();
   const [expandedItems, setExpandedItems] = useState<string[]>(["tools"]);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   
   // 只保留深淺色切換 Context
   const { theme, toggleTheme } = useTheme();
+
+  const handleLinkClick = (path: string) => {
+    setLocation(path);
+    window.scrollTo(0, 0);
+  };
 
   const toggleExpand = (id: string) => {
     setExpandedItems((prev) =>
@@ -47,28 +52,32 @@ export default function Sidebar() {
             className={`w-[calc(100%-24px)] flex items-center justify-between px-4 py-2.5 mx-3 my-1 rounded-xl text-sm font-bold transition-all duration-300 ${
               isExpanded 
                 ? "text-primary bg-primary/5 border border-primary/10 shadow-[0_0_10px_rgba(var(--primary),0.05)]" 
-                : "text-black/80 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 border border-transparent"
+                : "text-black/80 dark:text-white hover:bg-black/5 dark:hover:bg-white/5 border border-transparent"
             }`}
           >
             <span>{item.label}</span>
             <ChevronDown
               size={14}
-              className={`transition-transform duration-300 ${isExpanded ? "rotate-180 text-primary" : "text-black/40 dark:text-gray-500"}`}
+              className={`transition-transform duration-300 ${isExpanded ? "rotate-180 text-primary" : "text-black/40 dark:text-white"}`}
             />
           </button>
         ) : (
-          <Link
+          <a
             href={item.path || "/"}
+            onClick={(e) => {
+              e.preventDefault();
+              handleLinkClick(item.path || "/");
+            }}
             className={`
               block px-4 py-2.5 mx-3 my-1 text-sm rounded-xl transition-all duration-300
               ${active 
                 ? "bg-primary/10 dark:bg-primary/15 text-primary font-bold border border-primary/30 shadow-[0_0_15px_-3px_rgba(var(--primary),0.3)] translate-x-1" 
-                : "text-black/70 dark:text-gray-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-primary hover:translate-x-1 border border-transparent"
+                : "text-black/70 dark:text-white hover:bg-black/5 dark:hover:bg-white/5 hover:text-primary hover:translate-x-1 border border-transparent"
               }
             `}
           >
             <span className={level > 0 ? "ml-1" : ""}>{item.label}</span>
-          </Link>
+          </a>
         )}
 
         {/* 子選單左側科技感導引線 */}
@@ -106,8 +115,8 @@ export default function Sidebar() {
 
       {/* 側邊欄本體：增強右側陰影與發光邊界，與右側內容徹底區分 */}
       <aside
-        className={`fixed left-0 top-0 h-screen bg-white/80 dark:bg-[#0a0a0c]/80 backdrop-blur-2xl 
-          border-r border-black/10 dark:border-white/5 dark:border-r-primary/20 
+        className={`fixed left-0 top-0 h-screen bg-white/80 dark:bg-black backdrop-blur-2xl dark:backdrop-blur-none 
+          border-r-4 border-gray-300 dark:border-gray-700 
           shadow-[8px_0_30px_-10px_rgba(0,0,0,0.1)] dark:shadow-[8px_0_30px_-10px_rgba(var(--primary),0.15)] 
           transition-all duration-500 ease-out z-40 flex flex-col ${
           isMobileOpen ? "translate-x-0 w-64" : "-translate-x-full lg:translate-x-0 lg:w-64"
@@ -124,7 +133,7 @@ export default function Sidebar() {
             <span className="block font-black text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-400 text-xl tracking-tight leading-none drop-shadow-sm">
               瀚荃集團
             </span>
-            <span className="block font-bold text-black/50 dark:text-gray-400 text-[10px] uppercase tracking-[0.25em] mt-1.5 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 px-2 py-0.5 rounded-full inline-block shadow-sm">
+            <span className="block font-bold text-black/50 dark:text-white text-[10px] uppercase tracking-[0.25em] mt-1.5 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 px-2 py-0.5 rounded-full inline-block shadow-sm">
               M365 導入專案
             </span>
           </div>
@@ -132,18 +141,16 @@ export default function Sidebar() {
 
         {/* 搜尋框 - 擬態微凸起設計 */}
         <div className="px-4 py-5">
-          <Link href="/search">
-            <div className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white dark:bg-[#121214] border border-black/10 dark:border-white/10 shadow-sm text-black/50 dark:text-gray-400 hover:text-primary hover:border-primary/40 hover:shadow-[0_0_15px_rgba(var(--primary),0.15)] transition-all cursor-pointer group">
-              <Search size={16} className="group-hover:scale-110 transition-transform text-primary/70" />
-              <span className="text-xs font-bold tracking-wide">
-                搜尋手冊、案例...
-              </span>
-            </div>
-          </Link>
+          <a href="/search" onClick={(e) => { e.preventDefault(); handleLinkClick("/search"); }} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white dark:bg-[#121214] border border-black/10 dark:border-white/10 shadow-sm text-black/50 dark:text-white hover:text-primary hover:border-primary/40 hover:shadow-[0_0_15px_rgba(var(--primary),0.15)] transition-all cursor-pointer group">
+            <Search size={16} className="group-hover:scale-110 transition-transform text-primary/70" />
+            <span className="text-xs font-bold tracking-wide">
+              搜尋手冊、案例...
+            </span>
+          </a>
         </div>
 
         <nav className="flex-1 overflow-y-auto pt-1 pb-4 scrollbar-hide">
-          <div className="px-6 mb-3 text-[10px] font-extrabold text-black/40 dark:text-gray-500 uppercase tracking-[0.2em] flex items-center gap-2">
+          <div className="px-6 mb-3 text-[10px] font-extrabold text-black/40 dark:text-white uppercase tracking-[0.2em] flex items-center gap-2">
             知識庫分類
             <div className="h-px bg-gradient-to-r from-black/10 to-transparent dark:from-primary/20 dark:to-transparent flex-1 mt-0.5"></div>
           </div>
@@ -154,17 +161,17 @@ export default function Sidebar() {
         <div className="p-4 bg-black/[0.02] dark:bg-black/20 border-t border-black/5 dark:border-white/5">
           <div className="flex items-center justify-between px-2">
             <div>
-              <p className="text-[10px] font-bold text-black/70 dark:text-gray-300">
+              <p className="text-[10px] font-bold text-black/70 dark:text-white">
                 系統版本 v0.0.1
               </p>
-              <p className="text-[9px] text-black/40 dark:text-gray-500 mt-0.5">CviLux IT Team © 2026</p>
+              <p className="text-[9px] text-black/40 dark:text-white mt-0.5">CviLux IT Team © 2026</p>
             </div>
             
             {/* 功能按鈕區塊：只保留深淺色切換 */}
             <div className="flex items-center gap-2">
               <button
                 onClick={toggleTheme}
-                className="p-2 rounded-xl bg-white dark:bg-[#121214] shadow-sm border border-black/10 dark:border-white/10 text-black/70 dark:text-gray-300 hover:text-primary hover:border-primary/40 hover:shadow-[0_0_10px_rgba(var(--primary),0.2)] hover:scale-105 transition-all"
+                className="p-2 rounded-xl bg-white dark:bg-[#121214] shadow-sm border border-black/10 dark:border-white/10 text-black/70 dark:text-white hover:text-primary hover:border-primary/40 hover:shadow-[0_0_10px_rgba(var(--primary),0.2)] hover:scale-105 transition-all"
                 title="切換深淺色 / Toggle Theme"
               >
                 {theme === "light" ? <Moon size={14} /> : <Sun size={14} />}

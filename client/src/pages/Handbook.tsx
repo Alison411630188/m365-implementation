@@ -73,7 +73,7 @@ export default function Handbook() {
             <div className="w-2 h-10 bg-primary rounded-full" />
             M365 使用手冊
           </h1>
-          <p className="text-lg text-foreground/60 max-w-4xl leading-relaxed ml-5">
+          <p className="text-lg text-foreground/60 dark:text-white max-w-4xl leading-relaxed ml-5">
             完整的逐步指南和最佳實踐，幫助您快速上手 Microsoft 365。<br/>
             不知道該用哪個工具？請直接查看「快速對照表」為您指引方向。
           </p>
@@ -113,14 +113,14 @@ export default function Handbook() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {QUICK_REFERENCE.map((section, idx) => (
                       <Card key={idx} className="p-6 border border-border shadow-sm bg-card hover:shadow-md transition-shadow">
-                        <h3 className="text-sm font-bold text-foreground/40 uppercase tracking-widest mb-5 border-b border-border/50 pb-3">
+                        <h3 className="text-sm font-bold text-foreground/40 dark:text-white uppercase tracking-widest mb-5 border-b border-border/50 pb-3">
                           {section.category}
                         </h3>
                         <div className="space-y-5">
                           {section.items.map((item, itemIdx) => (
                             <div key={itemIdx} className="flex flex-col gap-2">
-                              <div className="flex items-start gap-2 text-sm font-medium text-foreground/80 leading-relaxed">
-                                <span className="shrink-0 mt-0.5 text-foreground/40">{item.icon}</span>
+                              <div className="flex items-start gap-2 text-sm font-medium text-foreground/80 dark:text-white leading-relaxed">
+                                <span className="shrink-0 mt-0.5 text-foreground/40 dark:text-white">{item.icon}</span>
                                 <span>{item.question}</span>
                               </div>
                               <div className="pl-6">
@@ -156,27 +156,31 @@ export default function Handbook() {
                             <td className="p-4 font-bold flex items-center gap-2">
                               <div className="w-5 h-5 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div> Teams (一對一/群組私聊)
                             </td>
-                            <td className="p-4 text-foreground/80">上傳者的 <strong className="text-blue-500 bg-blue-50 dark:bg-blue-900/30 px-1.5 py-0.5 rounded">OneDrive</strong> 中</td>
-                            <td className="p-4 text-foreground/70">只有該聊天室內的人可以存取</td>
+                            <td className="p-4 text-foreground/80 dark:text-white">
+                              上傳者的 <strong className="text-blue-500 bg-blue-50 dark:bg-blue-900/30 px-1.5 py-0.5 rounded">OneDrive</strong> 中
+                            </td>
+                            <td className="p-4 text-foreground/70 dark:text-white">只有該聊天室內的人可以存取</td>
                           </tr>
                           <tr className="hover:bg-muted/30 transition-colors">
                             <td className="p-4 font-bold flex items-center gap-2">
                               <div className="w-5 h-5 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div> Teams (專案/部門頻道)
                             </td>
-                            <td className="p-4 text-foreground/80">該團隊背後的 <strong className="text-teal-500 bg-teal-50 dark:bg-teal-900/30 px-1.5 py-0.5 rounded">SharePoint</strong> 網站</td>
-                            <td className="p-4 text-foreground/70">整個團隊的所有成員都可存取</td>
+                            <td className="p-4 text-foreground/80 dark:text-white">
+                              該團隊背後的 <strong className="text-teal-500 bg-teal-50 dark:bg-teal-900/30 px-1.5 py-0.5 rounded">SharePoint</strong> 網站
+                            </td>
+                            <td className="p-4 text-foreground/70 dark:text-white">整個團隊的所有成員都可存取</td>
                           </tr>
                           <tr className="hover:bg-muted/30 transition-colors">
                             <td className="p-4 font-bold flex items-center gap-2">
-                              <Lock size={16} className="text-foreground/40 ml-0.5" /> 電腦上的本機資料夾
+                              <Lock size={16} className="text-foreground/40 dark:text-white ml-0.5" /> 電腦上的本機資料夾
                             </td>
-                            <td className="p-4 text-foreground/80">你的電腦實體硬碟</td>
+                            <td className="p-4 text-foreground/80 dark:text-white">你的電腦實體硬碟</td>
                             <td className="p-4 text-red-500 font-bold">只有你自己 (硬碟損壞即遺失)</td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
-                    <div className="bg-primary/5 p-4 text-sm text-foreground/80 border-t border-border flex gap-3 items-start">
+                    <div className="bg-primary/5 p-4 text-sm text-foreground/80 dark:text-white border-t border-border flex gap-3 items-start">
                       <Lightbulb className="text-primary shrink-0 mt-0.5" size={18} />
                       <p className="leading-relaxed">
                         <strong className="text-primary">實戰鐵則：</strong> 個人草稿放 OneDrive，正式的專案與部門文件請務必上傳到 Teams 頻道或 SharePoint，以確保知識傳承！
@@ -211,7 +215,7 @@ export default function Handbook() {
                         </h3>
                         
                         {/* 只有第一個佔據整行的項目(Teams)顯示完整敘述 */}
-                        <p className={`text-xs text-foreground/50 mt-2 font-medium text-center ${index === 0 ? "block" : "hidden sm:block"}`}>
+                        <p className={`text-xs text-foreground/50 dark:text-white mt-2 font-medium text-center ${index === 0 ? "block" : "hidden sm:block"}`}>
                           {tool.desc}
                         </p>
                       </Card>
@@ -233,10 +237,10 @@ export default function Handbook() {
                   <div className="absolute top-0 left-6 w-0.5 h-full bg-border -z-10 hidden md:block"></div>
                   <div className="bg-primary text-primary-foreground w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl mb-6 shadow-lg shadow-primary/30">1</div>
                   <h3 className="text-lg font-bold text-foreground mb-3">登入 M365 帳戶</h3>
-                  <p className="text-sm text-foreground/70 mb-4 leading-relaxed">
+                  <p className="text-sm text-foreground/70 dark:text-white mb-4 leading-relaxed">
                     使用您的公司帳戶登入 Microsoft 365。訪問 office.com 或使用您的組織提供的登入連結。
                   </p>
-                  <ul className="text-sm text-foreground/60 space-y-2 font-medium">
+                  <ul className="text-sm text-foreground/60 dark:text-white space-y-2 font-medium">
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 輸入公司電子郵件</li>
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 輸入您的密碼</li>
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 完成多因素驗證 (MFA)</li>
@@ -247,10 +251,10 @@ export default function Handbook() {
                   <div className="absolute top-0 left-6 w-0.5 h-full bg-border -z-10 hidden md:block"></div>
                   <div className="bg-primary text-primary-foreground w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl mb-6 shadow-lg shadow-primary/30">2</div>
                   <h3 className="text-lg font-bold text-foreground mb-3">探索應用程式啟動器</h3>
-                  <p className="text-sm text-foreground/70 mb-4 leading-relaxed">
+                  <p className="text-sm text-foreground/70 dark:text-white mb-4 leading-relaxed">
                     點擊左上角的應用程式啟動器（九宮格圖示）以訪問所有 M365 應用程式。
                   </p>
-                  <ul className="text-sm text-foreground/60 space-y-2 font-medium">
+                  <ul className="text-sm text-foreground/60 dark:text-white space-y-2 font-medium">
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 查看所有可用 App</li>
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 釘選常用工具</li>
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 搜尋特定應用程式</li>
@@ -260,10 +264,10 @@ export default function Handbook() {
                 <div>
                   <div className="bg-primary text-primary-foreground w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl mb-6 shadow-lg shadow-primary/30">3</div>
                   <h3 className="text-lg font-bold text-foreground mb-3">設置您的個人資料</h3>
-                  <p className="text-sm text-foreground/70 mb-4 leading-relaxed">
+                  <p className="text-sm text-foreground/70 dark:text-white mb-4 leading-relaxed">
                     完善您的個人資料，讓跨部門的同事更容易找到您，改善企業內部協作體驗。
                   </p>
-                  <ul className="text-sm text-foreground/60 space-y-2 font-medium">
+                  <ul className="text-sm text-foreground/60 dark:text-white space-y-2 font-medium">
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 上傳專業的大頭照</li>
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 確認職位和部門資訊</li>
                     <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary" /> 設置 Teams 狀態訊息</li>
@@ -283,7 +287,7 @@ export default function Handbook() {
                 <div className="p-6 bg-muted/30 rounded-2xl border border-border/50">
                   <ShieldCheck className="text-indigo-500 mb-4" size={32} />
                   <h3 className="text-lg font-bold text-foreground mb-3">保護您的帳戶</h3>
-                  <ul className="text-sm text-foreground/70 space-y-2.5 font-medium">
+                  <ul className="text-sm text-foreground/70 dark:text-white space-y-2.5 font-medium">
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" /> 使用強密碼並定期更改</li>
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" /> 務必開啟多因素驗證 (MFA)</li>
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-indigo-400 mt-1.5 shrink-0" /> 不要在公共電腦上記住密碼</li>
@@ -294,7 +298,7 @@ export default function Handbook() {
                 <div className="p-6 bg-muted/30 rounded-2xl border border-border/50">
                   <AlertCircle className="text-red-500 mb-4" size={32} />
                   <h3 className="text-lg font-bold text-foreground mb-3">防範社交工程與釣魚</h3>
-                  <ul className="text-sm text-foreground/70 space-y-2.5 font-medium">
+                  <ul className="text-sm text-foreground/70 dark:text-white space-y-2.5 font-medium">
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5 shrink-0" /> 仔細檢查寄件人的真實 Email 地址</li>
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5 shrink-0" /> 絕不在來路不明的網頁輸入 M365 密碼</li>
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-red-400 mt-1.5 shrink-0" /> 不隨意下載外部郵件的壓縮檔附件</li>
@@ -305,7 +309,7 @@ export default function Handbook() {
                 <div className="p-6 bg-muted/30 rounded-2xl border border-border/50">
                   <Lock className="text-teal-500 mb-4" size={32} />
                   <h3 className="text-lg font-bold text-foreground mb-3">檔案權限與資料分類</h3>
-                  <ul className="text-sm text-foreground/70 space-y-2.5 font-medium">
+                  <ul className="text-sm text-foreground/70 dark:text-white space-y-2.5 font-medium">
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-1.5 shrink-0" /> 分享連結時，優先選「特定人員」而非「任何人」</li>
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-1.5 shrink-0" /> 機密財報請加上敏感度標籤 (Sensitivity labels)</li>
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-teal-400 mt-1.5 shrink-0" /> 定期檢查 OneDrive 中對外分享的過期連結</li>
@@ -327,7 +331,7 @@ export default function Handbook() {
                   <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
                     <span className="text-xl">⌨️</span> 鍵盤快捷鍵
                   </h3>
-                  <ul className="text-sm text-foreground/70 space-y-2 font-medium">
+                  <ul className="text-sm text-foreground/70 dark:text-white space-y-2 font-medium">
                     <li className="flex justify-between border-b border-border/40 pb-1"><span>搜尋</span> <kbd className="bg-muted px-1.5 rounded text-xs font-mono">Ctrl+F</kbd></li>
                     <li className="flex justify-between border-b border-border/40 pb-1"><span>Teams 靜音</span> <kbd className="bg-muted px-1.5 rounded text-xs font-mono">Ctrl+Shift+M</kbd></li>
                     <li className="flex justify-between border-b border-border/40 pb-1"><span>強制重新整理</span> <kbd className="bg-muted px-1.5 rounded text-xs font-mono">Ctrl+F5</kbd></li>
@@ -339,7 +343,7 @@ export default function Handbook() {
                   <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
                     <span className="text-xl">🔍</span> 搜尋高階語法
                   </h3>
-                  <ul className="text-sm text-foreground/70 space-y-2.5 font-medium">
+                  <ul className="text-sm text-foreground/70 dark:text-white space-y-2.5 font-medium">
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 使用引號 <code>"財報"</code> 搜尋精確短語</li>
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 使用 <code>-</code> 排除特定單詞</li>
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 在 Teams 搜尋框輸入 <code>/</code> 呼叫快捷指令</li>
@@ -350,7 +354,7 @@ export default function Handbook() {
                   <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
                     <span className="text-xl">👥</span> 協同編輯禮儀
                   </h3>
-                  <ul className="text-sm text-foreground/70 space-y-2.5 font-medium">
+                  <ul className="text-sm text-foreground/70 dark:text-white space-y-2.5 font-medium">
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 善用「註解」功能 Tag 同事，不要直接改原文顏色</li>
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 檔案預設會自動儲存，請勿任意按復原</li>
                     <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 點擊上方頭像可看到同事目前游標位置</li>
@@ -361,18 +365,18 @@ export default function Handbook() {
                   <h3 className="font-bold text-foreground mb-4 flex items-center gap-2">
                     <span className="text-xl">📌</span> 快速訪問設定
                   </h3>
-                  <ul className="text-sm text-foreground/70 space-y-2.5 font-medium">
-                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 將正在執行的專案釘選在 Teams 頻道最上方</li>
-                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 在 Edge 瀏覽器將 M365 首頁設為我的最愛</li>
-                    <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 將常用的 SharePoint 網站按星號追蹤</li>
-                  </ul>
+                  <ul className="text-sm text-foreground/70 dark:text-white space-y-2.5 font-medium">
+                    <n                      <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 將正在執行的專案釘選在 Teams 頻道最上方</li>
+                      <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 在 Edge 瀏覽器將 M365 首頁設為我的最愛</li>
+                      <li className="flex items-start gap-2"><div className="w-1.5 h-1.5 rounded-full bg-primary/60 mt-1.5 shrink-0" /> 將常用的 SharePoint 網站按星號追蹤</li>
+                    </ul>
+                  </div>
                 </div>
-              </div>
-            </Card>
-          </TabsContent>
+              </Card>
+            </TabsContent>
 
-        </Tabs>
+          </Tabs>
+        </div>
       </div>
-    </div>
   );
 }

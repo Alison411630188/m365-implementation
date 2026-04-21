@@ -9,22 +9,21 @@ import {
 import {
   PlannerIcon,
   PowerAutomateIcon,
-  PowerBIIcon,
   SharePointIcon,
   TeamsIcon,
 } from "@/components/M365Icons";
 
 /**
  * M365 實戰學院 - 精緻版首頁 (Landing Page)
- * 變更點：將 Teams, Power Automate, Power BI 的圖示加上 scale-[1.35] 放大
+ * 變更點：將 Teams, Power Automate 的圖示加上 scale-[1.35] 放大
  */
 
 const TOOLS = [
   { id: "teams", name: "Teams", desc: "溝通協作與會議", icon: <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div>, color: "text-indigo-500", bg: "bg-indigo-500/10", border: "hover:border-indigo-500/50 hover:shadow-indigo-500/20" },
+  { href: "https://teams-edu-web.vercel.app", name: "Teams 實戰教學", desc: "線上互動式教學", icon: <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div>, color: "text-indigo-500", bg: "bg-indigo-500/10", border: "hover:border-indigo-500/50 hover:shadow-indigo-500/20" },
   { id: "sharepoint", name: "SharePoint", desc: "企業文件與知識庫", icon: <div className="w-8 h-8 flex items-center justify-center"><SharePointIcon /></div>, color: "text-teal-500", bg: "bg-teal-500/10", border: "hover:border-teal-500/50 hover:shadow-teal-500/20" },
   { id: "planner", name: "Planner", desc: "專案與任務追蹤", icon: <div className="w-8 h-8 flex items-center justify-center"><PlannerIcon /></div>, color: "text-green-500", bg: "bg-green-500/10", border: "hover:border-green-500/50 hover:shadow-green-500/20" },
   { id: "power-automate", name: "Power Automate", desc: "日常流程自動化", icon: <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><PowerAutomateIcon /></div>, color: "text-blue-500", bg: "bg-blue-500/10", border: "hover:border-blue-500/50 hover:shadow-blue-500/20" },
-  { id: "power-bi", name: "Power BI", desc: "商業數據視覺化", icon: <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><PowerBIIcon /></div>, color: "text-yellow-500", bg: "bg-yellow-500/10", border: "hover:border-yellow-500/50 hover:shadow-yellow-500/20" },
 ];
 
 export default function Home() {
@@ -46,7 +45,7 @@ export default function Home() {
             擁抱高效率，<br className="md:hidden" />探索 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-500 to-teal-400">M365 實戰學院</span>
           </h1>
           
-          <p className="text-xl md:text-2xl text-foreground/60 max-w-3xl mx-auto mb-12 leading-relaxed font-medium">
+          <p className="text-xl md:text-2xl text-foreground/60 dark:text-white max-w-3xl mx-auto mb-12 leading-relaxed font-medium">
             告別瑣碎的手動輸入與混亂的檔案版本。在這裡，我們用最白話的圖文與真實企業情境，帶你輕鬆駕馭微軟五大神器。
           </p>
           
@@ -70,12 +69,12 @@ export default function Home() {
         <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-12 animate-in fade-in duration-700 delay-200 fill-mode-both">
             <h2 className="text-3xl font-bold text-foreground mb-4">五大核心工具，解決 90% 日常痛點</h2>
-            <p className="text-foreground/60">點擊下方卡片，查看各工具的「圖文教學」與「操作秘笈」</p>
+            <p className="text-foreground/60 dark:text-white">點擊下方卡片，查看各工具的「圖文教學」與「操作秘笈」</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
-            {TOOLS.map((tool, index) => (
-              <Link key={tool.id} href={`/tools/${tool.id}`}>
+            {TOOLS.map((tool, index) => {
+              const card = (
                 <Card 
                   className={`group relative overflow-hidden h-full p-6 border border-border shadow-sm bg-card cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${tool.border} animate-in slide-in-from-bottom-10 fade-in fill-mode-both`}
                   style={{ animationDelay: `${index * 100 + 300}ms` }}
@@ -87,7 +86,7 @@ export default function Home() {
                   <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-primary transition-colors">
                     {tool.name}
                   </h3>
-                  <p className="text-sm text-foreground/60 font-medium">
+                  <p className="text-sm text-foreground/60 dark:text-white font-medium">
                     {tool.desc}
                   </p>
                   
@@ -96,8 +95,21 @@ export default function Home() {
                     <ArrowRight size={20} />
                   </div>
                 </Card>
-              </Link>
-            ))}
+              );
+
+              if ('href' in tool) {
+                return (
+                  <a key={tool.name} href={(tool as any).href} target="_blank" rel="noopener noreferrer">
+                    {card}
+                  </a>
+                )
+              }
+              return (
+                <Link key={(tool as any).id} href={`/tools/${(tool as any).id}`}>
+                  {card}
+                </Link>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -113,7 +125,7 @@ export default function Home() {
                   <BookOpen size={32} />
                 </div>
                 <h2 className="text-2xl font-bold text-foreground mb-3">M365 使用手冊</h2>
-                <p className="text-foreground/60 leading-relaxed mb-6 h-12">
+                <p className="text-foreground/60 dark:text-white leading-relaxed mb-6 h-12">
                   不知道什麼時候該用什麼工具？這裡有「快速對照表」與「檔案儲存觀念釐清」，幫你打好基本功。
                 </p>
                 <div className="font-bold text-primary flex items-center gap-2">
@@ -128,7 +140,7 @@ export default function Home() {
                   <Lightbulb size={32} />
                 </div>
                 <h2 className="text-2xl font-bold text-foreground mb-3">15 大應用情境案例</h2>
-                <p className="text-foreground/60 leading-relaxed mb-6 h-12">
+                <p className="text-foreground/60 dark:text-white leading-relaxed mb-6 h-12">
                   整理了企業最常見的痛點（如：簽核自動化、結案報告自動產出），提供超詳細 Step-by-Step 教學。
                 </p>
                 <div className="font-bold text-orange-500 flex items-center gap-2">
