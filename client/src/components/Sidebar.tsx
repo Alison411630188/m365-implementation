@@ -6,7 +6,7 @@ import { useTheme } from "@/contexts/ThemeContext";
 import { SearchDialog } from "@/components/SearchDialog";
 
 /**
- * 側邊欄導航元件 - 整合了全站搜尋對話框
+ * 側邊欄導航元件 - 第三次調整了 Logo 下方標籤的垂直間距
  */
 
 interface NavItem {
@@ -134,7 +134,7 @@ export default function Sidebar() {
             <span className="block font-black text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-400 text-xl tracking-tight leading-none drop-shadow-sm">
               瀚荃集團
             </span>
-            <span className="block font-bold text-black/50 dark:text-white text-[10px] uppercase tracking-[0.25em] mt-1.5 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 px-2 py-0.5 rounded-full inline-block shadow-sm">
+            <span className="block font-bold text-black/50 dark:text-white text-[10px] uppercase tracking-[0.25em] mt-3 bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 px-2 py-0.5 rounded-full inline-block shadow-sm">
               M365 導入專案
             </span>
           </div>
@@ -163,7 +163,7 @@ export default function Sidebar() {
           <div className="flex items-center justify-between px-2">
             <div>
               <p className="text-[10px] font-bold text-black/70 dark:text-white">
-                系統版本 v0.0.1
+                系統版本 v1.0.0
               </p>
               <p className="text-[9px] text-black/40 dark:text-white mt-0.5">CviLux IT Team © 2026</p>
             </div>

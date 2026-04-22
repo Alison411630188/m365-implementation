@@ -11,13 +11,12 @@ import {
   AlertCircle,
   BookOpen
 } from "lucide-react";
-import { SCENARIOS, ToolType } from "@/data/cases"; // 從獨立的資料檔案引入
+import { SCENARIOS, ToolType } from "@/data/cases";
 
 /**
- * M365 應用情境案例 - Refactored to use external data source
+ * M365 應用情境案例 - 修復 HTML 渲染問題
  */
 
-// 取得工具對應的 icon 與顏色
 function getToolBadge(tool: ToolType) {
   switch (tool) {
     case "Planner":
@@ -30,6 +29,8 @@ function getToolBadge(tool: ToolType) {
       return { icon: <MessageSquare size={12} className="mr-1" />, bg: "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400" };
     case "SharePoint":
       return { icon: <Share2 size={12} className="mr-1" />, bg: "bg-teal-100 text-teal-700 dark:bg-teal-900/30 dark:text-teal-400" };
+    default:
+      return { icon: <BookOpen size={12} className="mr-1" />, bg: "bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400" };
   }
 }
 
@@ -44,7 +45,6 @@ export default function Cases() {
     <div className="min-h-screen bg-background selection:bg-primary/10">
       <div className="mx-auto px-6 md:px-10 py-12 max-w-[1440px] w-full">
         
-        {/* 頁面標題 */}
         <div className="mb-12 pb-8 border-b border-border">
           <h1 className="text-4xl font-extrabold text-foreground tracking-tight mb-4 flex items-center gap-3">
             <div className="w-2 h-10 bg-primary rounded-full" />
@@ -55,7 +55,6 @@ export default function Cases() {
           </p>
         </div>
 
-        {/* 篩選器 */}
         <div className="flex flex-wrap gap-3 mb-10">
           <button
             onClick={() => setActiveFilter("All")}
@@ -83,12 +82,10 @@ export default function Cases() {
           ))}
         </div>
 
-        {/* 情境列表 - 兩欄瀑布流排版 */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
           {filteredScenarios.map((scenario) => (
             <Card key={scenario.id} className="overflow-hidden border-2 border-primary/20 hover:border-primary/40 dark:border-primary/30 dark:hover:border-primary/50 shadow-md hover:shadow-xl transition-shadow bg-card">
               
-              {/* 卡片標題區塊 */}
               <div className="p-6 pb-4 border-b border-border/50 bg-muted/30">
                 <div className="flex flex-wrap gap-2 mb-4">
                   {scenario.tools.map(tool => {
@@ -106,7 +103,6 @@ export default function Cases() {
                 </h3>
               </div>
 
-              {/* 核心資訊區塊 (使用者 / 目標 / 痛點) */}
               <div className="p-6 bg-background space-y-4 border-b border-border/50">
                 <div className="flex items-start gap-3">
                   <div className="shrink-0 p-2 bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-lg">
@@ -139,7 +135,6 @@ export default function Cases() {
                 </div>
               </div>
 
-              {/* User Story 區塊 - 已移除斜體 */}
               <div className="p-6 bg-primary/5 border-b border-border/50">
                 <div className="flex gap-2">
                   <BookOpen size={18} className="text-primary shrink-0 mt-0.5" />
@@ -152,20 +147,19 @@ export default function Cases() {
                 </div>
               </div>
 
-              {/* 操作步驟區塊 */}
               <div className="p-6">
                 <h4 className="text-xs font-bold text-foreground/40 uppercase tracking-widest mb-5">實作步驟指南</h4>
                 <div className="space-y-6">
                   {scenario.steps.map((step, idx) => (
                     <div key={idx} className="flex items-start gap-4">
-                      {/* 步驟數字圓圈 */}
                       <div className="shrink-0 w-7 h-7 rounded-full bg-primary/10 text-primary flex items-center justify-center text-sm font-black border border-primary/20">
                         {idx + 1}
                       </div>
-                      {/* 步驟說明 */}
-                      <div className="pt-0.5 text-sm text-foreground/80 leading-relaxed font-medium">
-                        {step}
-                      </div>
+                      {/* 使用 dangerouslySetInnerHTML 來渲染 HTML */}
+                      <div 
+                        className="pt-0.5 text-sm text-foreground/80 leading-relaxed font-medium"
+                        dangerouslySetInnerHTML={{ __html: step }}
+                      />
                     </div>
                   ))}
                 </div>

@@ -8,11 +8,13 @@ import {
   SharePointIcon,
   TeamsIcon,
 } from "@/components/M365Icons";
+import NotFound from "./NotFound"; // 引入 404 頁面
 
 /**
- * M365 工具手冊詳情頁面 - 最終版 (含最新 Vercel 連結)
+ * M365 工具手冊詳情頁面 - 修復路由錯誤
  */
 
+// ... (interface 定義與 toolDetails 資料維持不變) ...
 interface ViewItem {
   name: string;
   description: string;
@@ -53,7 +55,7 @@ const toolDetails: Record<string, ToolDetailInfo> = {
     ],
     commonViews: [
       { name: "看板 (Board)", description: "【新手最常用】像拖曳便利貼一樣，把任務輕鬆從一個貯體拉到另一個貯體。" },
-      { name: "格線 (Grid)", description: "【適合快速編輯】像 Excel 表格一樣的清單，方便一次修改多個任務的日期或負責人。" },
+      { name: "方格 (Grid)", description: "【適合快速編輯】像 Excel 表格一樣的清單，方便一次修改多個任務的日期或負責人。" },
       { name: "圖表 (Charts)", description: "【適合主管/PM】自動生成狀態圖與人力負載圖，一眼看出誰的工作量大爆炸。" },
       { name: "排程 (Schedule)", description: "【適合抓時間】以月曆形式呈現，幫助團隊確認到期日是否過度集中在同一天。" }
     ],
@@ -213,7 +215,6 @@ function getToolIcon(toolId: string) {
   }
 }
 
-// 這裡就是替換成你最新 Vercel 網址的地方 👇
 function getM365AppUrl(toolId: string): string {
   const urlMap: Record<string, string> = {
     'planner': 'https://planner-edu-web.vercel.app',
@@ -229,14 +230,24 @@ export default function ToolDetail() {
   const [, params] = useRoute("/tools/:toolId");
   const toolId = params?.toolId as string;
 
-  const tool = M365_TOOLS.find((t) => t.id === toolId);
+  // 修正後的邏輯：先檢查 toolId 是否有效
+  const isValidToolId = toolId && M365_TOOLS.some((t) => t.id === toolId);
+  if (!isValidToolId) {
+    return <NotFound />;
+  }
+
+  const tool = M365_TOOLS.find((t) => t.id === toolId)!; // 此時 tool 必不為空
   const details = toolDetails[toolId];
 
-  if (!tool || !details) return <div className="p-20 text-center font-bold">手冊內容整備中...</div>;
+  // 如果有 tool 但沒有 details，顯示整備中訊息
+  if (!details) {
+    return <div className="p-20 text-center font-bold">手冊內容整備中...</div>;
+  }
 
   return (
     <div className="min-h-screen bg-background selection:bg-primary/10">
       <div className="mx-auto px-6 md:px-10 py-12 max-w-[1440px] w-full">
+        {/* ... (其餘 JSX 內容維持不變) ... */}
         {/* 頂部標題與按鈕 */}
         <div className="mb-12 pb-8 border-b border-border">
           <div className="flex items-start gap-8">
