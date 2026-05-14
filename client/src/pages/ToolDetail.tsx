@@ -1,5 +1,5 @@
+
 import { Card } from "@/components/ui/card";
-import { useRoute } from "wouter";
 import { M365_TOOLS } from "@/../../shared/const";
 import {
   PlannerIcon,
@@ -8,13 +8,8 @@ import {
   SharePointIcon,
   TeamsIcon,
 } from "@/components/M365Icons";
-import NotFound from "./NotFound"; // 引入 404 頁面
+import NotFound from "./NotFound";
 
-/**
- * M365 工具手冊詳情頁面 - 修復路由錯誤
- */
-
-// ... (interface 定義與 toolDetails 資料維持不變) ...
 interface ViewItem {
   name: string;
   description: string;
@@ -226,20 +221,23 @@ function getM365AppUrl(toolId: string): string {
   return urlMap[toolId] || 'https://www.microsoft.com';
 }
 
-export default function ToolDetail() {
-  const [, params] = useRoute("/tools/:toolId");
+interface ToolDetailProps {
+  params: {
+    toolId: string;
+  };
+}
+
+export default function ToolDetail({ params }: ToolDetailProps) {
   const toolId = params?.toolId as string;
 
-  // 修正後的邏輯：先檢查 toolId 是否有效
   const isValidToolId = toolId && M365_TOOLS.some((t) => t.id === toolId);
   if (!isValidToolId) {
     return <NotFound />;
   }
 
-  const tool = M365_TOOLS.find((t) => t.id === toolId)!; // 此時 tool 必不為空
+  const tool = M365_TOOLS.find((t) => t.id === toolId)!;
   const details = toolDetails[toolId];
 
-  // 如果有 tool 但沒有 details，顯示整備中訊息
   if (!details) {
     return <div className="p-20 text-center font-bold">手冊內容整備中...</div>;
   }
@@ -247,21 +245,17 @@ export default function ToolDetail() {
   return (
     <div className="min-h-screen bg-background selection:bg-primary/10">
       <div className="mx-auto px-6 md:px-10 py-12 max-w-[1440px] w-full">
-        {/* ... (其餘 JSX 內容維持不變) ... */}
-        {/* 頂部標題與按鈕 */}
         <div className="mb-12 pb-8 border-b border-border">
           <div className="flex items-start gap-8">
             <div className={`flex items-center justify-center shrink-0 transition-transform hover:scale-110 duration-300 w-16 h-16 sm:w-20 sm:h-20 ${toolId === 'teams' || toolId === 'power-automate' || toolId === 'power-bi' ? 'scale-[1.35]' : ''}`}>
               {getToolIcon(toolId)}
             </div>
-            
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
                 <h1 className="text-4xl font-extrabold text-foreground tracking-tight">{tool.name}</h1>
                 <span className="px-2 py-1 bg-primary/10 text-primary text-[10px] font-bold rounded uppercase tracking-widest border border-primary/20 shadow-sm">Manual</span>
               </div>
               <p className="text-lg text-foreground/60 mb-6 leading-relaxed font-medium">{tool.description}</p>
-              
               {toolId !== 'power-bi' && (
                 <a
                   href={getM365AppUrl(toolId)}

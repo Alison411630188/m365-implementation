@@ -1,9 +1,9 @@
+
 import { NAVIGATION_ITEMS } from "@/../../shared/const";
-import { ChevronDown, Menu, X, Moon, Sun, Search } from "lucide-react";
+import { ChevronDown, Menu, X, Moon, Sun } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { useTheme } from "@/contexts/ThemeContext";
-import { SearchDialog } from "@/components/SearchDialog";
 
 /**
  * 側邊欄導航元件 - 第三次調整了 Logo 下方標籤的垂直間距
@@ -20,7 +20,6 @@ export default function Sidebar() {
   const [location, setLocation] = useLocation();
   const [expandedItems, setExpandedItems] = useState<string[]>(["tools"]);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   
   const { theme, toggleTheme } = useTheme();
 
@@ -93,8 +92,6 @@ export default function Sidebar() {
 
   return (
     <>
-      <SearchDialog open={isSearchOpen} onOpenChange={setIsSearchOpen} />
-
       {/* Global background elements */}
       <div className="fixed inset-0 z-[-100] bg-slate-50 dark:bg-[#050507]">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[500px] opacity-40 dark:opacity-20 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/40 via-transparent to-transparent pointer-events-none"></div>
@@ -140,17 +137,7 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* Search trigger button */}
-        <div className="px-4 py-5">
-          <button onClick={() => setIsSearchOpen(true)} className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-white dark:bg-[#121214] border border-black/10 dark:border-white/10 shadow-sm text-black/50 dark:text-white hover:text-primary hover:border-primary/40 hover:shadow-[0_0_15px_rgba(var(--primary),0.15)] transition-all cursor-pointer group">
-            <Search size={16} className="group-hover:scale-110 transition-transform text-primary/70" />
-            <span className="text-xs font-bold tracking-wide">
-              搜尋手冊、案例...
-            </span>
-          </button>
-        </div>
-
-        <nav className="flex-1 overflow-y-auto pt-1 pb-4 scrollbar-hide">
+        <nav className="flex-1 overflow-y-auto pt-5 pb-4 scrollbar-hide">
           <div className="px-6 mb-3 text-[10px] font-extrabold text-black/40 dark:text-white uppercase tracking-[0.2em] flex items-center gap-2">
             知識庫分類
             <div className="h-px bg-gradient-to-r from-black/10 to-transparent dark:from-primary/20 dark:to-transparent flex-1 mt-0.5"></div>

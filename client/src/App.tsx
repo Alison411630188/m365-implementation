@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Sidebar from "@/components/Sidebar";
@@ -7,16 +8,14 @@ import Handbook from "@/pages/Handbook";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/NotFound";
 import ToolDetail from "@/pages/ToolDetail";
+import CaseDetail from "@/pages/CaseDetail";
 import Search from "@/pages/Search";
 import { Route, Switch, useLocation } from "wouter";
 import { useEffect } from "react";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
-
-// 1. 導入動畫庫
 import { motion, AnimatePresence } from "framer-motion";
 
-// 2. 定義轉場動畫參數（淡入 + 輕微位移）
 const pageVariants = {
   initial: { opacity: 0, x: 20 },
   animate: { opacity: 1, x: 0 },
@@ -32,14 +31,11 @@ function Router() {
   const [location] = useLocation();
 
   useEffect(() => {
-    // 當路由改變時，滾動到頁面頂部
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location]);
 
   return (
-    /* 3. 使用 AnimatePresence 監控路由切換 */
     <AnimatePresence mode="wait">
-      {/* 4. 給 Switch 一個 location 參數與 key，讓它知道什麼時候該跑出場動畫 */}
       <Switch location={location} key={location}>
         <Route path="/">
           <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition}>
@@ -51,6 +47,14 @@ function Router() {
           <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition}>
             <Handbook />
           </motion.div>
+        </Route>
+
+        <Route path="/cases/:id">
+          {params => (
+            <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition}>
+              <CaseDetail params={params} />
+            </motion.div>
+          )}
         </Route>
 
         <Route path="/cases">
@@ -72,9 +76,11 @@ function Router() {
         </Route>
 
         <Route path="/tools/:toolId">
-          <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition}>
-            <ToolDetail />
-          </motion.div>
+          {params => (
+            <motion.div initial="initial" animate="animate" exit="exit" variants={pageVariants} transition={pageTransition}>
+              <ToolDetail params={params} />
+            </motion.div>
+          )}
         </Route>
 
         <Route path="/404">
@@ -99,10 +105,7 @@ function App() {
       <ThemeProvider defaultTheme="light" switchable>
         <TooltipProvider>
           <Toaster />
-          {/* Sidebar 放在這裡：它是靜止的，不受動畫影響 */}
           <Sidebar />
-          
-          {/* 這裡是內容區：Router 裡面的頁面會有轉場動畫 */}
           <main className="lg:ml-64 min-h-screen relative overflow-hidden">
             <Router />
           </main>

@@ -5,30 +5,21 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Card } from "@/components/ui/card";
-import { Search, User } from "lucide-react";
-import { useState } from "react";
+import { User } from "lucide-react";
 import { faqItems, FAQItem } from "@/data/faq";
 
 /**
- * 問答區頁面 - 更新聯絡人資訊
+ * 問答區頁面 - 移除搜尋功能
  */
 
 export default function FAQ() {
-  const [searchTerm, setSearchTerm] = useState("");
-
   const categories = Array.from(
     new Set(faqItems.map((item) => item.category))
   );
 
-  const filteredItems = faqItems.filter(
-    (item) =>
-      item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.answer.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const groupedItems = categories.reduce(
     (acc, category) => {
-      acc[category] = filteredItems.filter((item) => item.category === category);
+      acc[category] = faqItems.filter((item) => item.category === category);
       return acc;
     },
     {} as Record<string, FAQItem[]>
@@ -48,24 +39,9 @@ export default function FAQ() {
           <h1 className="text-4xl font-bold text-foreground mb-4">
             常見問答
           </h1>
-          <p className="text-lg text-foreground/70 mb-8">
+          <p className="text-lg text-foreground/70">
             我們整理了一些常見的問題，希望能為您解惑。如果找不到您想要的答案，請隨時與我們聯繫。
           </p>
-
-          {/* 搜尋框 */}
-          <div className="relative max-w-2xl">
-            <Search
-              size={20}
-              className="absolute left-4 top-3.5 text-foreground/50"
-            />
-            <input
-              type="text"
-              placeholder="搜尋問題或關鍵字..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-lg border border-border bg-background text-foreground placeholder-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-          </div>
         </div>
 
         {/* 問答內容 */}
@@ -96,19 +72,7 @@ export default function FAQ() {
           </div>
         ))}
 
-        {/* 無結果提示 */}
-        {Object.values(groupedItems).every((items) => items.length === 0) && (
-          <div className="text-center py-12">
-            <p className="text-lg text-foreground/70 mb-4">
-              找不到符合的結果
-            </p>
-            <p className="text-foreground/50">
-              請試試看其他的關鍵字，或直接與我們聯繫。
-            </p>
-          </div>
-        )}
-
-        {/* 聯繫我們部分 (優化後) */}
+        {/* 聯繫我們部分 */}
         <div className="mt-16">
           <h2 className="text-2xl font-bold text-foreground mb-8">有問題可以聯繫</h2>
 

@@ -1,8 +1,11 @@
+
 import { Card } from "@/components/ui/card";
 import { Link } from "wouter";
 import { 
   ArrowRight, 
   BookOpen,
+  ChevronRight,
+  HelpCircle,
   Lightbulb,
   Rocket
 } from "lucide-react";
@@ -14,10 +17,7 @@ import {
   TeamsIcon,
 } from "@/components/M365Icons";
 import { TOOLS_DATA } from "@/data/tools";
-
-/**
- * M365 實戰學院 - 精緻版首頁 (Landing Page)
- */
+import { SCENARIOS } from "@/data/cases"; // Import scenarios
 
 const ICONS: { [key: string]: JSX.Element } = {
   teams: <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div>,
@@ -27,11 +27,49 @@ const ICONS: { [key: string]: JSX.Element } = {
   'power-bi': <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><PowerBIIcon /></div>,
 };
 
+const TOOL_ICONS_MINI: { [key: string]: JSX.Element } = {
+  Teams: <TeamsIcon />, 
+  SharePoint: <SharePointIcon />,
+  Planner: <PlannerIcon />,
+  'Power Automate': <PowerAutomateIcon />,
+  'Power BI': <PowerBIIcon />,
+};
+
 export default function Home() {
+
+  const QUICK_REFERENCE = [
+    {
+      category: '溝通協調',
+      items: [
+        { question: '我需要跟同事一對一或群組聊天', tool: 'Teams 私人聊天'},
+        { question: '我需要召開一場正式的線上會議', tool: 'Teams 會議' },
+      ]
+    },
+    {
+      category: '檔案管理',
+      items: [
+        { question: '我想要儲存、共享和同步部門的檔案', tool: 'SharePoint 文件庫' },
+        { question: '我需要在專案頻道中快速找到檔案', tool: 'Teams 檔案頁籤' },
+      ]
+    },
+    {
+      category: '專案追蹤',
+      items: [
+        { question: '我需要指派和追蹤團隊成員的任務', tool: 'Planner' },
+      ]
+    },
+    {
+      category: '數據與自動化',
+      items: [
+        { question: '我想要自動化重複性的手動工作', tool: 'Power Automate' },
+        { question: '我需要建立互動式的數據儀表板', tool: 'Power BI' },
+      ]
+    }
+  ];
+
   return (
     <div className="min-h-screen bg-background overflow-hidden selection:bg-primary/20">
       
-      {/* --- 主視覺區塊 (Hero Section) --- */}
       <section className="relative pt-24 pb-32 px-6 md:px-10 lg:pt-36 lg:pb-40">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/20 blur-[120px] rounded-full pointer-events-none -z-10 animate-pulse duration-1000"></div>
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/10 blur-[100px] rounded-full pointer-events-none -z-10"></div>
@@ -65,7 +103,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- 五大核心工具區塊 --- */}
       <section className="px-6 md:px-10 py-16 bg-muted/30 border-y border-border/50">
         <div className="max-w-[1440px] mx-auto">
           <div className="text-center mb-12 animate-in fade-in duration-700 delay-200 fill-mode-both">
@@ -91,7 +128,6 @@ export default function Home() {
                     {tool.desc}
                   </p>
                   
-                  {/* 隱藏的箭頭，hover時出現 */}
                   <div className="absolute bottom-6 right-6 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-foreground/40 group-hover:text-primary">
                     <ArrowRight size={20} />
                   </div>
@@ -115,46 +151,99 @@ export default function Home() {
         </div>
       </section>
 
-      {/* --- 學習資源分流區塊 --- */}
       <section className="px-6 md:px-10 py-24">
-        <div className="max-w-[1000px] mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
+        <div className="max-w-[1200px] mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">我只想知道... 我該用哪個工具？</h2>
+            <p className="text-foreground/60 dark:text-white">根據你的任務情境，我們直接推薦最適合的工具與教學。</p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {QUICK_REFERENCE.map((section) => (
+              <Card key={section.category} className="p-6 border border-border shadow-sm bg-card hover:shadow-md transition-shadow">
+                <h3 className="text-sm font-bold text-foreground/40 dark:text-white uppercase tracking-widest mb-4 border-b border-border/50 pb-3">
+                  {section.category}
+                </h3>
+                <div className="space-y-4">
+                  {section.items.map((item) => (
+                    <div key={item.question} className="flex items-center gap-3 group">
+                      <HelpCircle size={18} className="text-primary/60 shrink-0" />
+                      <div className="flex-1">
+                        <p className="font-medium text-foreground/80 dark:text-white">{item.question}</p>
+                        <p className="text-sm text-primary font-bold">→ {item.tool}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            ))}
+          </div>
+          <div className="text-center mt-12">
             <Link href="/handbook">
-              <Card className="group p-8 border border-border/50 bg-card hover:border-primary/50 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg">
-                <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <BookOpen size={32} />
-                </div>
-                <h2 className="text-2xl font-bold text-foreground mb-3">M365 使用手冊</h2>
-                <p className="text-foreground/60 dark:text-white leading-relaxed mb-6 h-12">
-                  不知道什麼時候該用什麼工具？這裡有「快速對照表」與「檔案儲存觀念釐清」，幫你打好基本功。
-                </p>
-                <div className="font-bold text-primary flex items-center gap-2">
-                  開始閱讀 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                </div>
-              </Card>
+              <button className="px-6 py-3 bg-muted text-foreground rounded-full font-bold text-base hover:bg-muted/80 transition-all flex items-center justify-center gap-2 mx-auto">
+                查看完整使用手冊 <ArrowRight size={18} />
+              </button>
             </Link>
-
-            <Link href="/cases">
-              <Card className="group p-8 border border-border/50 bg-card hover:border-orange-500/50 transition-all duration-300 cursor-pointer shadow-sm hover:shadow-lg">
-                <div className="w-16 h-16 rounded-2xl bg-orange-500/10 text-orange-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  <Lightbulb size={32} />
-                </div>
-                <h2 className="text-2xl font-bold text-foreground mb-3">15 大應用情境案例</h2>
-                <p className="text-foreground/60 dark:text-white leading-relaxed mb-6 h-12">
-                  整理了企業最常見的痛點（如：簽核自動化、結案報告自動產出），提供超詳細 Step-by-Step 教學。
-                </p>
-                <div className="font-bold text-orange-500 flex items-center gap-2">
-                  探索案例 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                </div>
-              </Card>
-            </Link>
-
           </div>
         </div>
       </section>
 
-      {/* --- Footer 簡約結尾 --- */}
+      <section className="px-6 md:px-10 py-24 bg-muted/30 border-y border-border/50">
+        <div className="max-w-[1440px] mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-foreground mb-4">從真實案例啟發靈感</h2>
+            <p className="text-foreground/60 dark:text-white">看看其他部門如何運用 M365 解決了哪些令人頭痛的問題。</p>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {SCENARIOS.slice(0, 3).map((scenario) => (
+              <Link key={scenario.id} href={`/cases/${scenario.id}`}>
+                <Card className="group h-full flex flex-col p-8 border-2 border-border/50 bg-card hover:border-primary/50 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-xl hover:-translate-y-2">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-4">
+                      {scenario.tools.map(tool => (
+                        <div key={tool} className="w-7 h-7 flex items-center justify-center scale-110">
+                           {TOOL_ICONS_MINI[tool] || ''}
+                        </div>
+                      ))}
+                    </div>
+                    <h3 className="text-xl font-bold text-foreground mb-3 leading-snug group-hover:text-primary transition-colors">
+                      {scenario.title}
+                    </h3>
+                    <p className="text-foreground/60 dark:text-white leading-relaxed">
+                      {scenario.context}
+                    </p>
+                  </div>
+                  <div className="mt-8 font-bold text-primary flex items-center gap-2 text-sm">
+                    查看解決方案 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
+          <div className="text-center mt-12">
+            <Link href="/cases">
+              <button className="px-8 py-4 bg-card text-foreground border border-border rounded-full font-bold text-base hover:bg-muted transition-all flex items-center justify-center gap-2 mx-auto">
+                探索所有 15 大應用情境
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-6 md:px-10 py-24 text-center">
+         <div className="max-w-xl mx-auto">
+          <Lightbulb className="mx-auto text-yellow-500 mb-6" size={40} />
+          <h2 className="text-3xl font-bold text-foreground mb-4">還有其他問題嗎？</h2>
+          <p className="text-foreground/60 dark:text-white mb-8 leading-relaxed">
+            我們整理了一份常見問題 (FAQ) 列表，涵蓋了帳號、權限、以及工具使用的各種疑難雜症。如果還是找不到答案，裡面也提供了 IT 團隊的聯絡方式。
+          </p>
+          <Link href="/faq">
+            <button className="w-full sm:w-auto px-8 py-4 bg-primary text-primary-foreground rounded-full font-bold text-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20 flex items-center justify-center gap-2">
+              前往 FAQ <ChevronRight size={20} />
+            </button>
+          </Link>
+        </div>
+      </section>
+
       <footer className="border-t border-border/50 py-10 text-center">
         <p className="text-sm font-bold text-foreground/40 uppercase tracking-widest">
           Empowering the Modern Workplace
