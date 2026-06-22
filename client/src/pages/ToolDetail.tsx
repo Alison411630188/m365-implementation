@@ -3,6 +3,8 @@ import { Card } from "@/components/ui/card";
 import { M365_TOOLS } from "@/../../shared/const";
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { useEffect } from "react";
+import { ChevronRight } from "lucide-react";
+import { Link } from "wouter";
 import {
   PlannerIcon,
   PowerAutomateIcon,
@@ -250,6 +252,14 @@ export default function ToolDetail({ params }: ToolDetailProps) {
     <div className="min-h-screen bg-background selection:bg-primary/10">
       <div className="mx-auto px-6 md:px-10 py-12 max-w-[1440px] w-full">
         <div className="mb-12 pb-8 border-b border-border">
+          {/* 麵包屑 */}
+          <nav className="flex items-center gap-1.5 text-xs text-foreground/40 font-medium mb-6">
+            <Link href="/"><a className="hover:text-primary transition-colors">首頁</a></Link>
+            <ChevronRight size={12} />
+            <Link href="/handbook"><a className="hover:text-primary transition-colors">使用手冊</a></Link>
+            <ChevronRight size={12} />
+            <span className="text-foreground/70">{tool.name}</span>
+          </nav>
           <div className="flex items-start gap-8">
             <div className={`flex items-center justify-center shrink-0 transition-transform hover:scale-110 duration-300 w-16 h-16 sm:w-20 sm:h-20 ${toolId === 'teams' || toolId === 'power-automate' || toolId === 'power-bi' ? 'scale-[1.35]' : ''}`}>
               {getToolIcon(toolId)}

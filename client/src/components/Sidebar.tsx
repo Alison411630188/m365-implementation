@@ -1,13 +1,9 @@
 
 import { NAVIGATION_ITEMS } from "@/../../shared/const";
-import { ChevronDown, Menu, X, Moon, Sun } from "lucide-react";
+import { ChevronDown, Menu, X, Moon, Sun, Search } from "lucide-react";
 import { useState } from "react";
 import { useLocation } from "wouter";
 import { useTheme } from "@/contexts/ThemeContext";
-
-/**
- * 側邊欄導航元件 - 第三次調整了 Logo 下方標籤的垂直間距
- */
 
 interface NavItem {
   id: string;
@@ -16,7 +12,11 @@ interface NavItem {
   children?: NavItem[];
 }
 
-export default function Sidebar() {
+interface SidebarProps {
+  onOpenSearch?: () => void;
+}
+
+export default function Sidebar({ onOpenSearch }: SidebarProps) {
   const [location, setLocation] = useLocation();
   const [expandedItems, setExpandedItems] = useState<string[]>(["tools"]);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -138,6 +138,18 @@ export default function Sidebar() {
         </div>
 
         <nav className="flex-1 overflow-y-auto pt-5 pb-4 scrollbar-hide">
+          {/* Search Button */}
+          <div className="px-3 mb-4">
+            <button
+              onClick={onOpenSearch}
+              className="w-full flex items-center gap-3 px-4 py-2.5 rounded-xl bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 text-black/50 dark:text-white/50 hover:text-primary hover:bg-primary/5 hover:border-primary/20 transition-all text-sm font-medium"
+            >
+              <Search size={15} />
+              <span className="flex-1 text-left">搜尋知識庫</span>
+              <span className="text-[10px] font-mono bg-black/5 dark:bg-white/10 px-1.5 py-0.5 rounded">⌘K</span>
+            </button>
+          </div>
+
           <div className="px-6 mb-3 text-[10px] font-extrabold text-black/40 dark:text-white uppercase tracking-[0.2em] flex items-center gap-2">
             知識庫分類
             <div className="h-px bg-gradient-to-r from-black/10 to-transparent dark:from-primary/20 dark:to-transparent flex-1 mt-0.5"></div>

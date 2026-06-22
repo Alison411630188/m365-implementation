@@ -216,3 +216,12 @@
     }
   }
 }
+
+@media print {
+  aside, nav, button, .fixed, footer { display: none !important; }
+  main { margin-left: 0 !important; }
+  body { font-size: 12pt; color: #000; background: #fff; }
+  h1, h2, h3 { page-break-after: avoid; }
+  .card { border: 1px solid #ccc !important; box-shadow: none !important; }
+  a[href]::after { content: " (" attr(href) ")"; font-size: 10pt; color: #666; }
+}

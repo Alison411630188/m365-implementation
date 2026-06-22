@@ -9,7 +9,8 @@ import {
   SharePointIcon,
   TeamsIcon,
 } from "@/components/M365Icons";
-import { ArrowLeft, CheckCircle } from "lucide-react";
+import { ArrowLeft, CheckCircle, ChevronRight } from "lucide-react";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 // Since some icons are not in the shared component, we define them here.
 const OutlookIcon = () => <img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663446578135/bce5925a-356c-4861-9C33-7D36F6D69542/outlook-logo.svg" alt="Outlook" className="w-full h-full" />;
@@ -40,6 +41,7 @@ interface CaseDetailProps {
 
 export default function CaseDetail({ params }: CaseDetailProps) {
   const scenario = SCENARIOS.find((s) => s.id === params.id);
+  usePageTitle(scenario ? scenario.title : "找不到案例");
 
   if (!scenario) {
     return <NotFound />;
@@ -48,14 +50,16 @@ export default function CaseDetail({ params }: CaseDetailProps) {
   return (
     <div className="min-h-screen bg-background selection:bg-primary/10 pb-20">
       <div className="mx-auto px-6 md:px-10 py-12 max-w-[1024px] w-full animate-in fade-in duration-500">
-        
+
         <div className="mb-10 pb-8 border-b border-border">
-          <Link href="/cases">
-            <a className="inline-flex items-center gap-2 text-sm font-bold text-foreground/60 dark:text-white hover:text-primary transition-colors mb-6">
-              <ArrowLeft size={16} />
-              返回所有情境案例
-            </a>
-          </Link>
+          {/* 麵包屑 */}
+          <nav className="flex items-center gap-1.5 text-xs text-foreground/40 font-medium mb-6">
+            <Link href="/"><a className="hover:text-primary transition-colors">首頁</a></Link>
+            <ChevronRight size={12} />
+            <Link href="/cases"><a className="hover:text-primary transition-colors">應用情境案例</a></Link>
+            <ChevronRight size={12} />
+            <span className="text-foreground/70 truncate max-w-[200px]">{scenario.title.replace(/【.*?】/, "").trim()}</span>
+          </nav>
           <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight mb-4">
             {scenario.title}
           </h1>

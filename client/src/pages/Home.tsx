@@ -22,7 +22,9 @@ import {
   TeamsIcon,
 } from "@/components/M365Icons";
 import { TOOLS_DATA } from "@/data/tools";
-import { SCENARIOS } from "@/data/cases"; // Import scenarios
+import { SCENARIOS } from "@/data/cases";
+import { ANNOUNCEMENTS, DEPT_PROGRESS } from "@/data/announcements";
+import { CheckCircle2, Clock, Circle, BarChart3 } from "lucide-react";
 
 const ICONS: { [key: string]: JSX.Element } = {
   teams: <div className="w-8 h-8 flex items-center justify-center scale-[1.35]"><TeamsIcon /></div>,
@@ -46,29 +48,11 @@ const STATS = [
   { icon: <GraduationCap size={22} />, value: "30+", label: "份教學步驟" },
 ];
 
-const ANNOUNCEMENTS = [
-  {
-    date: "2026-06-01",
-    tag: "新功能",
-    tagColor: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
-    title: "Power BI 儀表板教學上線",
-    desc: "新增完整的 Power BI 報表設計流程，包含 5 個實戰範本。",
-  },
-  {
-    date: "2026-05-15",
-    tag: "系統更新",
-    tagColor: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
-    title: "Teams 會議錄製功能說明更新",
-    desc: "針對新版 Teams 的錄製與逐字稿功能，已更新操作步驟。",
-  },
-  {
-    date: "2026-04-20",
-    tag: "重要公告",
-    tagColor: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
-    title: "SharePoint 權限申請流程調整",
-    desc: "請使用新的申請表單，舊流程將於本月底停用。",
-  },
-];
+const STATUS_CONFIG = {
+  "completed":   { icon: <CheckCircle2 size={15} className="text-green-500" />,  label: "已完成", bar: "bg-green-500" },
+  "in-progress": { icon: <Clock size={15} className="text-blue-500" />,          label: "導入中", bar: "bg-blue-500"  },
+  "pending":     { icon: <Circle size={15} className="text-foreground/30" />,    label: "待導入", bar: "bg-muted"     },
+};
 
 export default function Home() {
   usePageTitle();
@@ -276,6 +260,46 @@ export default function Home() {
                 探索所有 15 大應用情境
               </button>
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* 實施進度 */}
+      <section className="px-6 md:px-10 py-24 bg-muted/20 border-y border-border/50">
+        <div className="max-w-[1200px] mx-auto">
+          <div className="flex items-center gap-3 mb-2">
+            <BarChart3 size={20} className="text-primary" />
+            <h2 className="text-3xl font-bold text-foreground">各部門導入進度</h2>
+          </div>
+          <p className="text-foreground/50 ml-9 mb-10">即時追蹤 M365 在各部門的導入狀態</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {DEPT_PROGRESS.map((dept) => {
+              const cfg = STATUS_CONFIG[dept.status];
+              return (
+                <Card key={dept.dept} className="p-5 border border-border bg-card hover:shadow-md transition-shadow">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      {cfg.icon}
+                      <span className="font-bold text-foreground">{dept.dept}</span>
+                    </div>
+                    <span className="text-sm font-black text-foreground/60">{dept.percent}%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-muted rounded-full overflow-hidden mb-3">
+                    <div
+                      className={`h-full rounded-full transition-all duration-700 ${cfg.bar}`}
+                      style={{ width: `${dept.percent}%` }}
+                    />
+                  </div>
+                  <div className="flex flex-wrap gap-1">
+                    {dept.tools.map(t => (
+                      <span key={t} className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-muted text-foreground/50 border border-border">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </section>
