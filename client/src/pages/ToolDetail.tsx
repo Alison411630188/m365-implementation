@@ -1,6 +1,8 @@
 
 import { Card } from "@/components/ui/card";
 import { M365_TOOLS } from "@/../../shared/const";
+import { usePageTitle } from "@/hooks/usePageTitle";
+import { useEffect } from "react";
 import {
   PlannerIcon,
   PowerAutomateIcon,
@@ -231,11 +233,13 @@ export default function ToolDetail({ params }: ToolDetailProps) {
   const toolId = params?.toolId as string;
 
   const isValidToolId = toolId && M365_TOOLS.some((t) => t.id === toolId);
-  if (!isValidToolId) {
+  const tool = isValidToolId ? M365_TOOLS.find((t) => t.id === toolId)! : null;
+
+  usePageTitle(tool ? `${tool.name} 教學` : undefined);
+
+  if (!isValidToolId || !tool) {
     return <NotFound />;
   }
-
-  const tool = M365_TOOLS.find((t) => t.id === toolId)!;
   const details = toolDetails[toolId];
 
   if (!details) {

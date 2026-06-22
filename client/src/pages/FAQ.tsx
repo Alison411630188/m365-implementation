@@ -7,12 +7,14 @@ import {
 import { Card } from "@/components/ui/card";
 import { User } from "lucide-react";
 import { faqItems, FAQItem } from "@/data/faq";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 /**
  * 問答區頁面 - 移除搜尋功能
  */
 
 export default function FAQ() {
+  usePageTitle("常見問答");
   const categories = Array.from(
     new Set(faqItems.map((item) => item.category))
   );

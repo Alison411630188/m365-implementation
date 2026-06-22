@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
+import { usePageTitle } from "@/hooks/usePageTitle";
 import { 
   CheckCircle2, 
   Workflow, 
@@ -35,6 +36,7 @@ function getToolBadge(tool: ToolType) {
 }
 
 export default function Cases() {
+  usePageTitle("實戰案例");
   const [activeFilter, setActiveFilter] = useState<ToolType | "All">("All");
 
   const filteredScenarios = activeFilter === "All" 

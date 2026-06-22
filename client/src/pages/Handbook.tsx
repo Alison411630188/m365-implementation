@@ -18,12 +18,14 @@ import {
   SharePointIcon,
   TeamsIcon,
 } from "@/components/M365Icons";
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 /**
  * M365 使用手冊頁面 - 五大工具全新網格排版版
  */
 
 export default function Handbook() {
+  usePageTitle("M365 使用手冊");
 
   // 快速對照表資料
   const QUICK_REFERENCE = [
