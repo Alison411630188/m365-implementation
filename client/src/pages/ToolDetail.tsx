@@ -2,7 +2,6 @@
 import { Card } from "@/components/ui/card";
 import { M365_TOOLS } from "@/../../shared/const";
 import { usePageTitle } from "@/hooks/usePageTitle";
-import { useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import { Link } from "wouter";
 import {
@@ -396,3 +395,4 @@ export default function ToolDetail({ params }: ToolDetailProps) {
     </div>
   );
 }
+                                    
